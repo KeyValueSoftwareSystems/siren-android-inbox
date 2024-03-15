@@ -1,6 +1,8 @@
 package com.keyvalue.siren.androidsdk.data.service
 
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponse
+import com.keyvalue.siren.androidsdk.data.model.BulkUpdateBody
+import com.keyvalue.siren.androidsdk.data.model.MarkAllAsReadResponse
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadBody
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponse
 import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponse
@@ -9,6 +11,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -38,4 +41,11 @@ interface NotificationApiService {
         @Path("inAppNotificationId") notificationId: String,
         @Body data: MarkAsReadBody,
     ): Response<MarkAsReadByIdResponse>
+
+    @POST("api/v2/in-app/recipients/{inAppRecipientId}/notifications/bulk-update")
+    suspend fun markAllAsRead(
+        @Path("inAppRecipientId") id: String,
+        @Header("Authorization") token: String,
+        @Body data: BulkUpdateBody,
+    ): Response<MarkAllAsReadResponse>
 }
