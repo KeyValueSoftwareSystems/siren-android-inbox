@@ -6,6 +6,8 @@ import com.keyvalue.siren.androidsdk.data.model.BulkUpdateBody
 import com.keyvalue.siren.androidsdk.data.model.MarkAllAsReadResponse
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadBody
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponse
+import com.keyvalue.siren.androidsdk.data.model.MarkAsViewedBody
+import com.keyvalue.siren.androidsdk.data.model.MarkAsViewedResponse
 import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponse
 import com.keyvalue.siren.androidsdk.data.networkcallbacks.NetworkCallback
 import com.keyvalue.siren.androidsdk.data.retrofit.RetrofitClient
@@ -199,6 +201,54 @@ class NotificationRepositoryImplementation(baseURL: String) : NotificationReposi
                         Gson().fromJson<MarkAllAsReadResponse>(
                             errorBody,
                             MarkAllAsReadResponse::class.java,
+                        )
+                    networkCallback.onError(
+                        JSONObject().put("type", SirenErrorTypes.ERROR)
+                            .put("code", errors.error?.errorCode ?: CODE_GENERIC_API_ERROR).put(
+                                "message",
+                                errors.error?.message
+                                    ?: "HTTP error! status: ${parentResponse.raw().code} ${parentResponse.raw().message}",
+                            ),
+                    )
+                }
+            }
+        } catch (e: SocketTimeoutException) {
+            networkCallback.onError(
+                JSONObject().put("code", CODE_TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
+            )
+        } catch (e: Exception) {
+            networkCallback.onError(
+                JSONObject().put("code", CODE_GENERIC_API_ERROR)
+                    .put("message", ERROR_MESSAGE_SERVICE_NOT_AVAILABLE),
+            )
+        }
+    }
+
+    override suspend fun markAsViewed(
+        userToken: String,
+        recipientId: String,
+        startDate: String,
+        networkCallback: NetworkCallback,
+    ) {
+        try {
+            val parentResponse =
+                notificationsApiService?.markAsViewed(
+                    recipientId,
+                    userToken,
+                    MarkAsViewedBody(
+                        startDate,
+                    ),
+                )
+            val response = parentResponse?.body()
+            if (parentResponse?.isSuccessful == true && response?.markAsViewedResponse != null) {
+                response.markAsViewedResponse.let { networkCallback.onResult(it) }
+            } else {
+                val errorBody = parentResponse?.errorBody()?.string()
+                if (errorBody != null) {
+                    val errors =
+                        Gson().fromJson<MarkAsViewedResponse>(
+                            errorBody,
+                            MarkAsViewedResponse::class.java,
                         )
                     networkCallback.onError(
                         JSONObject().put("type", SirenErrorTypes.ERROR)

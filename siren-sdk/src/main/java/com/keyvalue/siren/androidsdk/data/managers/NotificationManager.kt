@@ -3,6 +3,7 @@ package com.keyvalue.siren.androidsdk.data.managers
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
 import com.keyvalue.siren.androidsdk.data.model.DataStatus
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponseData
+import com.keyvalue.siren.androidsdk.data.model.MarkAsViewedResponseData
 import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponseData
 import com.keyvalue.siren.androidsdk.data.networkcallbacks.NetworkCallback
 import com.keyvalue.siren.androidsdk.data.repository.NotificationRepository
@@ -10,6 +11,7 @@ import com.keyvalue.siren.androidsdk.data.repository.NotificationRepositoryImple
 import com.keyvalue.siren.androidsdk.data.state.AllNotificationState
 import com.keyvalue.siren.androidsdk.data.state.MarkAllAsReadState
 import com.keyvalue.siren.androidsdk.data.state.MarkAsReadByIdState
+import com.keyvalue.siren.androidsdk.data.state.MarkAsViewedViewedState
 import com.keyvalue.siren.androidsdk.data.state.NotificationUnViewedState
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.json.JSONObject
@@ -24,6 +26,8 @@ class NotificationManager(baseURL: String) {
     var markAsReadByIdState: MutableStateFlow<MarkAsReadByIdState?> =
         MutableStateFlow(null)
     var markAllAsReadState: MutableStateFlow<MarkAllAsReadState?> =
+        MutableStateFlow(null)
+    var markAsViewedState: MutableStateFlow<MarkAsViewedViewedState?> =
         MutableStateFlow(null)
 
     suspend fun fetchUnViewedNotificationsCount(
@@ -169,6 +173,42 @@ class NotificationManager(baseURL: String) {
                             )
                         this@NotificationManager.markAllAsReadState.emit(
                             markAllAsReadState,
+                        )
+                    }
+                },
+        )
+    }
+
+    suspend fun markAsViewed(
+        userToken: String,
+        recipientId: String,
+        startDate: String,
+    ) {
+        service.markAsViewed(
+            userToken = userToken,
+            recipientId = recipientId,
+            startDate = startDate,
+            networkCallback =
+                object : NetworkCallback {
+                    override suspend fun onResult(classObject: Any) {
+                        val markAsViewedViewedState =
+                            MarkAsViewedViewedState(
+                                markAsViewedResponse = classObject as MarkAsViewedResponseData,
+                                errorResponse = null,
+                            )
+                        this@NotificationManager.markAsViewedState.emit(
+                            markAsViewedViewedState,
+                        )
+                    }
+
+                    override suspend fun onError(errorObject: JSONObject) {
+                        val markAsViewedViewedState =
+                            MarkAsViewedViewedState(
+                                markAsViewedResponse = null,
+                                errorResponse = errorObject,
+                            )
+                        this@NotificationManager.markAsViewedState.emit(
+                            markAsViewedViewedState,
                         )
                     }
                 },
