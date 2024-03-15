@@ -19,4 +19,11 @@ interface NotificationRepository {
         isRead: Boolean? = null,
         networkCallback: NetworkCallback,
     )
+
+    suspend fun markAsReadById(
+        userToken: String,
+        recipientId: String,
+        notificationId: String,
+        networkCallback: NetworkCallback,
+    )
 }

@@ -2,6 +2,7 @@ package com.keyvalue.siren.androidsdk.presenter
 
 import com.keyvalue.siren.androidsdk.data.managers.NotificationManager
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
+import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponseData
 import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponseData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -79,6 +80,35 @@ class NotificationPresenter(
                             true,
                         )
                     }
+                }
+            }
+        }
+    }
+
+    fun markAsReadById(
+        callback: (data: MarkAsReadByIdResponseData?, error: JSONObject?, isError: Boolean) -> Unit,
+        notificationId: String,
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            notificationManager?.markAsReadById(userToken, recipientId, notificationId)
+
+            notificationManager?.markAsReadByIdState?.collect { markAsReadByIdState ->
+                if (markAsReadByIdState?.errorResponse == null) {
+                    markAsReadByIdState?.markAsReadByIdResponse?.let { response ->
+                        withContext(Dispatchers.Main) {
+                            callback(
+                                response,
+                                null,
+                                false,
+                            )
+                        }
+                    }
+                } else {
+                    callback(
+                        null,
+                        markAsReadByIdState.errorResponse,
+                        true,
+                    )
                 }
             }
         }
