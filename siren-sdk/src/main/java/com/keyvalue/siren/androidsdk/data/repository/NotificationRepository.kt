@@ -8,4 +8,15 @@ interface NotificationRepository {
         recipientId: String,
         networkCallback: NetworkCallback,
     )
+
+    suspend fun fetchAllNotifications(
+        userToken: String,
+        recipientId: String,
+        page: Int? = null,
+        size: Int? = null,
+        start: String? = null,
+        end: String? = null,
+        isRead: Boolean? = null,
+        networkCallback: NetworkCallback,
+    )
 }
