@@ -5,6 +5,8 @@ import com.keyvalue.siren.androidsdk.data.model.BulkUpdateBody
 import com.keyvalue.siren.androidsdk.data.model.MarkAllAsReadResponse
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadBody
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponse
+import com.keyvalue.siren.androidsdk.data.model.MarkAsViewedBody
+import com.keyvalue.siren.androidsdk.data.model.MarkAsViewedResponse
 import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -48,4 +50,11 @@ interface NotificationApiService {
         @Header("Authorization") token: String,
         @Body data: BulkUpdateBody,
     ): Response<MarkAllAsReadResponse>
+
+    @PATCH("api/v2/in-app/recipients/{inAppRecipientId}")
+    suspend fun markAsViewed(
+        @Path("inAppRecipientId") id: String,
+        @Header("Authorization") token: String,
+        @Body data: MarkAsViewedBody,
+    ): Response<MarkAsViewedResponse>
 }

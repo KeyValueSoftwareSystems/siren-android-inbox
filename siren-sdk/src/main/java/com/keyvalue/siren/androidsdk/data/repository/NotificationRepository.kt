@@ -33,4 +33,11 @@ interface NotificationRepository {
         startDate: String,
         networkCallback: NetworkCallback,
     )
+
+    suspend fun markAsViewed(
+        userToken: String,
+        recipientId: String,
+        startDate: String,
+        networkCallback: NetworkCallback,
+    )
 }
