@@ -2,6 +2,7 @@ package com.keyvalue.siren.androidsdk.presenter
 
 import com.keyvalue.siren.androidsdk.data.managers.NotificationManager
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
+import com.keyvalue.siren.androidsdk.data.model.DataStatus
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponseData
 import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponseData
 import kotlinx.coroutines.CoroutineScope
@@ -107,6 +108,35 @@ class NotificationPresenter(
                     callback(
                         null,
                         markAsReadByIdState.errorResponse,
+                        true,
+                    )
+                }
+            }
+        }
+    }
+
+    fun markAllAsRead(
+        callback: (data: DataStatus?, error: JSONObject?, isError: Boolean) -> Unit,
+        startDate: String,
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            notificationManager?.markAllAsRead(userToken, recipientId, startDate)
+
+            notificationManager?.markAllAsReadState?.collect { markAllAsReadState ->
+                if (markAllAsReadState?.errorResponse == null) {
+                    markAllAsReadState?.markAllAsReadResponse?.let { response ->
+                        withContext(Dispatchers.Main) {
+                            callback(
+                                response,
+                                null,
+                                false,
+                            )
+                        }
+                    }
+                } else {
+                    callback(
+                        null,
+                        markAllAsReadState.errorResponse,
                         true,
                     )
                 }

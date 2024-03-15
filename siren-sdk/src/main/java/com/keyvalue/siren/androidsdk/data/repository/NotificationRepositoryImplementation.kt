@@ -2,12 +2,15 @@ package com.keyvalue.siren.androidsdk.data.repository
 
 import com.google.gson.Gson
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponse
+import com.keyvalue.siren.androidsdk.data.model.BulkUpdateBody
+import com.keyvalue.siren.androidsdk.data.model.MarkAllAsReadResponse
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadBody
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponse
 import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponse
 import com.keyvalue.siren.androidsdk.data.networkcallbacks.NetworkCallback
 import com.keyvalue.siren.androidsdk.data.retrofit.RetrofitClient
 import com.keyvalue.siren.androidsdk.data.service.NotificationApiService
+import com.keyvalue.siren.androidsdk.utils.constants.BulkUpdateType
 import com.keyvalue.siren.androidsdk.utils.constants.CODE_GENERIC_API_ERROR
 import com.keyvalue.siren.androidsdk.utils.constants.CODE_TIMED_OUT
 import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_SERVICE_NOT_AVAILABLE
@@ -147,6 +150,55 @@ class NotificationRepositoryImplementation(baseURL: String) : NotificationReposi
                         Gson().fromJson<MarkAsReadByIdResponse>(
                             errorBody,
                             MarkAsReadByIdResponse::class.java,
+                        )
+                    networkCallback.onError(
+                        JSONObject().put("type", SirenErrorTypes.ERROR)
+                            .put("code", errors.error?.errorCode ?: CODE_GENERIC_API_ERROR).put(
+                                "message",
+                                errors.error?.message
+                                    ?: "HTTP error! status: ${parentResponse.raw().code} ${parentResponse.raw().message}",
+                            ),
+                    )
+                }
+            }
+        } catch (e: SocketTimeoutException) {
+            networkCallback.onError(
+                JSONObject().put("code", CODE_TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
+            )
+        } catch (e: Exception) {
+            networkCallback.onError(
+                JSONObject().put("code", CODE_GENERIC_API_ERROR)
+                    .put("message", ERROR_MESSAGE_SERVICE_NOT_AVAILABLE),
+            )
+        }
+    }
+
+    override suspend fun markAllAsRead(
+        userToken: String,
+        recipientId: String,
+        startDate: String,
+        networkCallback: NetworkCallback,
+    ) {
+        try {
+            val parentResponse =
+                notificationsApiService?.markAllAsRead(
+                    recipientId,
+                    userToken,
+                    BulkUpdateBody(
+                        startDate,
+                        operation = BulkUpdateType.MARK_AS_READ,
+                    ),
+                )
+            val response = parentResponse?.body()
+            if (parentResponse?.isSuccessful == true && response?.markAllAsReadResponse != null) {
+                response.markAllAsReadResponse.let { networkCallback.onResult(it) }
+            } else {
+                val errorBody = parentResponse?.errorBody()?.string()
+                if (errorBody != null) {
+                    val errors =
+                        Gson().fromJson<MarkAllAsReadResponse>(
+                            errorBody,
+                            MarkAllAsReadResponse::class.java,
                         )
                     networkCallback.onError(
                         JSONObject().put("type", SirenErrorTypes.ERROR)

@@ -10,3 +10,8 @@ enum class SirenErrorTypes {
     /** Network error. */
     NETWORK_ERROR,
 }
+
+enum class BulkUpdateType {
+    MARK_AS_READ,
+    MARK_AS_DELETED,
+}

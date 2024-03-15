@@ -26,4 +26,11 @@ interface NotificationRepository {
         notificationId: String,
         networkCallback: NetworkCallback,
     )
+
+    suspend fun markAllAsRead(
+        userToken: String,
+        recipientId: String,
+        startDate: String,
+        networkCallback: NetworkCallback,
+    )
 }
