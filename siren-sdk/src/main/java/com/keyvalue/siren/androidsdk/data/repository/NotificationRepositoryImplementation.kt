@@ -1,6 +1,7 @@
 package com.keyvalue.siren.androidsdk.data.repository
 
 import com.google.gson.Gson
+import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponse
 import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponse
 import com.keyvalue.siren.androidsdk.data.networkcallbacks.NetworkCallback
 import com.keyvalue.siren.androidsdk.data.retrofit.RetrofitClient
@@ -43,6 +44,60 @@ class NotificationRepositoryImplementation(baseURL: String) : NotificationReposi
                         Gson().fromJson<UnViewedNotificationResponse>(
                             errorBody,
                             UnViewedNotificationResponse::class.java,
+                        )
+                    networkCallback.onError(
+                        JSONObject().put("type", SirenErrorTypes.ERROR)
+                            .put("code", errors.error?.errorCode ?: CODE_GENERIC_API_ERROR).put(
+                                "message",
+                                errors.error?.message
+                                    ?: "HTTP error! status: ${parentResponse.raw().code} ${parentResponse.raw().message}",
+                            ),
+                    )
+                }
+            }
+        } catch (e: SocketTimeoutException) {
+            networkCallback.onError(
+                JSONObject().put("code", CODE_TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
+            )
+        } catch (e: Exception) {
+            networkCallback.onError(
+                JSONObject().put("code", CODE_GENERIC_API_ERROR)
+                    .put("message", ERROR_MESSAGE_SERVICE_NOT_AVAILABLE),
+            )
+        }
+    }
+
+    override suspend fun fetchAllNotifications(
+        userToken: String,
+        recipientId: String,
+        page: Int?,
+        size: Int?,
+        start: String?,
+        end: String?,
+        isRead: Boolean?,
+        networkCallback: NetworkCallback,
+    ) {
+        try {
+            val parentResponse =
+                notificationsApiService?.fetchAllNotifications(
+                    recipientId,
+                    userToken,
+                    page,
+                    size,
+                    start,
+                    end,
+                    isRead,
+                )
+            val response = parentResponse?.body()
+            if (parentResponse?.isSuccessful == true && response?.allNotificationResponse != null) {
+                response.allNotificationResponse.let { networkCallback.onResult(it) }
+            } else {
+                val errorBody = parentResponse?.errorBody()?.string()
+                if (errorBody != null) {
+                    val errors =
+                        Gson().fromJson<AllNotificationResponse>(
+                            errorBody,
+                            AllNotificationResponse::class.java,
                         )
                     networkCallback.onError(
                         JSONObject().put("type", SirenErrorTypes.ERROR)

@@ -1,9 +1,11 @@
 package com.keyvalue.siren.androidsdk.data.managers
 
+import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
 import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponseData
 import com.keyvalue.siren.androidsdk.data.networkcallbacks.NetworkCallback
 import com.keyvalue.siren.androidsdk.data.repository.NotificationRepository
 import com.keyvalue.siren.androidsdk.data.repository.NotificationRepositoryImplementation
+import com.keyvalue.siren.androidsdk.data.state.AllNotificationState
 import com.keyvalue.siren.androidsdk.data.state.NotificationUnViewedState
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.json.JSONObject
@@ -12,6 +14,8 @@ class NotificationManager(baseURL: String) {
     private var service: NotificationRepository =
         NotificationRepositoryImplementation(baseURL)
     var notificationUnViewedState: MutableStateFlow<NotificationUnViewedState?> =
+        MutableStateFlow(null)
+    var allNotificationsState: MutableStateFlow<AllNotificationState?> =
         MutableStateFlow(null)
 
     suspend fun fetchUnViewedNotificationsCount(
@@ -44,6 +48,50 @@ class NotificationManager(baseURL: String) {
                     )
                 }
             },
+        )
+    }
+
+    suspend fun fetchAllNotifications(
+        userToken: String,
+        recipientId: String,
+        page: Int? = null,
+        size: Int? = null,
+        start: String? = null,
+        end: String? = null,
+        isRead: Boolean? = null,
+    ) {
+        service.fetchAllNotifications(
+            userToken = userToken,
+            recipientId = recipientId,
+            page = page,
+            size = size,
+            start = start,
+            end = end,
+            isRead = isRead,
+            networkCallback =
+                object : NetworkCallback {
+                    override suspend fun onResult(classObject: Any) {
+                        val allNotificationsState =
+                            AllNotificationState(
+                                allNotificationResponse = classObject as List<AllNotificationResponseData>,
+                                errorResponse = null,
+                            )
+                        this@NotificationManager.allNotificationsState.emit(
+                            allNotificationsState,
+                        )
+                    }
+
+                    override suspend fun onError(errorObject: JSONObject) {
+                        val allNotificationsState =
+                            AllNotificationState(
+                                allNotificationResponse = null,
+                                errorResponse = errorObject,
+                            )
+                        this@NotificationManager.allNotificationsState.emit(
+                            allNotificationsState,
+                        )
+                    }
+                },
         )
     }
 }
