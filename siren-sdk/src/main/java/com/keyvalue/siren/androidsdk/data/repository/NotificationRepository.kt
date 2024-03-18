@@ -47,4 +47,11 @@ interface NotificationRepository {
         notificationId: String,
         networkCallback: NetworkCallback,
     )
+
+    suspend fun clearAllNotifications(
+        userToken: String,
+        recipientId: String,
+        startDate: String,
+        networkCallback: NetworkCallback,
+    )
 }

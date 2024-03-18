@@ -204,4 +204,33 @@ class NotificationPresenter(
             }
         }
     }
+
+    fun clearAllNotifications(
+        callback: (data: DataStatus?, error: JSONObject?, isError: Boolean) -> Unit,
+        startDate: String,
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            notificationManager?.clearAllNotifications(userToken, recipientId, startDate)
+
+            notificationManager?.clearAllNotificationsState?.collect { clearAllNotificationsState ->
+                if (clearAllNotificationsState?.errorResponse == null) {
+                    clearAllNotificationsState?.clearAllNotificationsResponse?.let { response ->
+                        withContext(Dispatchers.Main) {
+                            callback(
+                                response,
+                                null,
+                                false,
+                            )
+                        }
+                    }
+                } else {
+                    callback(
+                        null,
+                        clearAllNotificationsState.errorResponse,
+                        true,
+                    )
+                }
+            }
+        }
+    }
 }
