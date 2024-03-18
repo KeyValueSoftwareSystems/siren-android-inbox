@@ -2,6 +2,7 @@ package com.keyvalue.siren.androidsdk.data.service
 
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponse
 import com.keyvalue.siren.androidsdk.data.model.BulkUpdateBody
+import com.keyvalue.siren.androidsdk.data.model.ClearAllNotificationsResponse
 import com.keyvalue.siren.androidsdk.data.model.DeleteNotificationByIdResponse
 import com.keyvalue.siren.androidsdk.data.model.MarkAllAsReadResponse
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadBody
@@ -66,4 +67,11 @@ interface NotificationApiService {
         @Header("Authorization") token: String,
         @Path("inAppNotificationId") notificationId: String,
     ): Response<DeleteNotificationByIdResponse>
+
+    @POST("api/v2/in-app/recipients/{inAppRecipientId}/notifications/bulk-update")
+    suspend fun clearAllNotifications(
+        @Path("inAppRecipientId") id: String,
+        @Header("Authorization") token: String,
+        @Body data: BulkUpdateBody,
+    ): Response<ClearAllNotificationsResponse>
 }
