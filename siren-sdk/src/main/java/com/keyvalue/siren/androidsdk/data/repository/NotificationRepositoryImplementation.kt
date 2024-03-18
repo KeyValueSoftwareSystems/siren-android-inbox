@@ -3,6 +3,7 @@ package com.keyvalue.siren.androidsdk.data.repository
 import com.google.gson.Gson
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponse
 import com.keyvalue.siren.androidsdk.data.model.BulkUpdateBody
+import com.keyvalue.siren.androidsdk.data.model.DeleteNotificationByIdResponse
 import com.keyvalue.siren.androidsdk.data.model.MarkAllAsReadResponse
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadBody
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponse
@@ -250,6 +251,49 @@ class NotificationRepositoryImplementation(baseURL: String) : NotificationReposi
                             errorBody,
                             MarkAsViewedResponse::class.java,
                         )
+                    networkCallback.onError(
+                        JSONObject().put("type", SirenErrorTypes.ERROR)
+                            .put("code", errors.error?.errorCode ?: CODE_GENERIC_API_ERROR).put(
+                                "message",
+                                errors.error?.message
+                                    ?: "HTTP error! status: ${parentResponse.raw().code} ${parentResponse.raw().message}",
+                            ),
+                    )
+                }
+            }
+        } catch (e: SocketTimeoutException) {
+            networkCallback.onError(
+                JSONObject().put("code", CODE_TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
+            )
+        } catch (e: Exception) {
+            networkCallback.onError(
+                JSONObject().put("code", CODE_GENERIC_API_ERROR)
+                    .put("message", ERROR_MESSAGE_SERVICE_NOT_AVAILABLE),
+            )
+        }
+    }
+
+    override suspend fun deleteNotificationById(
+        userToken: String,
+        recipientId: String,
+        notificationId: String,
+        networkCallback: NetworkCallback,
+    ) {
+        try {
+            val parentResponse =
+                notificationsApiService?.deleteNotificationById(
+                    recipientId,
+                    userToken,
+                    notificationId,
+                )
+            val response = parentResponse?.body()
+            if (parentResponse?.isSuccessful == true && response?.deleteNotificationByIdResponse != null) {
+                response.deleteNotificationByIdResponse.let { networkCallback.onResult(it) }
+            } else {
+                val errorBody = parentResponse?.errorBody()?.string()
+                if (errorBody != null) {
+                    val errors =
+                        Gson().fromJson(errorBody, DeleteNotificationByIdResponse::class.java)
                     networkCallback.onError(
                         JSONObject().put("type", SirenErrorTypes.ERROR)
                             .put("code", errors.error?.errorCode ?: CODE_GENERIC_API_ERROR).put(

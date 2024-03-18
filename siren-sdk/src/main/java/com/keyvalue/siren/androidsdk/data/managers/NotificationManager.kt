@@ -9,6 +9,7 @@ import com.keyvalue.siren.androidsdk.data.networkcallbacks.NetworkCallback
 import com.keyvalue.siren.androidsdk.data.repository.NotificationRepository
 import com.keyvalue.siren.androidsdk.data.repository.NotificationRepositoryImplementation
 import com.keyvalue.siren.androidsdk.data.state.AllNotificationState
+import com.keyvalue.siren.androidsdk.data.state.DeleteNotificationByIdState
 import com.keyvalue.siren.androidsdk.data.state.MarkAllAsReadState
 import com.keyvalue.siren.androidsdk.data.state.MarkAsReadByIdState
 import com.keyvalue.siren.androidsdk.data.state.MarkAsViewedViewedState
@@ -28,6 +29,8 @@ class NotificationManager(baseURL: String) {
     var markAllAsReadState: MutableStateFlow<MarkAllAsReadState?> =
         MutableStateFlow(null)
     var markAsViewedState: MutableStateFlow<MarkAsViewedViewedState?> =
+        MutableStateFlow(null)
+    var deleteNotificationByIdState: MutableStateFlow<DeleteNotificationByIdState?> =
         MutableStateFlow(null)
 
     suspend fun fetchUnViewedNotificationsCount(
@@ -209,6 +212,43 @@ class NotificationManager(baseURL: String) {
                             )
                         this@NotificationManager.markAsViewedState.emit(
                             markAsViewedViewedState,
+                        )
+                    }
+                },
+        )
+    }
+
+    suspend fun deleteNotificationById(
+        userToken: String,
+        recipientId: String,
+        notificationId: String,
+    ) {
+        service.deleteNotificationById(
+            userToken = userToken,
+            recipientId = recipientId,
+            notificationId = notificationId,
+            networkCallback =
+                object : NetworkCallback {
+                    override suspend fun onResult(classObject: Any) {
+                        val deleteNotificationByIdState =
+                            DeleteNotificationByIdState(
+                                deleteStatus = classObject as DataStatus,
+                                deleteId = notificationId,
+                                errorResponse = null,
+                            )
+                        this@NotificationManager.deleteNotificationByIdState.emit(
+                            deleteNotificationByIdState,
+                        )
+                    }
+
+                    override suspend fun onError(errorObject: JSONObject) {
+                        val deleteNotificationByIdState =
+                            DeleteNotificationByIdState(
+                                deleteStatus = null,
+                                errorResponse = errorObject,
+                            )
+                        this@NotificationManager.deleteNotificationByIdState.emit(
+                            deleteNotificationByIdState,
                         )
                     }
                 },

@@ -2,6 +2,7 @@ package com.keyvalue.siren.androidsdk.data.service
 
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponse
 import com.keyvalue.siren.androidsdk.data.model.BulkUpdateBody
+import com.keyvalue.siren.androidsdk.data.model.DeleteNotificationByIdResponse
 import com.keyvalue.siren.androidsdk.data.model.MarkAllAsReadResponse
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadBody
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponse
@@ -10,6 +11,7 @@ import com.keyvalue.siren.androidsdk.data.model.MarkAsViewedResponse
 import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
@@ -57,4 +59,11 @@ interface NotificationApiService {
         @Header("Authorization") token: String,
         @Body data: MarkAsViewedBody,
     ): Response<MarkAsViewedResponse>
+
+    @DELETE("api/v2/in-app/recipients/{inAppRecipientId}/notifications/{inAppNotificationId}")
+    suspend fun deleteNotificationById(
+        @Path("inAppRecipientId") id: String,
+        @Header("Authorization") token: String,
+        @Path("inAppNotificationId") notificationId: String,
+    ): Response<DeleteNotificationByIdResponse>
 }
