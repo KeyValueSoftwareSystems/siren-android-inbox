@@ -173,4 +173,35 @@ class NotificationPresenter(
             }
         }
     }
+
+    fun deleteNotificationById(
+        notificationId: String,
+        callback: (data: DataStatus?, deleteId: String?, error: JSONObject?, isError: Boolean) -> Unit,
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            notificationManager?.deleteNotificationById(userToken, recipientId, notificationId)
+
+            notificationManager?.deleteNotificationByIdState?.collect { clearAllNotificationsState ->
+                if (clearAllNotificationsState?.errorResponse == null) {
+                    clearAllNotificationsState?.deleteStatus?.let { response ->
+                        withContext(Dispatchers.Main) {
+                            callback(
+                                response,
+                                notificationId,
+                                null,
+                                false,
+                            )
+                        }
+                    }
+                } else {
+                    callback(
+                        null,
+                        null,
+                        clearAllNotificationsState.errorResponse,
+                        true,
+                    )
+                }
+            }
+        }
+    }
 }

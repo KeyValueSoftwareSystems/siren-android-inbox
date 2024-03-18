@@ -40,4 +40,11 @@ interface NotificationRepository {
         startDate: String,
         networkCallback: NetworkCallback,
     )
+
+    suspend fun deleteNotificationById(
+        userToken: String,
+        recipientId: String,
+        notificationId: String,
+        networkCallback: NetworkCallback,
+    )
 }
