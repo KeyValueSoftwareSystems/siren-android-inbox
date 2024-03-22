@@ -8,3 +8,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+siren-sdk/src/main/res/values/config.xml
