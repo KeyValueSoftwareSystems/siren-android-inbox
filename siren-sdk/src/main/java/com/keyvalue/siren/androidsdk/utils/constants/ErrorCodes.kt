@@ -1,4 +1,7 @@
 package com.keyvalue.siren.androidsdk.utils.constants
 
-const val CODE_TIMED_OUT = "TIMED_OUT"
-const val CODE_GENERIC_API_ERROR = "GENERIC_API_ERROR"
+const val TIMED_OUT = "TIMED_OUT"
+const val INVALID_TOKEN = "INVALID_TOKEN"
+const val INVALID_RECIPIENT_ID = "INVALID_RECIPIENT_ID"
+const val TOKEN_VERIFICATION_FAILED = "TOKEN_VERIFICATION_FAILED"
+const val GENERIC_API_ERROR = "GENERIC_API_ERROR"

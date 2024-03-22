@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="SIREN_BASE_URL_DEV">https://api.dev.sirenapp.io/</string>
+</resources>
