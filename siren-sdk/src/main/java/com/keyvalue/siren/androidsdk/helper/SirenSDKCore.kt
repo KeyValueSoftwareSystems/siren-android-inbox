@@ -438,7 +438,7 @@ class SirenSDKCore(
             }
 
             // Render badge with unViewedCount if count is greater than 0
-            if (unViewedCount > 0) {
+            if (unViewedCount > 0 && props.hideBadge != true) {
                 Box(
                     modifier =
                         Modifier
