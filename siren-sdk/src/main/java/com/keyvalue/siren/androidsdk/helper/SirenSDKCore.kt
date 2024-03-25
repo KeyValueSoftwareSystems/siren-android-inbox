@@ -89,7 +89,7 @@ class SirenSDKCore(
     _userToken: String,
     _recipientId: String,
     private var errorCallback: ErrorCallback,
-) : SirenSDKClient, SDKCoreUI() {
+) : SirenSDKClient {
     private var unViewedNotificationTimer: Timer = Timer()
     private var authenticationStatus: TokenVerificationStatus = TokenVerificationStatus.FAILED
     private var allNotificationTimer: Timer = Timer()
