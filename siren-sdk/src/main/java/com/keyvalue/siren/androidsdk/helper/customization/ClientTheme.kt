@@ -51,6 +51,7 @@ data class ThemeProps(
  * @property notificationIcon Custom composable icon to be used as the notification icon.
  * @property darkMode Enables dark mode for the badge.
  * @property disabled Disable click handler of icon.
+ * @property hideBadge Hides the badge displayed on the notification icon.
  */
 data class SirenInboxIconProps(
     val theme: Theme? = null,
@@ -58,6 +59,7 @@ data class SirenInboxIconProps(
     val notificationIcon: @Composable (() -> Unit)? = null,
     var darkMode: Boolean? = false,
     val disabled: Boolean? = false,
+    val hideBadge: Boolean? = false,
 )
 
 /**
