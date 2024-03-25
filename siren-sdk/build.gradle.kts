@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("maven-publish")
 }
 
 android {
@@ -10,6 +11,7 @@ android {
     defaultConfig {
         minSdk = 24
         targetSdk = 34
+        consumerProguardFiles("consumer-rules.pro")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -19,7 +21,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -78,4 +80,17 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil-compose:1.4.0")
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+                groupId = "com.github.KeyValueSoftwareSystems"
+                artifactId = "siren-android-inbox"
+                version = "1.0.0"
+            }
+        }
+    }
 }

@@ -26,4 +26,3 @@
 -keep class com.keyvalue.siren.androidsdk.data.model** {*;}
 
 -keeppackagenames com.keyvalue.siren.androidsdk**
--flattenpackagehierarchy 'com.keyvalue.siren.androidsdk.obscure'
