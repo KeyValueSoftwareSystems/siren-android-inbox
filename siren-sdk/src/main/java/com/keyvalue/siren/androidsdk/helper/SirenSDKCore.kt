@@ -146,13 +146,13 @@ class SirenSDKCore(
         }
     }
 
+    private val tokenVerificationError: JSONObject = JSONObject().put("type", SirenErrorTypes.ERROR)
+        .put("code", TOKEN_VERIFICATION_FAILED)
+        .put("message", ERROR_MESSAGE_TOKEN_VERIFICATION_FAILED)
+
     private fun authorizeUserAction(callback: (error: JSONObject?) -> Unit): TokenVerificationStatus {
         if (authenticationStatus === TokenVerificationStatus.FAILED) {
-            callback(
-                JSONObject().put("type", SirenErrorTypes.ERROR)
-                    .put("code", TOKEN_VERIFICATION_FAILED)
-                    .put("message", ERROR_MESSAGE_TOKEN_VERIFICATION_FAILED),
-            )
+            callback(tokenVerificationError)
         }
         return authenticationStatus
     }
@@ -514,6 +514,8 @@ class SirenSDKCore(
             }
             if (authenticationStatus == TokenVerificationStatus.SUCCESS) {
                 fetchCount()
+            } else if (authenticationStatus == TokenVerificationStatus.FAILED) {
+                callback.onError(tokenVerificationError)
             }
         }
 
@@ -779,6 +781,8 @@ class SirenSDKCore(
             }
             if (authenticationStatus == TokenVerificationStatus.SUCCESS) {
                 fetchNotifications()
+            } else if (authenticationStatus == TokenVerificationStatus.FAILED) {
+                callback.onError(tokenVerificationError)
             }
         }
 
