@@ -65,7 +65,6 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("androidx.compose.material:material:1.6.1")
 
     // Retrofit
