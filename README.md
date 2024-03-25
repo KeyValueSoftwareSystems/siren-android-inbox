@@ -1,43 +1,14 @@
-<div>
-    <img width="50px" style="float:left;padding-right:12px;" src="https://app.dev.sirenapp.io/assets/Siren-b2f89b52.svg" >
-    <H1>Siren Android Inbox</H1>
-</div>
-
-## Table of Contents
-
-<!-- MarkdownTOC -->
-
-- [Overview](#overview)
-- [Quick Start Guide](#quick-start-guide)
-    - [Install Siren SDK](#install-siren-sdk)
-        - [Using Android Studio](#using-android-studio)
-    - [Siren Inbox Icon](#siren-inbox-icon)
-    - [Siren Inbox](#siren-inbox)
-    - [Error Codes](#error-codes)
-    - [Complete Code Example](#complete-code-example)
-- [I want to know more!](#i-want-to-know-more)
-
-<!-- /MarkdownTOC -->
-
-
-<a name="introduction"></a>
+# Siren Android Inbox
 
 ## Overview
 
-The siren-android-inbox sdk is a comprehensive and customizable android UI kit for displaying and managing notifications. This documentation provides comprehensive information on how to install, configure, and use the sdk effectively.
+The `siren-android-inbox` sdk is a comprehensive and customizable android UI kit for displaying and managing notifications. This documentation provides comprehensive information on how to install, configure, and use the sdk effectively.
 
-## Quick Start Guide
-
-### Install Siren SDK
+## 1. Installation
 
 You will need your sdk token for initializing your library.
 
-### Using Android Studio
-
-1. If this is your first time using Android Studio, Install Android Studio and dependencies
-   from [Android Studio's Website](https://developer.android.com/studio). And start a new project.
-2. Add the JitPack repository to your build file
-
+1. Add the JitPack repository to your build file
 ```kotlin
 allprojects {
     repositories {
@@ -46,8 +17,7 @@ allprojects {
     }
 }
 ```
-
-3. Add the dependency
+2. Add the dependency
 
 ```kotlin
 dependencies {
@@ -55,9 +25,10 @@ dependencies {
 }
 ```
 
-## Initialize SirenSDK
+## 2. Configuration
+### 2.1 Initialization
 
-Import and initialize `SirenSDK` in `MainActivity`, passing the context, token, recipientId and errorCallback
+Initialize `SirenSDK` in `MainActivity` by passing the context, token, recipientId and errorCallback
 
 ```kotlin
 import com.keyvalue.siren.androidsdk.helper.client.SirenSDK
@@ -79,9 +50,9 @@ class MainActivity {
 }
 ```
 
-### Siren Inbox Icon
+### 2.2 Configure notification icon
 
-This composable function includes a customizable notification icon and a badge for indicating the number of un-viewed notifications in the user interface.
+This composable function consists of a notification icon along with a badge to display the number of unviewed notifications.
 
 ```kotlin
 import com.keyvalue.siren.androidsdk.helper.customization.SirenInboxIconProps
@@ -104,21 +75,21 @@ sirenSDK.SirenInboxIcon(
 
 ```
 
-#### Siren Inbox Icon Props
-
-Given below are the list of parameters of Icon composable function.
+#### Parameters for notification icon
+Below are optional parameters available for the icon composable function:
 
 Parameter | Description | Type | Default value |
 --- | --- | --- | --- |
-theme | Theme Data class defining the theme configuration options |  Theme | null |
-customStyles | Custom style Props Data class defining the customizable styling options |  CustomStyles | null |
-notificationIcon | Option to use custom notification Icon | @Composable (() -> Unit)? | null |
-darkMode | Flag to enable dark mode |  Boolean | false |
-disabled | Flag to disable click handler of icon |  Boolean | false |
+theme | Data class defining the theme configuration |  Theme | null |
+customStyles | Data class defining the customizable styles |  CustomStyles | null |
+notificationIcon | Option to use custom notification icon | @Composable (() -> Unit)? | null |
+darkMode | Toggle to enable dark mode |  Boolean | false |
+disabled | Toggle to disable click on icon |  Boolean | false |
+hideBadge | Toggle to hide the badge displayed on the notification icon | Boolean | false |
 
-### Siren Inbox
+### 2.3 Configure notification inbox
 
-Siren Inbox is a paginated list view for displaying notifications.
+Inbox is a paginated list view for displaying notifications.
 
 ```kotlin
 import com.keyvalue.siren.androidsdk.helper.customization.SirenInboxProps
@@ -142,30 +113,37 @@ sirenSDK.SirenInbox(
 
 ```
 
-#### Siren Inbox Props
+#### Siren Inbox parameters
 
-Given below are the list of parameters of the Siren inbox composable function.
+Given below are the list of parameters of the Siren inbox composable function:
 
 Parameter | Description | Type | Default value |
 --- | --- | --- | --- |
-theme | Theme Data class defining the theme configuration options |  Theme | null |
-customStyles | Custom styling configuration options |  Theme | null |
-title |  Title of the notification window |  String | "Notifications" |
-hideHeader | Flag to hide or show the header |  Boolean | false |
-hideClearAll | Flag to hide or show the clear all button in header |  Boolean | false |
-darkMode | Flag to enable dark mode |  Boolean | false |
+theme | Data class defining the theme configuration |  Theme | null |
+customStyles | Data class defining the customizable styles |  Theme | null |
+title |  Title of the notification inbox |  String | "Notifications" |
+hideHeader | Toggle to hide the header section |  Boolean | false |
+hideClearAll | Toggle to hide the clear all button |  Boolean | false |
+darkMode | Toggle to enable dark mode |  Boolean | false |
 cardProps | Props for customizing the notification cards | CardProps | null |
-listEmptyComponent | Custom composable function to display when the notification list is empty | (@Composable () -> Unit) | null |
-customHeader | Custom header component | (@Composable () -> Unit) | null |
-customFooter | Custom footer component | (@Composable () -> Unit) | null |
-customNotificationCard | Custom function for rendering notification cards | (@Composable (AllNotificationResponseData) -> Unit) | null |
-customLoader | Custom composable function for displaying loader | (@Composable () -> Unit) | null |
-customErrorWindow | Custom composable function for displaying error window | (@Composable () -> Unit) | null |
-itemsPerFetch | Number of notifications to be fetched each time | Int | 20
+listEmptyComponent | Custom composable function for empty notification list | (@Composable () -> Unit) | null |
+customHeader | Custom header composable function | (@Composable () -> Unit) | null |
+customFooter | Custom footer composable function | (@Composable () -> Unit) | null |
+customNotificationCard | Custom click handler for notification cards | (@Composable (AllNotificationResponseData) -> Unit) | null |
+customLoader | Custom composable function to display the initial loading state | (@Composable () -> Unit) | null |
+customErrorWindow | Custom error window | (@Composable () -> Unit) | null |
+itemsPerFetch | Number of notifications fetch per api request (have a max cap of 50) | Int | 20
 
-#### Theming options
+##### CardProps
+```kotlin
+data class CardProps(
+    val hideAvatar: Boolean? = false,
+)
+```
+#### Theme customization
 
-Customize the theme configuration consisting of various theme properties such as colors, badge styles, window header styles, window container styles, and notification card styles.
+Here are the available theme options:
+
 
 ```kotlin
 import androidx.compose.ui.graphics.Color
@@ -220,9 +198,9 @@ data class NotificationCardThemeProps(
 )
 ```
 
-#### Styling options
+#### Style options
 
-Customize the styling configurations for various UI elements such as notification icons, windows, window headers, window containers, notification cards, badges, delete icon, date icon, and clear all icon.
+Here are the custom style options:
 
 ```js
 import androidx.compose.ui.unit.Dp
@@ -295,281 +273,151 @@ data class ClearAllIconStyle(
 
 ```
 
-### Functions
+## 3. Functions
 
-These are the functions for modifying notifications.
+Utility functions for modifying notifications:
 
-Function | Parameters |
---- | --- |
-markAsRead | notificationId, callback |
-markNotificationsAsReadByDate | untilDate, callback |
-markNotificationsAsViewed | untilDate, callback |
-deleteNotificationsByDate | untilDate, callback |
-deleteNotification | notificationId, callback |
-updateToken | userToken, recipientId
+Functions | Parameters | Type | Description |
+----------|------------|-------|------------|
+markNotificationsAsReadByDate | startDate | ISO date string | Sets the read status of notifications to true until the given date |
+markAsRead | id | string | Set read status of a notification to true          |
+deleteNotification |  id | string  | Delete a notification by id |
+deleteNotificationsByDate | startDate | ISO date string | Delete all notifications until given date |
+markNotificationsAsViewed | startDate | ISO date string |Sets the viewed status of notifications to true until the given date |
+updateToken | userToken, recipientId | string | To change the tokens
 
-### Error codes
+Sample code:
+```kotlin
+import com.keyvalue.siren.androidsdk.helper.client.SirenSDK
+import com.keyvalue.siren.androidsdk.helper.client.callbacks.ErrorCallback
+import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponseData
+import com.keyvalue.siren.androidsdk.helper.client.callbacks.MarkAsReadByIdCallback
+...
+    val sirenSDK =
+        SirenSDK.getInstance(
+            this,
+            "userToken",
+            "recipientId",
+            object : ErrorCallback {
+                override fun onError(jsonObject: JSONObject) {
+                }
+            },
+        )
+    fun markAsRead() {
+        sirenSDK.markAsRead(
+            notificationId = "notificationId",
+            callback = object : MarkAsReadByIdCallback {
+                override fun onSuccess(responseData: MarkAsReadByIdResponseData?) {
+                    // onSuccess
+                }
+                override fun onError(jsonObject: JSONObject) {
+                    // onError
+                }
+            }
+        )
+    }
+```
+
+## 4. Error codes
 
 Given below are all possible error codes thrown by sdk.
 
-Error code | Message | Description |
---- | --- | --- |
-TIMED_OUT | Timed out | Request timed out|
-INVALID_TOKEN | Invalid token | Invalid token |
-INVALID_RECIPIENT_ID | Invalid recipient id | Invalid recipient id |
-TOKEN_VERIFICATION_FAILED | Token verification failed | This operation requires a valid token |
-GENERIC_API_ERROR | Generic api error | Service is not available |
+Error code  | Description |
+--- | --- |
+TIMED_OUT  | Request timed out|
+INVALID_TOKEN  | The token passed is invalid |
+INVALID_RECIPIENT_ID  | The recipient id passed is invalid |
+TOKEN_VERIFICATION_FAILED | Verification of the given tokens has failed |
+GENERIC_API_ERROR  | Occurrence of an unexpected api error |
 
-### Complete Code Example
+## Example
 
-Here's a runnable code example that covers everything in this quick start guide.
+Here's a basic example to help you get started
 
 ```kotlin
 
 package com.keyvalue.sirensampleapp
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+// Add all necessary imports
+...
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
-import com.keyvalue.siren.androidsdk.helper.client.BadgeThemeProps
 import com.keyvalue.siren.androidsdk.data.model.DataStatus
-import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponseData
-import com.keyvalue.siren.androidsdk.data.model.MarkAsViewedResponseData
 import com.keyvalue.siren.androidsdk.helper.client.SirenSDK
-import com.keyvalue.siren.androidsdk.helper.client.SirenSDKClient
 import com.keyvalue.siren.androidsdk.helper.client.callbacks.ErrorCallback
-import com.keyvalue.siren.androidsdk.helper.client.callbacks.MarkAsReadByIdCallback
-import com.keyvalue.siren.androidsdk.helper.client.callbacks.MarkAsViewedCallback
 import com.keyvalue.siren.androidsdk.helper.client.callbacks.SirenAllNotificationUpdateCallback
 import com.keyvalue.siren.androidsdk.helper.client.callbacks.SirenInboxCallback
 import com.keyvalue.siren.androidsdk.helper.client.callbacks.SirenInboxIconCallback
 import com.keyvalue.siren.androidsdk.helper.customization.SirenInboxIconProps
 import com.keyvalue.siren.androidsdk.helper.customization.SirenInboxProps
-import com.keyvalue.siren.androidsdk.helper.customization.Theme
-import com.keyvalue.siren.androidsdk.helper.customization.ThemeProps
-import com.keyvalue.sirensampleapp.ui.theme.SirenSampleAppTheme
-import org.json.JSONObject
 
-@Composable
-fun NotificationIcon(
-    sirenSDK: SirenSDKClient,
-    navController: NavController,
-) {
-    Surface(
-        color = MaterialTheme.colorScheme.background,
-    ) {
-        sirenSDK.SirenInboxIcon(
-            SirenInboxIconProps(
-                theme =
-                Theme(
-                    dark =
-                    ThemeProps(
-                        badgeStyle =
-                        BadgeThemeProps(
-                            color = Color.Red,
-                            textColor = Color.White,
-                        ),
-                    ),
-                ),
-                darkMode = true,
-                notificationIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Notifications,
-                        contentDescription = "notification icon with unread notifications indicator",
-                        tint = Color(236, 155, 112, 255),
-                        modifier = Modifier.size(100.dp),
-                    )
-                },
-            ),
-            object : SirenInboxIconCallback {
-                override fun onError(jsonObject: JSONObject) {
-                }
+    // replace with userToken and recipientId
 
-                override fun onClick() {
-                    navController.navigate("notification_window")
-                }
-            },
-        )
-    }
-}
-
-@Composable
-fun NotificationWindow(
-    sirenSDK: SirenSDKClient,
-    navController: NavController,
-) {
-    Surface(
-        color = MaterialTheme.colorScheme.background,
-    ) {
-        sirenSDK.SirenInbox(
-            SirenInboxProps(),
-            object : SirenInboxCallback {
-                override fun onCardClick(notificationItem: AllNotificationResponseData) {
-                }
-
+    val sirenSDK =
+        SirenSDK.getInstance(
+            this,
+            "userToken",
+            "recipientId",
+            object : ErrorCallback {
                 override fun onError(jsonObject: JSONObject) {
                 }
             },
         )
-    }
-}
+        
+    sirenSDK.SirenInboxIcon(
+        SirenInboxIconProps(
+            darkMode = true,
+            notificationIcon = {
+                Icon(
+                    imageVector = Icons.Default.Notifications,
+                    tint = Color(236, 155, 112, 255),
+                    modifier = Modifier.size(100.dp),
+                )
+            },
+        ),
+        object : SirenInboxIconCallback {
+            override fun onError(jsonObject: JSONObject) {
+                // onError
+            }
 
-@Composable
-fun MyApp(sirenSDK: SirenSDKClient) {
-    val navController = rememberNavController()
+            override fun onClick() {
+                // onClick
+            }
+        },
+    )
 
-    NavHost(navController, startDestination = "notification_icon") {
-        composable("notification_icon") {
-            NotificationIcon(sirenSDK, navController)
-        }
-        composable("notification_window") {
-            NotificationWindow(sirenSDK, navController)
-        }
-    }
-}
+    sirenSDK.SirenInbox(
+        SirenInboxProps(),
+        object : SirenInboxCallback {
+            override fun onCardClick(notificationItem: AllNotificationResponseData) {
+                // onClick
+            }
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+            override fun onError(jsonObject: JSONObject) {
+                // onError
+            }
+        },
+    )
 
-        // replace with userToken and recipientId
+    fun deleteNotification() {
+        sirenSDK.deleteNotification(
+            notificationId = "notificationId",
+            callback = object : SirenAllNotificationUpdateCallback {
+                override fun onSuccess(dataStatus: DataStatus?) {
+                    // onSuccess
+                }
 
-        val sirenSDK =
-            SirenSDK.getInstance(
-                this,
-                "userToken",
-                "recipientId",
-                object : ErrorCallback {
-                    override fun onError(jsonObject: JSONObject) {
-                    }
-                },
-            )
-        setContent {
-            SirenSampleAppTheme {
-                Surface(
-                    color = MaterialTheme.colorScheme.background,
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        MyApp(sirenSDK)
-                    }
+                override fun onError(jsonObject: JSONObject) {
+                    // onError
                 }
             }
-        }
-
-        fun markAsRead() {
-            sirenSDK.markAsRead(
-                notificationId = "notificationId",
-                callback = object : MarkAsReadByIdCallback {
-                    override fun onSuccess(responseData: MarkAsReadByIdResponseData?) {
-                        // onSuccess
-                    }
-
-                    override fun onError(jsonObject: JSONObject) {
-                        // onError
-                    }
-                }
-            )
-        }
-
-        fun markNotificationsAsReadByDate() {
-            sirenSDK.markNotificationsAsReadByDate(
-                startDate = "startDate",
-                callback = object : SirenAllNotificationUpdateCallback {
-                    override fun onSuccess(dataStatus: DataStatus?) {
-                        // onSuccess
-                    }
-
-                    override fun onError(jsonObject: JSONObject) {
-                        // onError
-                    }
-
-                }
-            )
-        }
-
-        fun markNotificationsAsViewed() {
-            sirenSDK.markNotificationsAsViewed(
-                startDate = "startDate",
-                callback = object : MarkAsViewedCallback {
-                    override fun onSuccess(responseData: MarkAsViewedResponseData) {
-                        // onSuccess
-                    }
-
-                    override fun onError(jsonObject: JSONObject) {
-                        // onError
-                    }
-
-                }
-            )
-        }
-
-        fun deleteNotificationsByDate() {
-            sirenSDK.deleteNotificationsByDate(
-                startDate = "startDate",
-                callback = object : SirenAllNotificationUpdateCallback {
-                    override fun onSuccess(dataStatus: DataStatus?) {
-                        // onSuccess
-                    }
-
-                    override fun onError(jsonObject: JSONObject) {
-                        // onError
-                    }
-
-                }
-            )
-        }
-
-        fun deleteNotification() {
-            sirenSDK.deleteNotification(
-                notificationId = "notificationId",
-                callback = object : SirenAllNotificationUpdateCallback {
-                    override fun onSuccess(dataStatus: DataStatus?) {
-                        // onSuccess
-                    }
-
-                    override fun onError(jsonObject: JSONObject) {
-                        // onError
-                    }
-
-                }
-            )
-        }
-
-        fun updateToken() {
-            sirenSDK.updateToken(
-                userToken = "userToken",
-                recipientId = "recipientId"
-            )
-        }
-
-
+        )
     }
-}
 
+    fun updateToken() {
+        sirenSDK.updateToken(
+            userToken = "userToken",
+            recipientId = "recipientId"
+        )
+    }
 
 ```
-
-### I want to know more!
-
-No worries, here are some links that you will find useful:
-
-* **[Advanced Kotlin-Android Guide](https://developer.android.com/kotlin)**
