@@ -107,16 +107,21 @@ fun NotificationCard(
                     .padding(notificationCardStyle.padding!!),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Image(
-                painter = painter,
-                contentDescription = null,
-                modifier =
-                    Modifier
-                        .size(notificationCardStyle.avatarSize!!)
-                        .clip(CircleShape)
-                        .weight(1f),
-            )
-
+            if (props.cardProps?.hideAvatar != true) {
+                Image(
+                    painter = painter,
+                    contentDescription = null,
+                    modifier =
+                        Modifier
+                            .size(notificationCardStyle.avatarSize!!)
+                            .clip(CircleShape)
+                            .weight(1f),
+                )
+            } else {
+                Spacer(
+                    modifier = Modifier.size(notificationCardStyle.avatarSize!!).weight(1f),
+                )
+            }
             Column(
                 modifier =
                     Modifier
