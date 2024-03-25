@@ -18,6 +18,7 @@ class SirenSDK {
             callback: ErrorCallback,
         ): SirenSDKClient {
             return SirenSDKCore(
+                context,
                 userToken,
                 recipientId,
                 callback,

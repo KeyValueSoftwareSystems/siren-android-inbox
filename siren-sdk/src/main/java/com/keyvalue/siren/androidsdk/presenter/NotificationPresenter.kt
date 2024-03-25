@@ -1,5 +1,6 @@
 package com.keyvalue.siren.androidsdk.presenter
 
+import android.content.Context
 import com.keyvalue.siren.androidsdk.data.managers.NotificationManager
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
 import com.keyvalue.siren.androidsdk.data.model.DataStatus
@@ -13,9 +14,10 @@ import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 class NotificationPresenter(
+    context: Context,
     private var userToken: String,
     private var recipientId: String,
-) : BasePresenter() {
+) : BasePresenter(context) {
     private var notificationManager: NotificationManager? = null
 
     init {

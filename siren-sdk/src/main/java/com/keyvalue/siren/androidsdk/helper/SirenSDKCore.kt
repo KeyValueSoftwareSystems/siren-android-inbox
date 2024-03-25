@@ -1,5 +1,6 @@
 package com.keyvalue.siren.androidsdk.helper
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -84,6 +85,7 @@ import java.util.Timer
 import java.util.TimerTask
 
 class SirenSDKCore(
+    context: Context,
     _userToken: String,
     _recipientId: String,
     private var errorCallback: ErrorCallback,
@@ -104,8 +106,10 @@ class SirenSDKCore(
         MutableStateFlow(null)
     private var deleteByIdState: MutableStateFlow<String> = MutableStateFlow("")
     private var sdkRestartState: MutableStateFlow<SdkState> = MutableStateFlow(SdkState.NOT_RESTART)
+    private var context: Context? = null
 
     init {
+        this.context = context
         initialize(_userToken, _recipientId)
     }
 
@@ -132,9 +136,9 @@ class SirenSDKCore(
         }
         if (userToken.isNotEmpty() && recipientId.isNotEmpty()) {
             val authenticationPresenter =
-                AuthenticationPresenter(userToken, recipientId)
+                context?.let { AuthenticationPresenter(it, userToken, recipientId) }
             authenticationStatus = TokenVerificationStatus.PENDING
-            authenticationPresenter.verifyToken { boolean, _ ->
+            authenticationPresenter?.verifyToken { boolean, _ ->
                 authenticationStatus =
                     if (boolean) TokenVerificationStatus.SUCCESS else TokenVerificationStatus.FAILED
                 authenticationState.emit(authenticationStatus)
@@ -163,8 +167,9 @@ class SirenSDKCore(
                 }
             }
         if (authStatus == TokenVerificationStatus.SUCCESS) {
-            val notificationUnViewedPresenter = NotificationPresenter(userToken, recipientId)
-            notificationUnViewedPresenter.fetchUnViewedNotificationsCount(callback)
+            val notificationUnViewedPresenter =
+                context?.let { NotificationPresenter(it, userToken, recipientId) }
+            notificationUnViewedPresenter?.fetchUnViewedNotificationsCount(callback)
         }
     }
 
@@ -183,8 +188,9 @@ class SirenSDKCore(
                 }
             }
         if (authStatus == TokenVerificationStatus.SUCCESS) {
-            val notificationPresenter = NotificationPresenter(userToken, recipientId)
-            notificationPresenter.fetchAllNotifications(
+            val notificationPresenter =
+                context?.let { NotificationPresenter(it, userToken, recipientId) }
+            notificationPresenter?.fetchAllNotifications(
                 page = page,
                 size = size,
                 start = start,
@@ -206,8 +212,9 @@ class SirenSDKCore(
                 }
             }
         if (authStatus == TokenVerificationStatus.SUCCESS) {
-            val notificationPresenter = NotificationPresenter(userToken, recipientId)
-            notificationPresenter.markAsReadById(
+            val notificationPresenter =
+                context?.let { NotificationPresenter(it, userToken, recipientId) }
+            notificationPresenter?.markAsReadById(
                 notificationId = notificationId,
                 callback = callback,
             )
@@ -243,14 +250,15 @@ class SirenSDKCore(
                 }
             }
         if (authStatus == TokenVerificationStatus.SUCCESS) {
-            val notificationPresenter = NotificationPresenter(userToken, recipientId)
+            val notificationPresenter =
+                context?.let { NotificationPresenter(it, userToken, recipientId) }
             if (startDate != null) {
-                notificationPresenter.markAllAsRead(
+                notificationPresenter?.markAllAsRead(
                     startDate = startDate,
                     callback = callback,
                 )
             } else {
-                notificationPresenter.markAllAsRead(
+                notificationPresenter?.markAllAsRead(
                     startDate = startDateState,
                     callback = callback,
                 )
@@ -289,14 +297,15 @@ class SirenSDKCore(
                 }
             }
         if (authStatus == TokenVerificationStatus.SUCCESS) {
-            val notificationPresenter = NotificationPresenter(userToken, recipientId)
+            val notificationPresenter =
+                context?.let { NotificationPresenter(it, userToken, recipientId) }
             if (startDate != null) {
-                notificationPresenter.markAsViewed(
+                notificationPresenter?.markAsViewed(
                     startDate = startDate,
                     callback = callback,
                 )
             } else {
-                notificationPresenter.markAsViewed(
+                notificationPresenter?.markAsViewed(
                     startDate = startDateState,
                     callback = callback,
                 )
@@ -331,14 +340,15 @@ class SirenSDKCore(
                 }
             }
         if (authStatus == TokenVerificationStatus.SUCCESS) {
-            val notificationPresenter = NotificationPresenter(userToken, recipientId)
+            val notificationPresenter =
+                context?.let { NotificationPresenter(it, userToken, recipientId) }
             if (startDate != null) {
-                notificationPresenter.clearAllNotifications(
+                notificationPresenter?.clearAllNotifications(
                     startDate = startDate,
                     callback = callback,
                 )
             } else {
-                notificationPresenter.clearAllNotifications(
+                notificationPresenter?.clearAllNotifications(
                     startDate = startDateState,
                     callback = callback,
                 )
@@ -373,8 +383,9 @@ class SirenSDKCore(
                 }
             }
         if (authStatus == TokenVerificationStatus.SUCCESS) {
-            val notificationPresenter = NotificationPresenter(userToken, recipientId)
-            notificationPresenter.deleteNotificationById(
+            val notificationPresenter =
+                context?.let { NotificationPresenter(it, userToken, recipientId) }
+            notificationPresenter?.deleteNotificationById(
                 notificationId = notificationId,
                 callback = callback,
             )

@@ -1,5 +1,6 @@
 package com.keyvalue.siren.androidsdk.presenter
 
+import android.content.Context
 import com.keyvalue.siren.androidsdk.data.managers.AuthenticationManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -7,9 +8,10 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class AuthenticationPresenter(
+    context: Context,
     private var userToken: String,
     private var recipientId: String,
-) : BasePresenter() {
+) : BasePresenter(context) {
     private var authenticationManager: AuthenticationManager? = null
 
     init {
