@@ -36,13 +36,15 @@ object SirenSDKUtils {
         val minutes = (seconds / 60).toInt()
         val hours = (minutes / 60).toInt()
         val days = (hours / 24).toInt()
+        val months = (days / 30).toInt()
         val years = (days / 365).toInt()
 
         return when {
             millisecondsDiff < 60000 -> "Just now"
             minutes < 60 -> if (minutes == 1) "1 minute ago" else "$minutes minutes ago"
             hours < 24 -> if (hours == 1) "1 hour ago" else "$hours hours ago"
-            days < 365 -> if (days == 1) "1 day ago" else "$days days ago"
+            days < 30 -> if (days == 1) "1 day ago" else "$days days ago"
+            months < 12 -> if (months == 1) "1 month ago" else "$months months ago"
             else -> if (years == 1) "1 year ago" else "$years years ago"
         }
     }
