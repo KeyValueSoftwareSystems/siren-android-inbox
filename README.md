@@ -21,7 +21,7 @@ allprojects {
 
 ```kotlin
 dependencies {
-    implementation 'com.github.keyvalue:siren-android-inbox:1.0.0'
+    implementation 'com.github.KeyValueSoftwareSystems:siren-android-inbox:1.0.0'
 }
 ```
 
