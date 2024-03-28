@@ -120,8 +120,8 @@ class MainActivity : ComponentActivity() {
         val sirenSDK =
             SirenSDK.getInstance(
                 this,
-                "userToken",
-                "recipientId",
+                "YOUR_USER_TOKEN",
+                "YOUR_RECIPIENT_ID",
                 object : ErrorCallback {
                     override fun onError(jsonObject: JSONObject) {
                     }
