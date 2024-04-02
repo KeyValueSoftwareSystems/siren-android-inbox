@@ -8,6 +8,7 @@ import com.keyvalue.siren.androidsdk.helper.client.CardProps
 import com.keyvalue.siren.androidsdk.helper.client.ClearAllIconStyle
 import com.keyvalue.siren.androidsdk.helper.client.DateIconStyle
 import com.keyvalue.siren.androidsdk.helper.client.DeleteIconStyle
+import com.keyvalue.siren.androidsdk.helper.client.InboxHeaderProps
 import com.keyvalue.siren.androidsdk.helper.client.NotificationCardStyle
 import com.keyvalue.siren.androidsdk.helper.client.NotificationCardThemeProps
 import com.keyvalue.siren.androidsdk.helper.client.NotificationIconStyle
@@ -68,12 +69,10 @@ data class SirenInboxIconProps(
  * @property theme Color theme object for custom styling.
  * @property customStyles Additional custom styles for the Siren inbox.
  * @property title Title of the notification window.
- * @property hideHeader Flag to hide or show the header.
- * @property hideClearAll Flag indicating whether to hide the "Clear All" button in the header.
  * @property darkMode Flag to enable dark mode.
  * @property cardProps Additional properties for customizing the notification cards.
+ * @property inboxHeaderProps  Properties for customizing the header
  * @property listEmptyComponent Custom composable function to display when the notification list is empty.
- * @property customHeader Custom composable function to be displayed at the top of the inbox.
  * @property customFooter Custom composable function to be displayed below the inbox list.
  * @property customNotificationCard Custom composable function for rendering individual notification cards.
  * @property customLoader Custom composable function for loader to be displayed when the notification list is loading.
@@ -84,13 +83,11 @@ data class SirenInboxProps(
     val theme: Theme? = null,
     val customStyles: CustomStyles? = null,
     val title: String? = null,
-    val hideHeader: Boolean? = false,
-    val hideClearAll: Boolean? = false,
     var darkMode: Boolean? = false,
     val cardProps: CardProps? = null,
+    val inboxHeaderProps: InboxHeaderProps? = null,
     val listEmptyComponent: (@Composable () -> Unit)? = null,
     val customFooter: (@Composable () -> Unit)? = null,
-    val customHeader: (@Composable () -> Unit)? = null,
     val customNotificationCard: (@Composable (AllNotificationResponseData) -> Unit)? = null,
     val customLoader: (@Composable () -> Unit)? = null,
     val customErrorWindow: (@Composable () -> Unit)? = null,

@@ -44,7 +44,6 @@ import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponseData
 import com.keyvalue.siren.androidsdk.data.model.MarkAsViewedResponseData
 import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponseData
 import com.keyvalue.siren.androidsdk.helper.client.CombinedBadgeThemeProps
-import com.keyvalue.siren.androidsdk.helper.client.NotificationCardProps
 import com.keyvalue.siren.androidsdk.helper.client.SirenSDKClient
 import com.keyvalue.siren.androidsdk.helper.client.callbacks.ErrorCallback
 import com.keyvalue.siren.androidsdk.helper.client.callbacks.MarkAsReadByIdCallback
@@ -860,8 +859,8 @@ class SirenSDKCore(
                         .background(windowContainerStyle?.background!!)
                         .padding(windowContainerStyle.padding!!),
             ) {
-                if (props.hideHeader == false) {
-                    props.customHeader?.let { it() } ?: Header(
+                if (props.inboxHeaderProps?.hideHeader != true) {
+                    props.inboxHeaderProps?.customHeader?.let { it() } ?: Header(
                         title = props.title ?: DEFAULT_WINDOW_TITLE,
                         titleColor = windowHeaderStyle?.titleColor!!,
                         titleFontSize = windowHeaderStyle.titleSize!!,
@@ -872,7 +871,7 @@ class SirenSDKCore(
                         enableClearAll = enableClearAllButton,
                         titlePadding = windowHeaderStyle.titlePadding!!,
                         borderBottomColor = windowHeaderStyle.borderColor!!,
-                        hideClearAll = props.hideClearAll ?: false,
+                        hideClearAll = props.inboxHeaderProps?.hideClearAll ?: false,
                         themeColors = themeColors,
                         clearAllIconSize = styles.windowHeader.clearAllIconSize!!,
                     ) {
@@ -935,10 +934,8 @@ class SirenSDKCore(
                                         it(notificationData)
                                     }
                                 } ?: NotificationCard(
-                                    NotificationCardProps(
-                                        notification = notificationData,
-                                        cardProps = props.cardProps,
-                                    ),
+                                    notification = notificationData,
+                                    cardProps = props.cardProps,
                                     notificationCardStyle,
                                     onCardClick = {
                                         callback.onCardClick(it)
@@ -961,6 +958,20 @@ class SirenSDKCore(
                                     },
                                     themeColors = themeColors,
                                     darkMode = props.darkMode ?: false,
+                                    defaultCardClickCallback = {
+                                        notificationData?.id?.let {
+                                            markAsRead(
+                                                it,
+                                                object : MarkAsReadByIdCallback {
+                                                    override fun onSuccess(responseData: MarkAsReadByIdResponseData?) {}
+
+                                                    override fun onError(jsonObject: JSONObject) {
+                                                        callback.onError(jsonObject)
+                                                    }
+                                                },
+                                            )
+                                        }
+                                    },
                                 )
                             }
                         }
