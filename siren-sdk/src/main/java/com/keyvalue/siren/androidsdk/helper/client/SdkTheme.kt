@@ -57,6 +57,9 @@ data class InboxHeaderProps(
     val hideHeader: Boolean? = false,
     val hideClearAll: Boolean? = false,
     val customHeader: (@Composable () -> Unit)? = null,
+    val showBackButton: Boolean? = false,
+    val backButton: (@Composable () -> Unit)? = null,
+    val handleBackNavigation: (() -> Unit)? = null,
 )
 
 data class NotificationIconProps(

@@ -872,6 +872,9 @@ class SirenSDKCore(
                         borderBottomColor = windowHeaderStyle.borderColor!!,
                         hideClearAll = props.inboxHeaderProps?.hideClearAll ?: false,
                         themeColors = themeColors,
+                        showBackButton = props.inboxHeaderProps?.showBackButton ?: false,
+                        handleBackNavigation = props.inboxHeaderProps?.handleBackNavigation,
+                        backButton = props.inboxHeaderProps?.backButton,
                         clearAllIconSize = styles.windowHeader.clearAllIconSize!!,
                     ) {
                         deleteNotificationsByDate(
