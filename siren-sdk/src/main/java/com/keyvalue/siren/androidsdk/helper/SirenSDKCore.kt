@@ -64,6 +64,7 @@ import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_INVALID_TOKEN
 import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_TOKEN_VERIFICATION_FAILED
 import com.keyvalue.siren.androidsdk.utils.constants.INVALID_RECIPIENT_ID
 import com.keyvalue.siren.androidsdk.utils.constants.INVALID_TOKEN
+import com.keyvalue.siren.androidsdk.utils.constants.MAXIMUM_ITEMS_PER_FETCH
 import com.keyvalue.siren.androidsdk.utils.constants.MAX_VERIFICATION_RETRY
 import com.keyvalue.siren.androidsdk.utils.constants.SdkState
 import com.keyvalue.siren.androidsdk.utils.constants.SirenErrorTypes
@@ -612,10 +613,8 @@ class SirenSDKCore(
         val notificationsPerPage =
             if (props.itemsPerFetch == null) {
                 20
-            } else if (props.itemsPerFetch > 50) {
-                50
             } else {
-                props.itemsPerFetch
+                maxOf(0, if (props.itemsPerFetch > MAXIMUM_ITEMS_PER_FETCH) MAXIMUM_ITEMS_PER_FETCH else props.itemsPerFetch)
             }
 
         fun executeMarkAsViewed(startDate: String) {
