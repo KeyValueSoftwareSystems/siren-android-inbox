@@ -1,4 +1,4 @@
-package com.keyvalue.siren.androidsdk.helper
+package com.keyvalue.siren.androidsdk.core.elements
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material.Icon
@@ -51,22 +50,7 @@ fun NotificationCard(
     deleteNotificationCallback: () -> Unit,
     onCardClick: ((AllNotificationResponseData) -> Unit),
     themeColors: ThemeColors?,
-    darkMode: Boolean,
 ) {
-    val avatarImageUrl = props.notification?.message?.avatar?.imageUrl
-
-    val painter =
-        if (avatarImageUrl.isNullOrEmpty()) {
-            painterResource(id = if (darkMode) R.drawable.avatar_dark else R.drawable.avatar_light)
-        } else {
-            rememberImagePainter(
-                data = avatarImageUrl,
-                builder = {
-                    transformations(CircleCropTransformation())
-                },
-            )
-        }
-
     val modifier =
         Modifier
             .conditional(props.notification?.isRead == false) {
@@ -75,58 +59,61 @@ fun NotificationCard(
 
     Box(
         modifier =
-            modifier
-                .border(
-                    width = notificationCardStyle?.borderWidth!!,
-                    color = notificationCardStyle.borderColor!!,
-                ),
+        modifier
+            .border(
+                width = notificationCardStyle?.borderWidth!!,
+                color = notificationCardStyle.borderColor!!,
+            ),
     ) {
-        val borderStroke =
-            if (props.notification?.isRead == false) {
-                BorderStroke(5.dp, themeColors?.primaryColor!!)
-            } else {
-                BorderStroke(1.dp, Color.Transparent)
-            }
+        var borderStroke: BorderStroke? = null
+        if (props.notification?.isRead == false) {
+            borderStroke = BorderStroke(5.dp, themeColors?.primaryColor!!)
+        } else {
+            borderStroke = BorderStroke(1.dp, Color.Transparent)
+        }
 
         Row(
             modifier =
-                modifier
-                    .border(
-                        borderStroke,
-                        shape = borderShape(thickness = if (props.notification?.isRead == false) 5.dp else 1.dp),
-                    )
-                    .clickable {
-                        onCardClick.let {
-                            props.notification?.let { notification ->
-                                it(
-                                    notification,
-                                )
-                            }
+            modifier
+                .border(
+                    borderStroke,
+                    shape = borderShape(thickness = if (props.notification?.isRead == false) 5.dp else 1.dp),
+                )
+                .clickable {
+                    onCardClick.let {
+                        props.notification?.let { notification ->
+                            it(
+                                notification,
+                            )
                         }
                     }
-                    .padding(notificationCardStyle.padding!!),
+                }
+                .padding(notificationCardStyle.padding!!),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             if (props.cardProps?.hideAvatar != true) {
                 Image(
-                    painter = painter,
+                    painter =
+                    rememberImagePainter(
+                        data = props.notification?.message?.avatar?.imageUrl,
+                        builder = {
+                            transformations(CircleCropTransformation())
+                        },
+                    ),
                     contentDescription = null,
                     modifier =
-                        Modifier
-                            .size(notificationCardStyle.avatarSize!!)
-                            .clip(CircleShape)
-                            .weight(1f),
-                )
-            } else {
-                Spacer(
-                    modifier = Modifier.size(notificationCardStyle.avatarSize!!).weight(1f),
+                    Modifier
+                        .size(notificationCardStyle.avatarSize!!)
+                        .clip(CircleShape)
+                        .weight(1f),
                 )
             }
+
             Column(
                 modifier =
-                    Modifier
-                        .weight(5f)
-                        .padding(start = 5.dp),
+                Modifier
+                    .weight(5f)
+                    .padding(start = 5.dp),
             ) {
                 props.notification?.message?.let { message ->
                     message.header?.let { header ->
@@ -160,7 +147,7 @@ fun NotificationCard(
                         text = message.body,
                         color = notificationCardStyle.descriptionColor!!,
                         fontSize = notificationCardStyle.descriptionSize!!,
-                        maxLines = 2,
+                        maxLines = 3,
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
@@ -173,16 +160,16 @@ fun NotificationCard(
                         contentDescription = "Clock Icon",
                         colorFilter = ColorFilter.tint(themeColors?.timerIcon!!),
                         modifier =
-                            Modifier
-                                .size(notificationCardStyle.dateIconSize!!)
-                                .padding(end = 5.dp),
+                        Modifier
+                            .size(notificationCardStyle.dateIconSize!!)
+                            .padding(end = 5.dp),
                     )
                     props.notification?.let { responseData ->
                         responseData.createdAt.let { createdAt ->
                             val elapsedTimeText = SirenSDKUtils.generateElapsedTimeText(createdAt)
                             Text(
                                 text = elapsedTimeText,
-                                color = themeColors.dateColor!!,
+                                color = notificationCardStyle.dateColor!!,
                                 fontSize = notificationCardStyle.dateSize!!,
                                 lineHeight = 16.sp,
                                 fontWeight = FontWeight.W400,
@@ -192,17 +179,16 @@ fun NotificationCard(
                 }
             }
 
-            Box(modifier = Modifier.weight(1f).padding(end = 6.dp), contentAlignment = Alignment.CenterEnd) {
-                Icon(
-                    imageVector = Icons.Default.Clear,
-                    contentDescription = "Delete icon",
-                    tint = themeColors?.deleteIcon!!,
-                    modifier =
-                        Modifier
-                            .size(notificationCardStyle.deleteIconSize!!)
-                            .clickable { deleteNotificationCallback() },
-                )
-            }
+            Icon(
+                imageVector = Icons.Default.Clear,
+                contentDescription = "Delete icon",
+                tint = themeColors?.deleteIcon!!,
+                modifier =
+                Modifier
+                    .size(notificationCardStyle.deleteIconSize!!)
+                    .weight(1f)
+                    .clickable { deleteNotificationCallback() },
+            )
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.keyvalue.siren.androidsdk.data.managers
 
+import android.util.Log
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
 import com.keyvalue.siren.androidsdk.data.model.DataStatus
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponseData

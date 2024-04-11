@@ -1,5 +1,6 @@
 package com.keyvalue.siren.androidsdk.data.repository
 
+import android.util.Log
 import com.google.gson.Gson
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponse
 import com.keyvalue.siren.androidsdk.data.model.BulkUpdateBody

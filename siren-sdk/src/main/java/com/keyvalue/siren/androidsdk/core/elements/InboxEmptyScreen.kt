@@ -1,4 +1,4 @@
-package com.keyvalue.siren.androidsdk.helper
+package com.keyvalue.siren.androidsdk.core.elements
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,12 +21,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.keyvalue.siren.androidsdk.R
-import com.keyvalue.siren.androidsdk.utils.constants.INBOX_ERROR_DESCRIPTION
-import com.keyvalue.siren.androidsdk.utils.constants.INBOX_ERROR_TITLE
+import com.keyvalue.siren.androidsdk.utils.constants.INBOX_EMPTY_DESCRIPTION
+import com.keyvalue.siren.androidsdk.utils.constants.INBOX_EMPTY_TITLE
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun InboxErrorState(
+fun InboxEmptyScreen(
     pullRefreshState: PullRefreshState,
     backgroundColor: Color,
     titleColor: Color,
@@ -44,9 +44,9 @@ fun InboxErrorState(
                 .background(backgroundColor),
     ) {
         item {
-            Image(painter = painterResource(id = if (isDarkMode) R.drawable.error_state_dark else R.drawable.error_state_light), contentDescription = "Error state", modifier = Modifier.size(150.dp))
+            Image(painter = painterResource(id = if (isDarkMode) R.drawable.empty_state_dark else R.drawable.empty_state_light), contentDescription = "Error state", modifier = Modifier.size(150.dp))
             Text(
-                text = INBOX_ERROR_TITLE,
+                text = INBOX_EMPTY_TITLE,
                 fontWeight = FontWeight.W600,
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
@@ -54,7 +54,7 @@ fun InboxErrorState(
                 modifier = Modifier.padding(top = 10.dp, bottom = 4.dp),
             )
             Text(
-                text = INBOX_ERROR_DESCRIPTION,
+                text = INBOX_EMPTY_DESCRIPTION,
                 fontWeight = FontWeight.W400,
                 fontSize = 12.sp,
                 lineHeight = 16.sp,

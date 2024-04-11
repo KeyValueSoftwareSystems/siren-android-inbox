@@ -1,14 +1,17 @@
 package com.keyvalue.siren.androidsdk.presenter
 
 import android.content.Context
+import android.util.Log
 import com.keyvalue.siren.androidsdk.data.managers.NotificationManager
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
 import com.keyvalue.siren.androidsdk.data.model.DataStatus
 import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponseData
 import com.keyvalue.siren.androidsdk.data.model.MarkAsViewedResponseData
 import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponseData
+import com.keyvalue.siren.androidsdk.data.state.NotificationUnViewedState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -19,6 +22,7 @@ class NotificationPresenter(
     private var recipientId: String,
 ) : BasePresenter(context) {
     private var notificationManager: NotificationManager? = null
+    private var persistedNotificationState: NotificationUnViewedState? = null
 
     init {
         notificationManager = NotificationManager(baseURL)
@@ -28,21 +32,26 @@ class NotificationPresenter(
         CoroutineScope(Dispatchers.IO).launch {
             notificationManager?.fetchUnViewedNotificationsCount(userToken, recipientId)
             notificationManager?.notificationUnViewedState?.collect { notificationUnViewedState ->
-                if (notificationUnViewedState?.errorResponse == null) {
-                    notificationUnViewedState?.notificationUnViewedResponse?.let { response ->
+                if (persistedNotificationState ==  null || persistedNotificationState != notificationUnViewedState) {
+                    persistedNotificationState = notificationUnViewedState
+                    if (notificationUnViewedState?.errorResponse == null) {
+                        notificationUnViewedState?.notificationUnViewedResponse?.let { response ->
+                            callback(
+                                response,
+                                null,
+                                false,
+                            )
+                        }
+                    } else {
                         callback(
-                            response,
                             null,
-                            false,
+                            notificationUnViewedState.errorResponse,
+                            true,
                         )
                     }
-                } else {
-                    callback(
-                        null,
-                        notificationUnViewedState.errorResponse,
-                        true,
-                    )
                 }
+
+
             }
         }
     }
