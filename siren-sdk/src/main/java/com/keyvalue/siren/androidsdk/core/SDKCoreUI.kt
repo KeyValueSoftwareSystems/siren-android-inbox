@@ -536,6 +536,9 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                         borderBottomColor = windowHeaderStyle.borderColor!!,
                         hideClearAll = props.inboxHeaderProps?.hideClearAll ?: false,
                         themeColors = themeColors,
+                        showBackButton = props.inboxHeaderProps?.showBackButton ?: false,
+                        handleBackNavigation = props.inboxHeaderProps?.handleBackNavigation,
+                        backButton = props.inboxHeaderProps?.backButton,
                         clearAllIconSize = styles.windowHeader.clearAllIconSize!!,
                     ) {
                         deleteNotificationsByDateInner(

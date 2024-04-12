@@ -9,8 +9,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -44,6 +48,9 @@ fun Header(
     hideClearAll: Boolean,
     themeColors: ThemeColors?,
     clearAllIconSize: Dp,
+    showBackButton: Boolean,
+    backButton: (@Composable () -> Unit)?,
+    handleBackNavigation: (() -> Unit)?,
     onClearAllClick: () -> Unit,
 ) {
     Column {
@@ -57,13 +64,33 @@ fun Header(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(
-                text = title ?: DEFAULT_WINDOW_TITLE,
-                color = titleColor,
-                fontSize = titleFontSize,
-                fontWeight = titleFontWeight,
-                modifier = Modifier.padding(titlePadding),
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (showBackButton) {
+                    backButton?.let {
+                        it()
+                    }
+                        ?: Icon(
+                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                            contentDescription = "notification icon with unread notifications indicator",
+                            modifier =
+                                Modifier
+                                    .size(30.dp)
+                                    .offset(x = (-5).dp)
+                                    .clickable {
+                                        if (handleBackNavigation != null) {
+                                            handleBackNavigation()
+                                        }
+                                    },
+                        )
+                }
+                Text(
+                    text = title ?: DEFAULT_WINDOW_TITLE,
+                    color = titleColor,
+                    fontSize = titleFontSize,
+                    fontWeight = titleFontWeight,
+                    modifier = Modifier.padding(titlePadding),
+                )
+            }
             if (!hideClearAll) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -93,6 +120,12 @@ fun Header(
                 }
             }
         }
-        Box(modifier = Modifier.height(0.6.dp).fillMaxWidth().background(borderBottomColor)) {}
+        Box(
+            modifier =
+                Modifier
+                    .height(0.6.dp)
+                    .fillMaxWidth()
+                    .background(borderBottomColor),
+        ) {}
     }
 }
