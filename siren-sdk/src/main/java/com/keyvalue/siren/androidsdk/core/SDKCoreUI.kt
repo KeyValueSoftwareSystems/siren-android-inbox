@@ -47,7 +47,6 @@ import com.keyvalue.siren.androidsdk.core.elements.SkeletonLoader
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
 import com.keyvalue.siren.androidsdk.data.model.DataStatus
 import com.keyvalue.siren.androidsdk.data.model.MarkAsViewedResponseData
-import com.keyvalue.siren.androidsdk.helper.client.NotificationCardProps
 import com.keyvalue.siren.androidsdk.helper.client.callbacks.SirenInboxCallback
 import com.keyvalue.siren.androidsdk.helper.client.callbacks.SirenInboxIconCallback
 import com.keyvalue.siren.androidsdk.helper.customization.SirenInboxIconProps
@@ -516,8 +515,8 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                         .background(windowContainerStyle?.background!!)
                         .padding(windowContainerStyle.padding!!),
             ) {
-                if (props.hideHeader == false) {
-                    props.customHeader?.let { it() } ?: Header(
+                if (props.inboxHeaderProps?.hideHeader != true) {
+                    props.inboxHeaderProps?.customHeader?.let { it() } ?: Header(
                         title = props.title ?: DEFAULT_WINDOW_TITLE,
                         titleColor = windowHeaderStyle?.titleColor!!,
                         titleFontSize = windowHeaderStyle.titleSize!!,
@@ -528,7 +527,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                         enableClearAll = enableClearAllButton,
                         titlePadding = windowHeaderStyle.titlePadding!!,
                         borderBottomColor = windowHeaderStyle.borderColor!!,
-                        hideClearAll = props.hideClearAll ?: false,
+                        hideClearAll = props.inboxHeaderProps?.hideClearAll ?: false,
                         themeColors = themeColors,
                         clearAllIconSize = styles.windowHeader.clearAllIconSize!!,
                     ) {
@@ -582,10 +581,8 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                                         it(notificationData)
                                     }
                                 } ?: NotificationCard(
-                                    NotificationCardProps(
-                                        notification = notificationData,
-                                        cardProps = props.cardProps,
-                                    ),
+                                    notification = notificationData,
+                                    cardProps = props.cardProps,
                                     notificationCardStyle,
                                     onCardClick = {
                                         callback.onCardClick(it)
@@ -606,6 +603,10 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                                         }
                                     },
                                     themeColors = themeColors,
+                                    darkMode = props.darkMode ?: false,
+                                    defaultCardClickCallback = {
+                                        // Add callback
+                                    },
                                 )
                             }
                         }
