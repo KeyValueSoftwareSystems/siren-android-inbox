@@ -8,7 +8,7 @@ import com.keyvalue.siren.androidsdk.R
 abstract class BasePresenter(
     private var context: Context,
 ) {
-    protected var baseURL = context.resources.getString(R.string.SIREN_BASE_URL)
+    protected var baseURL = context.resources?.getString(R.string.SIREN_BASE_URL)
 
     protected fun isNetworkAvailable(): Boolean {
         val connectivityManager =

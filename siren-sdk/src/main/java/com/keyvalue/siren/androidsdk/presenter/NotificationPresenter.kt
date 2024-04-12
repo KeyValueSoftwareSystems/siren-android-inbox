@@ -21,7 +21,9 @@ class NotificationPresenter(
     private var notificationManager: NotificationManager? = null
 
     init {
-        notificationManager = NotificationManager(baseURL)
+        if (baseURL?.isNotEmpty() == true) {
+            notificationManager = NotificationManager(baseURL!!)
+        }
     }
 
     fun fetchUnViewedNotificationsCount(callback: (UnViewedNotificationResponseData?, JSONObject?, Boolean) -> Unit) {
