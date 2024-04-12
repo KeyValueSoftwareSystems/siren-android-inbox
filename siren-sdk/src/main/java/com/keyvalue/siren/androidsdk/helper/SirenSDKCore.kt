@@ -36,7 +36,7 @@ class SirenSDKCore(
     userToken: String,
     recipientId: String,
     private var errorCallback: ErrorCallback,
-) : SirenSDKClient, SDKCoreUI(context,userToken, recipientId) {
+) : SirenSDKClient, SDKCoreUI(context, userToken, recipientId) {
     init {
         this.context = context
         initialize(userToken, recipientId)
@@ -66,7 +66,7 @@ class SirenSDKCore(
         }
         if (userToken.isNotEmpty() && recipientId.isNotEmpty()) {
             val authenticationPresenter =
-                context?.let { AuthenticationPresenter(it,userToken, recipientId) }
+                context?.let { AuthenticationPresenter(it, userToken, recipientId) }
             authenticationStatus = TokenVerificationStatus.PENDING
             authenticationPresenter?.verifyToken { boolean, _ ->
                 authenticationStatus =
@@ -80,21 +80,20 @@ class SirenSDKCore(
         notificationId: String,
         callback: (MarkAsReadByIdResponseData?, JSONObject?, Boolean) -> Unit,
     ) {
-            authorizeUserAction { jsonError, authStatus ->
-                if (jsonError.toString().isNotEmpty()) {
-                    callback(null, jsonError, true)
-                } else {
-                    if (authStatus == TokenVerificationStatus.SUCCESS) {
-                        val notificationPresenter =
-                            context?.let { NotificationPresenter(it,userToken, recipientId) }
-                        notificationPresenter?.markAsReadById(
-                            notificationId = notificationId,
-                            callback = callback,
-                        )
-                    }
+        authorizeUserAction { jsonError, authStatus ->
+            if (jsonError.toString().isNotEmpty()) {
+                callback(null, jsonError, true)
+            } else {
+                if (authStatus == TokenVerificationStatus.SUCCESS) {
+                    val notificationPresenter =
+                        context?.let { NotificationPresenter(it, userToken, recipientId) }
+                    notificationPresenter?.markAsReadById(
+                        notificationId = notificationId,
+                        callback = callback,
+                    )
                 }
             }
-
+        }
     }
 
     override fun markAsRead(
@@ -119,28 +118,27 @@ class SirenSDKCore(
         startDate: String?,
         callback: (DataStatus?, JSONObject?, Boolean) -> Unit,
     ) {
-            authorizeUserAction { jsonError, authStatus ->
-                if (jsonError.toString().isNotEmpty()) {
-                    callback(null, jsonError, true)
-                } else {
-                    if (authStatus == TokenVerificationStatus.SUCCESS) {
-                        val notificationPresenter =
-                            context?.let { NotificationPresenter(it,userToken, recipientId) }
-                        if (startDate != null) {
-                            notificationPresenter?.markAllAsRead(
-                                startDate = startDate,
-                                callback = callback,
-                            )
-                        } else {
-                            notificationPresenter?.markAllAsRead(
-                                startDate = startDateState,
-                                callback = callback,
-                            )
-                        }
+        authorizeUserAction { jsonError, authStatus ->
+            if (jsonError.toString().isNotEmpty()) {
+                callback(null, jsonError, true)
+            } else {
+                if (authStatus == TokenVerificationStatus.SUCCESS) {
+                    val notificationPresenter =
+                        context?.let { NotificationPresenter(it, userToken, recipientId) }
+                    if (startDate != null) {
+                        notificationPresenter?.markAllAsRead(
+                            startDate = startDate,
+                            callback = callback,
+                        )
+                    } else {
+                        notificationPresenter?.markAllAsRead(
+                            startDate = startDateState,
+                            callback = callback,
+                        )
                     }
                 }
             }
-
+        }
     }
 
     override fun markNotificationsAsReadByDate(

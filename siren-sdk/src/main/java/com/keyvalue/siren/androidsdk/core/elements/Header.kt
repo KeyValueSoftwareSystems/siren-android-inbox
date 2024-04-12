@@ -1,6 +1,5 @@
 package com.keyvalue.siren.androidsdk.core.elements
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,11 +49,11 @@ fun Header(
     Column {
         Row(
             modifier =
-            Modifier
-                .height(height)
-                .fillMaxWidth()
-                .background(backgroundColor)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                Modifier
+                    .height(height)
+                    .fillMaxWidth()
+                    .background(backgroundColor)
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -69,12 +68,12 @@ fun Header(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier =
-                    Modifier
-                        .clickable(
-                            enabled = enableClearAll,
-                            onClick = onClearAllClick,
-                        )
-                        .alpha(if (enableClearAll) 1f else 0.4f),
+                        Modifier
+                            .clickable(
+                                enabled = enableClearAll,
+                                onClick = onClearAllClick,
+                            )
+                            .alpha(if (enableClearAll) 1f else 0.4f),
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.clear_all),

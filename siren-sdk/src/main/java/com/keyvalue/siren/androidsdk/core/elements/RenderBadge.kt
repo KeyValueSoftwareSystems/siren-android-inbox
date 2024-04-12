@@ -17,12 +17,12 @@ fun RenderBadge(
 ) {
     Box(
         modifier =
-        Modifier
-            .size(badgeStyle?.size!!)
-            .background(
-                color = badgeStyle.color!!,
-                shape = badgeStyle.borderShape!!,
-            ),
+            Modifier
+                .size(badgeStyle?.size!!)
+                .background(
+                    color = badgeStyle.color!!,
+                    shape = badgeStyle.borderShape!!,
+                ),
         contentAlignment = Alignment.Center,
     ) {
         Text(

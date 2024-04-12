@@ -1,6 +1,5 @@
 package com.keyvalue.siren.androidsdk
 
-import android.util.Log
 import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_TOKEN_VERIFICATION_FAILED
 import com.keyvalue.siren.androidsdk.utils.constants.SirenErrorTypes
 import com.keyvalue.siren.androidsdk.utils.constants.TOKEN_VERIFICATION_FAILED
@@ -16,12 +15,12 @@ object AuthorizeUserAction {
                 JSONObject().put("type", SirenErrorTypes.ERROR)
                     .put("code", TOKEN_VERIFICATION_FAILED)
                     .put("message", ERROR_MESSAGE_TOKEN_VERIFICATION_FAILED),
-                TokenVerificationStatus.FAILED
+                TokenVerificationStatus.FAILED,
             )
         } else {
             callback(
                 null,
-                authenticationStatus
+                authenticationStatus,
             )
         }
     }

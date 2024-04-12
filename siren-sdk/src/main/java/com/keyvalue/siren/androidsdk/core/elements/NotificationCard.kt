@@ -59,11 +59,11 @@ fun NotificationCard(
 
     Box(
         modifier =
-        modifier
-            .border(
-                width = notificationCardStyle?.borderWidth!!,
-                color = notificationCardStyle.borderColor!!,
-            ),
+            modifier
+                .border(
+                    width = notificationCardStyle?.borderWidth!!,
+                    color = notificationCardStyle.borderColor!!,
+                ),
     ) {
         var borderStroke: BorderStroke? = null
         if (props.notification?.isRead == false) {
@@ -74,46 +74,46 @@ fun NotificationCard(
 
         Row(
             modifier =
-            modifier
-                .border(
-                    borderStroke,
-                    shape = borderShape(thickness = if (props.notification?.isRead == false) 5.dp else 1.dp),
-                )
-                .clickable {
-                    onCardClick.let {
-                        props.notification?.let { notification ->
-                            it(
-                                notification,
-                            )
+                modifier
+                    .border(
+                        borderStroke,
+                        shape = borderShape(thickness = if (props.notification?.isRead == false) 5.dp else 1.dp),
+                    )
+                    .clickable {
+                        onCardClick.let {
+                            props.notification?.let { notification ->
+                                it(
+                                    notification,
+                                )
+                            }
                         }
                     }
-                }
-                .padding(notificationCardStyle.padding!!),
+                    .padding(notificationCardStyle.padding!!),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             if (props.cardProps?.hideAvatar != true) {
                 Image(
                     painter =
-                    rememberImagePainter(
-                        data = props.notification?.message?.avatar?.imageUrl,
-                        builder = {
-                            transformations(CircleCropTransformation())
-                        },
-                    ),
+                        rememberImagePainter(
+                            data = props.notification?.message?.avatar?.imageUrl,
+                            builder = {
+                                transformations(CircleCropTransformation())
+                            },
+                        ),
                     contentDescription = null,
                     modifier =
-                    Modifier
-                        .size(notificationCardStyle.avatarSize!!)
-                        .clip(CircleShape)
-                        .weight(1f),
+                        Modifier
+                            .size(notificationCardStyle.avatarSize!!)
+                            .clip(CircleShape)
+                            .weight(1f),
                 )
             }
 
             Column(
                 modifier =
-                Modifier
-                    .weight(5f)
-                    .padding(start = 5.dp),
+                    Modifier
+                        .weight(5f)
+                        .padding(start = 5.dp),
             ) {
                 props.notification?.message?.let { message ->
                     message.header?.let { header ->
@@ -160,9 +160,9 @@ fun NotificationCard(
                         contentDescription = "Clock Icon",
                         colorFilter = ColorFilter.tint(themeColors?.timerIcon!!),
                         modifier =
-                        Modifier
-                            .size(notificationCardStyle.dateIconSize!!)
-                            .padding(end = 5.dp),
+                            Modifier
+                                .size(notificationCardStyle.dateIconSize!!)
+                                .padding(end = 5.dp),
                     )
                     props.notification?.let { responseData ->
                         responseData.createdAt.let { createdAt ->
@@ -184,10 +184,10 @@ fun NotificationCard(
                 contentDescription = "Delete icon",
                 tint = themeColors?.deleteIcon!!,
                 modifier =
-                Modifier
-                    .size(notificationCardStyle.deleteIconSize!!)
-                    .weight(1f)
-                    .clickable { deleteNotificationCallback() },
+                    Modifier
+                        .size(notificationCardStyle.deleteIconSize!!)
+                        .weight(1f)
+                        .clickable { deleteNotificationCallback() },
             )
         }
     }

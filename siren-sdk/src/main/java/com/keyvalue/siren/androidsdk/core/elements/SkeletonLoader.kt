@@ -41,19 +41,19 @@ private fun GradientBlock(
     val gradientList = if (isDarkMode) darkModeGradientsList else lightModeGradientsList
     Box(
         modifier =
-        (modifier ?: Modifier)
-            .fillMaxWidth()
-            .height(height)
-            .clip(RoundedCornerShape(8.dp))
-            .background(
-                brush =
-                Brush.verticalGradient(
-                    colors =
-                    gradientList,
-                    startY = 0f,
-                    endY = 200f,
+            (modifier ?: Modifier)
+                .fillMaxWidth()
+                .height(height)
+                .clip(RoundedCornerShape(8.dp))
+                .background(
+                    brush =
+                        Brush.verticalGradient(
+                            colors =
+                            gradientList,
+                            startY = 0f,
+                            endY = 200f,
+                        ),
                 ),
-            ),
     )
 }
 
@@ -63,34 +63,34 @@ private fun SkeletonLoaderItem(isDarkMode: Boolean) {
     Column {
         Row(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .conditional(isDarkMode) {
-                    background(Color(0xFF232326))
-                }
-                .padding(16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .conditional(isDarkMode) {
+                        background(Color(0xFF232326))
+                    }
+                    .padding(16.dp),
         ) {
             Box(
                 modifier =
-                Modifier
-                    .size(50.dp)
-                    .clip(CircleShape)
-                    .background(
-                        brush =
-                        Brush.verticalGradient(
-                            colors =
-                            gradientList,
-                            startY = 0f,
-                            endY = 200f,
+                    Modifier
+                        .size(50.dp)
+                        .clip(CircleShape)
+                        .background(
+                            brush =
+                                Brush.verticalGradient(
+                                    colors =
+                                    gradientList,
+                                    startY = 0f,
+                                    endY = 200f,
+                                ),
                         ),
-                    ),
             )
             Column(
                 modifier =
-                Modifier
-                    .padding(start = 10.dp, end = 10.dp)
-                    .fillMaxWidth()
-                    .weight(1f),
+                    Modifier
+                        .padding(start = 10.dp, end = 10.dp)
+                        .fillMaxWidth()
+                        .weight(1f),
             ) {
                 GradientBlock(height = 20.dp, isDarkMode = isDarkMode)
                 Spacer(modifier = Modifier.height(8.dp))
@@ -101,18 +101,18 @@ private fun SkeletonLoaderItem(isDarkMode: Boolean) {
                 Row {
                     Box(
                         modifier =
-                        Modifier
-                            .size(15.dp)
-                            .clip(CircleShape)
-                            .background(
-                                brush =
-                                Brush.verticalGradient(
-                                    colors =
-                                    gradientList,
-                                    startY = 0f,
-                                    endY = 200f,
+                            Modifier
+                                .size(15.dp)
+                                .clip(CircleShape)
+                                .background(
+                                    brush =
+                                        Brush.verticalGradient(
+                                            colors =
+                                            gradientList,
+                                            startY = 0f,
+                                            endY = 200f,
+                                        ),
                                 ),
-                            ),
                     )
                     GradientBlock(
                         height = 15.dp,
@@ -123,18 +123,18 @@ private fun SkeletonLoaderItem(isDarkMode: Boolean) {
             }
             Box(
                 modifier =
-                Modifier
-                    .size(20.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(
-                        brush =
-                        Brush.verticalGradient(
-                            colors =
-                            gradientList,
-                            startY = 0f,
-                            endY = 200f,
+                    Modifier
+                        .size(20.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(
+                            brush =
+                                Brush.verticalGradient(
+                                    colors =
+                                    gradientList,
+                                    startY = 0f,
+                                    endY = 200f,
+                                ),
                         ),
-                    ),
             )
         }
         Box(modifier = Modifier.height(1.dp).fillMaxWidth().background(gradientList[0]))

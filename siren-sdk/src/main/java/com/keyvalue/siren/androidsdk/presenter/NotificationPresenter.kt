@@ -1,7 +1,6 @@
 package com.keyvalue.siren.androidsdk.presenter
 
 import android.content.Context
-import android.util.Log
 import com.keyvalue.siren.androidsdk.data.managers.NotificationManager
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
 import com.keyvalue.siren.androidsdk.data.model.DataStatus
@@ -11,7 +10,6 @@ import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponseData
 import com.keyvalue.siren.androidsdk.data.state.NotificationUnViewedState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -32,7 +30,7 @@ class NotificationPresenter(
         CoroutineScope(Dispatchers.IO).launch {
             notificationManager?.fetchUnViewedNotificationsCount(userToken, recipientId)
             notificationManager?.notificationUnViewedState?.collect { notificationUnViewedState ->
-                if (persistedNotificationState ==  null || persistedNotificationState != notificationUnViewedState) {
+                if (persistedNotificationState == null || persistedNotificationState != notificationUnViewedState) {
                     persistedNotificationState = notificationUnViewedState
                     if (notificationUnViewedState?.errorResponse == null) {
                         notificationUnViewedState?.notificationUnViewedResponse?.let { response ->
@@ -50,8 +48,6 @@ class NotificationPresenter(
                         )
                     }
                 }
-
-
             }
         }
     }

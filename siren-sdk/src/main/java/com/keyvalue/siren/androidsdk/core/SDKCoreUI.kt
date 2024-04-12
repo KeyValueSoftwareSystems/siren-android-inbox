@@ -1,7 +1,6 @@
 package com.keyvalue.siren.androidsdk.core
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -116,9 +115,11 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
         val verificationRetryTimer: Timer = Timer()
 
         Box(
-            modifier = Modifier.clickable(
-                enabled = !(props.disabled ?: false),
-                onClick = { callback.onClick() })
+            modifier =
+                Modifier.clickable(
+                    enabled = !(props.disabled ?: false),
+                    onClick = { callback.onClick() },
+                ),
         ) {
             if (props.notificationIcon !== null) {
                 props.notificationIcon.also {
@@ -136,13 +137,13 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
             if (unViewedCount > 0) {
                 Box(
                     modifier =
-                    Modifier
-                        .align(Alignment.TopEnd)
-                        .offset(
-                            x = (-(styles.badgeStyle?.right ?: 0)).dp,
-                            y = (styles.badgeStyle?.top ?: 0).dp,
-                        )
-                        .zIndex(1f),
+                        Modifier
+                            .align(Alignment.TopEnd)
+                            .offset(
+                                x = (-(styles.badgeStyle?.right ?: 0)).dp,
+                                y = (styles.badgeStyle?.top ?: 0).dp,
+                            )
+                            .zIndex(1f),
                 ) {
                     RenderBadge(unViewedCount, badgeStyle)
                 }
@@ -350,7 +351,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
 
         val enableClearAllButton =
             notificationListState.isNotEmpty() && !showListEmptyState && !showListErrorState &&
-                    !isLoading.value && !isRefreshing && !isRetry.value
+                !isLoading.value && !isRefreshing && !isRetry.value
 
         fun retryFetch() {
             isRetry.value = true
@@ -379,9 +380,9 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                         notificationListState = notificationListState.subList(
                             0, if (position == 0) 0 else position,
                         ) +
-                                notificationListState.subList(
-                                    position + 1, notificationListState.size,
-                                )
+                            notificationListState.subList(
+                                position + 1, notificationListState.size,
+                            )
                         if (notificationListState.isEmpty()) {
                             showListEmptyState = true
                         }
@@ -503,17 +504,17 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                 refreshing = isRefreshing,
                 state = pullRefreshState,
                 modifier =
-                Modifier
-                    .zIndex(1f)
-                    .align(Alignment.TopCenter),
+                    Modifier
+                        .zIndex(1f)
+                        .align(Alignment.TopCenter),
             )
             Column(
                 modifier =
-                Modifier
-                    .height(windowStyle?.height!!)
-                    .width(windowStyle.width!!)
-                    .background(windowContainerStyle?.background!!)
-                    .padding(windowContainerStyle.padding!!),
+                    Modifier
+                        .height(windowStyle?.height!!)
+                        .width(windowStyle.width!!)
+                        .background(windowContainerStyle?.background!!)
+                        .padding(windowContainerStyle.padding!!),
             ) {
                 if (props.hideHeader == false) {
                     props.customHeader?.let { it() } ?: Header(
@@ -568,10 +569,10 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                 } else {
                     LazyColumn(
                         modifier =
-                        Modifier
-                            .weight(1f)
-                            .fillMaxWidth()
-                            .pullRefresh(pullRefreshState),
+                            Modifier
+                                .weight(1f)
+                                .fillMaxWidth()
+                                .pullRefresh(pullRefreshState),
                         state = listState,
                     ) {
                         items(notificationListState) { notificationData ->
