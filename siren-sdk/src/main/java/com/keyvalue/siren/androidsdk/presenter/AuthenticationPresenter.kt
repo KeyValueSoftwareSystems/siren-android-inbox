@@ -15,7 +15,9 @@ class AuthenticationPresenter(
     private var authenticationManager: AuthenticationManager? = null
 
     init {
-        authenticationManager = AuthenticationManager(baseURL)
+        if (baseURL?.isNotEmpty() == true) {
+            authenticationManager = AuthenticationManager(baseURL!!)
+        }
     }
 
     fun verifyToken(callback: suspend (Boolean, JSONObject?) -> Unit) {
