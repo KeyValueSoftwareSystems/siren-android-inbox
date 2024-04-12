@@ -82,7 +82,7 @@ dependencies {
 
     // Unit test
     testImplementation("org.mockito:mockito-core:3.12.4")
-    testImplementation("org.mockito:mockito-inline:2.13.0")
+    testImplementation("org.mockito:mockito-inline:3.12.4")
     testImplementation("org.json:json:20140107")
 }
 

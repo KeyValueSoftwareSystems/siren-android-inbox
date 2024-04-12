@@ -92,8 +92,8 @@ class NotificationPresenter(
     }
 
     fun markAsReadById(
-        callback: (data: MarkAsReadByIdResponseData?, error: JSONObject?, isError: Boolean) -> Unit,
         notificationId: String,
+        callback: (data: MarkAsReadByIdResponseData?, error: JSONObject?, isError: Boolean) -> Unit,
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             notificationManager?.markAsReadById(userToken, recipientId, notificationId)
@@ -121,8 +121,8 @@ class NotificationPresenter(
     }
 
     fun markAllAsRead(
-        callback: (data: DataStatus?, error: JSONObject?, isError: Boolean) -> Unit,
         startDate: String,
+        callback: (data: DataStatus?, error: JSONObject?, isError: Boolean) -> Unit,
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             notificationManager?.markAllAsRead(userToken, recipientId, startDate)
@@ -150,8 +150,8 @@ class NotificationPresenter(
     }
 
     fun markAsViewed(
-        callback: (data: MarkAsViewedResponseData?, error: JSONObject?, isError: Boolean) -> Unit,
         startDate: String,
+        callback: (data: MarkAsViewedResponseData?, error: JSONObject?, isError: Boolean) -> Unit,
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             notificationManager?.markAsViewed(userToken, recipientId, startDate)
@@ -210,8 +210,8 @@ class NotificationPresenter(
     }
 
     fun clearAllNotifications(
-        callback: (data: DataStatus?, error: JSONObject?, isError: Boolean) -> Unit,
         startDate: String,
+        callback: (data: DataStatus?, error: JSONObject?, isError: Boolean) -> Unit,
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             notificationManager?.clearAllNotifications(userToken, recipientId, startDate)
