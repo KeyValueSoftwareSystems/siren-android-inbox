@@ -6,7 +6,6 @@ import com.keyvalue.siren.androidsdk.AuthorizeUserAction.authenticationStatus
 import com.keyvalue.siren.androidsdk.AuthorizeUserAction.authorizeUserAction
 import com.keyvalue.siren.androidsdk.core.SDKCoreUI
 import com.keyvalue.siren.androidsdk.data.model.DataStatus
-import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponseData
 import com.keyvalue.siren.androidsdk.helper.client.SirenSDKClient
 import com.keyvalue.siren.androidsdk.helper.client.callbacks.ErrorCallback
 import com.keyvalue.siren.androidsdk.helper.client.callbacks.MarkAsReadByIdCallback
@@ -72,26 +71,6 @@ class SirenSDKCore(
                 authenticationStatus =
                     if (boolean) TokenVerificationStatus.SUCCESS else TokenVerificationStatus.FAILED
                 authenticationState.emit(authenticationStatus)
-            }
-        }
-    }
-
-    private fun markAsReadInner(
-        notificationId: String,
-        callback: (MarkAsReadByIdResponseData?, JSONObject?, Boolean) -> Unit,
-    ) {
-        authorizeUserAction { jsonError, authStatus ->
-            if (jsonError.toString().isNotEmpty()) {
-                callback(null, jsonError, true)
-            } else {
-                if (authStatus == TokenVerificationStatus.SUCCESS) {
-                    val notificationPresenter =
-                        context?.let { NotificationPresenter(it, userToken, recipientId) }
-                    notificationPresenter?.markAsReadById(
-                        notificationId = notificationId,
-                        callback = callback,
-                    )
-                }
             }
         }
     }

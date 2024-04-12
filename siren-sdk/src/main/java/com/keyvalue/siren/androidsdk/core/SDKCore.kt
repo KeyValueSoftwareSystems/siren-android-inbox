@@ -4,6 +4,7 @@ import android.content.Context
 import com.keyvalue.siren.androidsdk.AuthorizeUserAction
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
 import com.keyvalue.siren.androidsdk.data.model.DataStatus
+import com.keyvalue.siren.androidsdk.data.model.MarkAsReadByIdResponseData
 import com.keyvalue.siren.androidsdk.data.model.MarkAsViewedResponseData
 import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponseData
 import com.keyvalue.siren.androidsdk.presenter.NotificationPresenter
@@ -119,6 +120,26 @@ abstract class SDKCore(var context: Context, var userToken: String, var recipien
                 if (authStatus == TokenVerificationStatus.SUCCESS) {
                     val notificationPresenter = NotificationPresenter(context, userToken, recipientId)
                     notificationPresenter.deleteNotificationById(
+                        notificationId = notificationId,
+                        callback = callback,
+                    )
+                }
+            }
+        }
+    }
+
+    protected fun markAsReadInner(
+        notificationId: String,
+        callback: (MarkAsReadByIdResponseData?, JSONObject?, Boolean) -> Unit,
+    ) {
+        AuthorizeUserAction.authorizeUserAction { jsonError, authStatus ->
+            if (jsonError != null) {
+                callback(null, jsonError, true)
+            } else {
+                if (authStatus == TokenVerificationStatus.SUCCESS) {
+                    val notificationPresenter =
+                        NotificationPresenter(context, userToken, recipientId)
+                    notificationPresenter.markAsReadById(
                         notificationId = notificationId,
                         callback = callback,
                     )

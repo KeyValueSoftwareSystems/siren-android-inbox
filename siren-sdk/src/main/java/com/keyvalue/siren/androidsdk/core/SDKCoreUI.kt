@@ -615,7 +615,24 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                                     themeColors = themeColors,
                                     darkMode = props.darkMode ?: false,
                                     defaultCardClickCallback = {
-                                        // Add callback
+                                        notificationData?.id?.let {
+                                            markAsReadInner(
+                                                it,
+                                            ) {
+                                                    responseData, errorObject, isError ->
+                                                CoroutineScope(Dispatchers.Main).launch {
+                                                    if (isError && errorObject != null) {
+                                                        callback.onError(errorObject)
+                                                    } else {
+                                                        responseData?.id?.let { id ->
+                                                            markAsReadByIdState.emit(
+                                                                id,
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
                                     },
                                 )
                             }
