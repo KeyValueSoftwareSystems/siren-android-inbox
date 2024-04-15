@@ -122,12 +122,10 @@ Parameter | Description | Type | Default value |
 theme | Data class defining the theme configuration |  Theme | null |
 customStyles | Data class defining the customizable styles |  Theme | null |
 title |  Title of the notification inbox |  String | "Notifications" |
-hideHeader | Toggle to hide the header section |  Boolean | false |
-hideClearAll | Toggle to hide the clear all button |  Boolean | false |
 darkMode | Toggle to enable dark mode |  Boolean | false |
 cardProps | Props for customizing the notification cards | CardProps | null |
+inboxHeaderProps | Props for customizing the header | InboxHeaderProps | null |
 listEmptyComponent | Custom composable function for empty notification list | (@Composable () -> Unit) | null |
-customHeader | Custom header composable function | (@Composable () -> Unit) | null |
 customFooter | Custom footer composable function | (@Composable () -> Unit) | null |
 customNotificationCard | Custom click handler for notification cards | (@Composable (AllNotificationResponseData) -> Unit) | null |
 customLoader | Custom composable function to display the initial loading state | (@Composable () -> Unit) | null |
@@ -138,6 +136,18 @@ itemsPerFetch | Number of notifications fetch per api request (have a max cap of
 ```kotlin
 data class CardProps(
     val hideAvatar: Boolean? = false,
+    val disableAutoMarkAsRead: Boolean? = false,
+)
+```
+##### InboxHeaderProps
+```kotlin
+data class InboxHeaderProps(
+    val hideHeader: Boolean? = false,
+    val hideClearAll: Boolean? = false,
+    val customHeader: (@Composable () -> Unit)? = null,
+    val showBackButton: Boolean? = false,
+    val backButton: (@Composable () -> Unit)? = null,
+    val handleBackNavigation: (() -> Unit)? = null,
 )
 ```
 #### Theme customization
@@ -355,8 +365,8 @@ import com.keyvalue.siren.androidsdk.helper.customization.SirenInboxProps
     val sirenSDK =
         SirenSDK.getInstance(
             this,
-            "userToken",
-            "recipientId",
+            "YOUR_USER_TOKEN",
+            "YOUR_RECIPIENT_ID",
             object : ErrorCallback {
                 override fun onError(jsonObject: JSONObject) {
                 }

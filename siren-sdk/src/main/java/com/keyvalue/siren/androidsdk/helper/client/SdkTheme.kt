@@ -1,11 +1,11 @@
 package com.keyvalue.siren.androidsdk.helper.client
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
-import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
 
 data class ThemeColors(
     val primaryColor: Color? = null,
@@ -50,11 +50,16 @@ data class NotificationCardThemeProps(
 
 data class CardProps(
     val hideAvatar: Boolean? = false,
+    val disableAutoMarkAsRead: Boolean? = false,
 )
 
-data class NotificationCardProps(
-    val notification: AllNotificationResponseData? = null,
-    val cardProps: CardProps? = null,
+data class InboxHeaderProps(
+    val hideHeader: Boolean? = false,
+    val hideClearAll: Boolean? = false,
+    val customHeader: (@Composable () -> Unit)? = null,
+    val showBackButton: Boolean? = false,
+    val backButton: (@Composable () -> Unit)? = null,
+    val handleBackNavigation: (() -> Unit)? = null,
 )
 
 data class NotificationIconProps(

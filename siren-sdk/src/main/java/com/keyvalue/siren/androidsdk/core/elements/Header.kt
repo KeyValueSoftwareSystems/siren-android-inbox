@@ -1,4 +1,4 @@
-package com.keyvalue.siren.androidsdk.helper
+package com.keyvalue.siren.androidsdk.core.elements
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,8 +9,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +23,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -44,6 +50,9 @@ fun Header(
     hideClearAll: Boolean,
     themeColors: ThemeColors?,
     clearAllIconSize: Dp,
+    showBackButton: Boolean,
+    backButton: (@Composable () -> Unit)?,
+    handleBackNavigation: (() -> Unit)?,
     onClearAllClick: () -> Unit,
 ) {
     Column {
@@ -57,13 +66,34 @@ fun Header(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(
-                text = title ?: DEFAULT_WINDOW_TITLE,
-                color = titleColor,
-                fontSize = titleFontSize,
-                fontWeight = titleFontWeight,
-                modifier = Modifier.padding(titlePadding),
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (showBackButton) {
+                    backButton?.let {
+                        it()
+                    }
+                        ?: Icon(
+                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                            contentDescription = "siren-header-back",
+                            modifier =
+                                Modifier
+                                    .size(30.dp)
+                                    .offset(x = (-5).dp)
+                                    .clickable {
+                                        if (handleBackNavigation != null) {
+                                            handleBackNavigation()
+                                        }
+                                    }
+                                    .semantics { contentDescription = "siren-header-back" },
+                        )
+                }
+                Text(
+                    text = title ?: DEFAULT_WINDOW_TITLE,
+                    color = titleColor,
+                    fontSize = titleFontSize,
+                    fontWeight = titleFontWeight,
+                    modifier = Modifier.padding(titlePadding),
+                )
+            }
             if (!hideClearAll) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -73,7 +103,8 @@ fun Header(
                                 enabled = enableClearAll,
                                 onClick = onClearAllClick,
                             )
-                            .alpha(if (enableClearAll) 1f else 0.4f),
+                            .alpha(if (enableClearAll) 1f else 0.4f)
+                            .semantics { contentDescription = "siren-header-clear-all" },
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.clear_all),
@@ -93,6 +124,12 @@ fun Header(
                 }
             }
         }
-        Box(modifier = Modifier.height(0.6.dp).fillMaxWidth().background(borderBottomColor)) {}
+        Box(
+            modifier =
+                Modifier
+                    .height(0.6.dp)
+                    .fillMaxWidth()
+                    .background(borderBottomColor),
+        ) {}
     }
 }
