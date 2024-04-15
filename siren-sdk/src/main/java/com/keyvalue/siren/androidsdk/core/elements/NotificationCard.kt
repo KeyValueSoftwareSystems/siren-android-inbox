@@ -126,10 +126,6 @@ fun NotificationCard(
                             .weight(1f)
                             .semantics { contentDescription = "siren-notification-avatar-${notification?.id}" },
                 )
-            } else {
-                Spacer(
-                    modifier = Modifier.size(notificationCardStyle.avatarSize!!).weight(1f),
-                )
             }
             Column(
                 modifier =
