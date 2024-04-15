@@ -33,6 +33,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.keyvalue.siren.androidsdk.AuthorizeUserAction.authenticationStatus
@@ -127,9 +129,10 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                 }
             } else {
                 Icon(
-                    painter = painterResource(id = if (props.darkMode == true) R.drawable.bell_dark else R.drawable.bell_light),
-                    contentDescription = "notification icon with unread notifications indicator",
-                    modifier = Modifier.size(iconStyle?.size!!),
+                    painter = painterResource(id = R.drawable.bell_dark),
+                    contentDescription = "siren-notification-icon",
+                    tint = if (props.darkMode == true) Color.White else Color.Black,
+                    modifier = Modifier.size(iconStyle?.size!!).semantics { contentDescription = "siren-notification-icon" },
                 )
             }
 
@@ -581,7 +584,8 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                             Modifier
                                 .weight(1f)
                                 .fillMaxWidth()
-                                .pullRefresh(pullRefreshState),
+                                .pullRefresh(pullRefreshState)
+                                .semantics { contentDescription = "siren-notification-list" },
                         state = listState,
                     ) {
                         items(notificationListState) { notificationData ->

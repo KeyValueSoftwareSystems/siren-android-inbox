@@ -23,6 +23,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -71,7 +73,7 @@ fun Header(
                     }
                         ?: Icon(
                             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                            contentDescription = "notification icon with unread notifications indicator",
+                            contentDescription = "siren-header-back",
                             modifier =
                                 Modifier
                                     .size(30.dp)
@@ -80,7 +82,8 @@ fun Header(
                                         if (handleBackNavigation != null) {
                                             handleBackNavigation()
                                         }
-                                    },
+                                    }
+                                    .semantics { contentDescription = "siren-header-back" },
                         )
                 }
                 Text(
@@ -100,7 +103,8 @@ fun Header(
                                 enabled = enableClearAll,
                                 onClick = onClearAllClick,
                             )
-                            .alpha(if (enableClearAll) 1f else 0.4f),
+                            .alpha(if (enableClearAll) 1f else 0.4f)
+                            .semantics { contentDescription = "siren-header-clear-all" },
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.clear_all),

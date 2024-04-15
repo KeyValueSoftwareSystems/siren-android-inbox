@@ -29,6 +29,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -81,7 +83,8 @@ fun NotificationCard(
                 .border(
                     width = notificationCardStyle?.borderWidth!!,
                     color = notificationCardStyle.borderColor!!,
-                ),
+                )
+                .semantics { contentDescription = "siren-notification-card-${notification?.id}" },
     ) {
         val borderStroke =
             if (notification?.isRead == false) {
@@ -115,12 +118,13 @@ fun NotificationCard(
             if (cardProps?.hideAvatar != true) {
                 Image(
                     painter = painter,
-                    contentDescription = null,
+                    contentDescription = "siren-notification-avatar-${notification?.id}",
                     modifier =
                         Modifier
                             .size(notificationCardStyle.avatarSize!!)
                             .clip(CircleShape)
-                            .weight(1f),
+                            .weight(1f)
+                            .semantics { contentDescription = "siren-notification-avatar-${notification?.id}" },
                 )
             } else {
                 Spacer(
@@ -200,12 +204,13 @@ fun NotificationCard(
             Box(modifier = Modifier.weight(1f).padding(end = 6.dp), contentAlignment = Alignment.CenterEnd) {
                 Icon(
                     imageVector = Icons.Default.Clear,
-                    contentDescription = "Delete icon",
+                    contentDescription = "siren-notification-delete-${notification?.id}",
                     tint = themeColors?.deleteIcon!!,
                     modifier =
                         Modifier
                             .size(notificationCardStyle.deleteIconSize!!)
-                            .clickable { deleteNotificationCallback() },
+                            .clickable { deleteNotificationCallback() }
+                            .semantics { contentDescription = "siren-notification-delete-${notification?.id}" },
                 )
             }
         }
