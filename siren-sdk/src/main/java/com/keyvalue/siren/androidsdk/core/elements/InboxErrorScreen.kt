@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,7 +43,8 @@ fun InboxErrorScreen(
                 .fillMaxSize()
                 .shadow(0.dp)
                 .pullRefresh(pullRefreshState)
-                .background(backgroundColor),
+                .background(backgroundColor)
+                .semantics { contentDescription = "siren-error-state" },
     ) {
         item {
             Image(painter = painterResource(id = if (isDarkMode) R.drawable.error_state_dark else R.drawable.error_state_light), contentDescription = "Error state", modifier = Modifier.size(150.dp))
