@@ -137,6 +137,7 @@ itemsPerFetch | Number of notifications fetch per api request (have a max cap of
 data class CardProps(
     val hideAvatar: Boolean? = false,
     val disableAutoMarkAsRead: Boolean? = false,
+    val hideDelete: Boolean? = false,
 )
 ```
 ##### InboxHeaderProps

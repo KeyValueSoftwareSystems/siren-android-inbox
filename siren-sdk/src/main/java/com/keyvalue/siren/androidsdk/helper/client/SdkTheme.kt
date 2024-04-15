@@ -51,6 +51,7 @@ data class NotificationCardThemeProps(
 data class CardProps(
     val hideAvatar: Boolean? = false,
     val disableAutoMarkAsRead: Boolean? = false,
+    val hideDelete: Boolean? = false,
 )
 
 data class InboxHeaderProps(

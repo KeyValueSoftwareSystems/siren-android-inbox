@@ -201,17 +201,19 @@ fun NotificationCard(
                 }
             }
 
-            Box(modifier = Modifier.weight(1f).padding(end = 6.dp), contentAlignment = Alignment.CenterEnd) {
-                Icon(
-                    imageVector = Icons.Default.Clear,
-                    contentDescription = "siren-notification-delete-${notification?.id}",
-                    tint = themeColors?.deleteIcon!!,
-                    modifier =
-                        Modifier
-                            .size(notificationCardStyle.deleteIconSize!!)
-                            .clickable { deleteNotificationCallback() }
-                            .semantics { contentDescription = "siren-notification-delete-${notification?.id}" },
-                )
+            if (cardProps?.hideDelete != true) {
+                Box(modifier = Modifier.weight(1f).padding(end = 6.dp), contentAlignment = Alignment.CenterEnd) {
+                    Icon(
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = "siren-notification-delete-${notification?.id}",
+                        tint = themeColors?.deleteIcon!!,
+                        modifier =
+                            Modifier
+                                .size(notificationCardStyle.deleteIconSize!!)
+                                .clickable { deleteNotificationCallback() }
+                                .semantics { contentDescription = "siren-notification-delete-${notification?.id}" },
+                    )
+                }
             }
         }
     }
