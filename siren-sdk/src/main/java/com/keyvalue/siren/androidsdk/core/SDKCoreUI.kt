@@ -560,7 +560,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                 }
 
                 if (isInitialListCall || isRetry.value || isRefreshing) {
-                    props.customLoader?.let { it() } ?: SkeletonLoader(isDarkMode = props.darkMode)
+                    props.customLoader?.let { it() } ?: SkeletonLoader(isDarkMode = props.darkMode, hideAvatar = props.cardProps?.hideAvatar)
                 } else if (showListEmptyState) {
                     props.listEmptyComponent?.let { it() } ?: InboxEmptyScreen(
                         pullRefreshState = pullRefreshState,
