@@ -47,7 +47,6 @@ import com.keyvalue.siren.androidsdk.core.elements.SkeletonLoader
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
 import com.keyvalue.siren.androidsdk.data.model.DataStatus
 import com.keyvalue.siren.androidsdk.data.model.MarkAsViewedResponseData
-import com.keyvalue.siren.androidsdk.helper.client.NotificationCardProps
 import com.keyvalue.siren.androidsdk.helper.client.callbacks.SirenInboxCallback
 import com.keyvalue.siren.androidsdk.helper.client.callbacks.SirenInboxIconCallback
 import com.keyvalue.siren.androidsdk.helper.customization.SirenInboxIconProps
@@ -55,7 +54,9 @@ import com.keyvalue.siren.androidsdk.helper.customization.SirenInboxProps
 import com.keyvalue.siren.androidsdk.presenter.CorePresenter
 import com.keyvalue.siren.androidsdk.utils.SirenSDKUtils
 import com.keyvalue.siren.androidsdk.utils.constants.DATA_FETCH_INTERVAL
+import com.keyvalue.siren.androidsdk.utils.constants.DEFAULT_ITEMS_PER_FETCH
 import com.keyvalue.siren.androidsdk.utils.constants.DEFAULT_WINDOW_TITLE
+import com.keyvalue.siren.androidsdk.utils.constants.MAXIMUM_ITEMS_PER_FETCH
 import com.keyvalue.siren.androidsdk.utils.constants.MAX_VERIFICATION_RETRY
 import com.keyvalue.siren.androidsdk.utils.constants.SdkState
 import com.keyvalue.siren.androidsdk.utils.constants.TOKEN_VERIFICATION_RETRY_INTERVAL
@@ -75,7 +76,6 @@ import java.util.TimerTask
 abstract class SDKCoreUI(context: Context, userToken: String, recipientId: String) :
     SDKCore(context, userToken, recipientId) {
     private var unViewedNotificationTimer: Timer = Timer()
-    private val notificationsPerPage = 10
     private var allNotificationTimer: Timer = Timer()
     protected var corePresenter: CorePresenter? = null
 
@@ -277,6 +277,12 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
 
         var verificationRetryCount = 1
         val verificationRetryTimer: Timer = Timer()
+        val notificationsPerPage =
+            if (props.itemsPerFetch == null) {
+                DEFAULT_ITEMS_PER_FETCH
+            } else {
+                maxOf(0, if (props.itemsPerFetch > MAXIMUM_ITEMS_PER_FETCH) MAXIMUM_ITEMS_PER_FETCH else props.itemsPerFetch)
+            }
 
         fun executeMarkAsViewed(startDate: String) {
             markNotificationsAsViewedInner(
@@ -516,8 +522,8 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                         .background(windowContainerStyle?.background!!)
                         .padding(windowContainerStyle.padding!!),
             ) {
-                if (props.hideHeader == false) {
-                    props.customHeader?.let { it() } ?: Header(
+                if (props.inboxHeaderProps?.hideHeader != true) {
+                    props.inboxHeaderProps?.customHeader?.let { it() } ?: Header(
                         title = props.title ?: DEFAULT_WINDOW_TITLE,
                         titleColor = windowHeaderStyle?.titleColor!!,
                         titleFontSize = windowHeaderStyle.titleSize!!,
@@ -528,8 +534,11 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                         enableClearAll = enableClearAllButton,
                         titlePadding = windowHeaderStyle.titlePadding!!,
                         borderBottomColor = windowHeaderStyle.borderColor!!,
-                        hideClearAll = props.hideClearAll ?: false,
+                        hideClearAll = props.inboxHeaderProps?.hideClearAll ?: false,
                         themeColors = themeColors,
+                        showBackButton = props.inboxHeaderProps?.showBackButton ?: false,
+                        handleBackNavigation = props.inboxHeaderProps?.handleBackNavigation,
+                        backButton = props.inboxHeaderProps?.backButton,
                         clearAllIconSize = styles.windowHeader.clearAllIconSize!!,
                     ) {
                         deleteNotificationsByDateInner(
@@ -582,10 +591,8 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                                         it(notificationData)
                                     }
                                 } ?: NotificationCard(
-                                    NotificationCardProps(
-                                        notification = notificationData,
-                                        cardProps = props.cardProps,
-                                    ),
+                                    notification = notificationData,
+                                    cardProps = props.cardProps,
                                     notificationCardStyle,
                                     onCardClick = {
                                         callback.onCardClick(it)
@@ -606,6 +613,27 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                                         }
                                     },
                                     themeColors = themeColors,
+                                    darkMode = props.darkMode ?: false,
+                                    defaultCardClickCallback = {
+                                        notificationData?.id?.let {
+                                            markAsReadInner(
+                                                it,
+                                            ) {
+                                                    responseData, errorObject, isError ->
+                                                CoroutineScope(Dispatchers.Main).launch {
+                                                    if (isError && errorObject != null) {
+                                                        callback.onError(errorObject)
+                                                    } else {
+                                                        responseData?.id?.let { id ->
+                                                            markAsReadByIdState.emit(
+                                                                id,
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
                                 )
                             }
                         }
