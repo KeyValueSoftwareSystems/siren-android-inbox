@@ -124,6 +124,15 @@ fun NotificationCard(
                             .size(notificationCardStyle.avatarSize!!)
                             .clip(CircleShape)
                             .weight(1f)
+                            .conditional(cardProps?.onAvatarClick != null && notification != null) {
+                                clickable {
+                                    cardProps?.onAvatarClick?.let {
+                                        if (notification != null) {
+                                            it(notification)
+                                        }
+                                    }
+                                }
+                            }
                             .semantics { contentDescription = "siren-notification-avatar-${notification?.id}" },
                 )
             }
