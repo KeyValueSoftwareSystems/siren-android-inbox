@@ -58,7 +58,10 @@ private fun GradientBlock(
 }
 
 @Composable
-private fun SkeletonLoaderItem(isDarkMode: Boolean) {
+private fun SkeletonLoaderItem(
+    isDarkMode: Boolean,
+    hideAvatar: Boolean,
+) {
     val gradientList = if (isDarkMode) darkModeGradientsList else lightModeGradientsList
     Column {
         Row(
@@ -70,21 +73,23 @@ private fun SkeletonLoaderItem(isDarkMode: Boolean) {
                     }
                     .padding(16.dp),
         ) {
-            Box(
-                modifier =
-                    Modifier
-                        .size(50.dp)
-                        .clip(CircleShape)
-                        .background(
-                            brush =
-                                Brush.verticalGradient(
-                                    colors =
-                                    gradientList,
-                                    startY = 0f,
-                                    endY = 200f,
-                                ),
-                        ),
-            )
+            if (hideAvatar != true) {
+                Box(
+                    modifier =
+                        Modifier
+                            .size(50.dp)
+                            .clip(CircleShape)
+                            .background(
+                                brush =
+                                    Brush.verticalGradient(
+                                        colors =
+                                        gradientList,
+                                        startY = 0f,
+                                        endY = 200f,
+                                    ),
+                            ),
+                )
+            }
             Column(
                 modifier =
                     Modifier
@@ -142,10 +147,13 @@ private fun SkeletonLoaderItem(isDarkMode: Boolean) {
 }
 
 @Composable
-fun SkeletonLoader(isDarkMode: Boolean? = false) {
+fun SkeletonLoader(
+    isDarkMode: Boolean? = false,
+    hideAvatar: Boolean? = false,
+) {
     Column {
         repeat(6) {
-            SkeletonLoaderItem(isDarkMode = isDarkMode ?: false)
+            SkeletonLoaderItem(isDarkMode = isDarkMode ?: false, hideAvatar = hideAvatar ?: false)
         }
     }
 }

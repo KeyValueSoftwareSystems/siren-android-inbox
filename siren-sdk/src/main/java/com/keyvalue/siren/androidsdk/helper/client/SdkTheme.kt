@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
 
 data class ThemeColors(
     val primaryColor: Color? = null,
@@ -50,7 +51,9 @@ data class NotificationCardThemeProps(
 
 data class CardProps(
     val hideAvatar: Boolean? = false,
+    val onAvatarClick: ((AllNotificationResponseData) -> Unit)? = null,
     val disableAutoMarkAsRead: Boolean? = false,
+    val hideDelete: Boolean? = false,
 )
 
 data class InboxHeaderProps(
