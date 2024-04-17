@@ -54,6 +54,7 @@ data class CardProps(
     val onAvatarClick: ((AllNotificationResponseData) -> Unit)? = null,
     val disableAutoMarkAsRead: Boolean? = false,
     val hideDelete: Boolean? = false,
+    val deleteIcon: @Composable (() -> Unit)? = null,
 )
 
 data class InboxHeaderProps(
