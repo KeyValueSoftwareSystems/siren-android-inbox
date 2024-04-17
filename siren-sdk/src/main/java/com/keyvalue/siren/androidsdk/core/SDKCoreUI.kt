@@ -566,7 +566,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                         pullRefreshState = pullRefreshState,
                         backgroundColor = themeColors?.neutralColor!!,
                         titleColor = themeColors.textColor!!,
-                        descriptionColor = Color(0xFF667185),
+                        descriptionColor = themeColors.dateColor!!,
                         isDarkMode = props.darkMode ?: false,
                     )
                 } else if (showListErrorState) {
@@ -575,7 +575,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                             pullRefreshState = pullRefreshState,
                             backgroundColor = themeColors?.neutralColor!!,
                             titleColor = themeColors.textColor!!,
-                            descriptionColor = Color(0xFF667185),
+                            descriptionColor = themeColors.dateColor!!,
                             isDarkMode = props.darkMode ?: false,
                         )
                 } else {
