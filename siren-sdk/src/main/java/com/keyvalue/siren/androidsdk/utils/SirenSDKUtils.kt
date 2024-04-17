@@ -219,6 +219,9 @@ object SirenSDKUtils {
                     titleSize =
                         customStyles?.notificationCard?.titleSize
                             ?: defaultCustomStyles.notificationCard?.titleSize,
+                    subTitleFontWeight =
+                        customStyles?.notificationCard?.subTitleFontWeight
+                            ?: defaultCustomStyles.notificationCard?.subTitleFontWeight,
                     descriptionColor =
                         modeAppliedClientTheme?.notificationCard?.descriptionColor
                             ?: modeAppliedClientTheme?.colors?.textColor
@@ -226,6 +229,9 @@ object SirenSDKUtils {
                     descriptionSize =
                         customStyles?.notificationCard?.descriptionSize
                             ?: defaultCustomStyles.notificationCard?.descriptionSize,
+                    descriptionFontWeight =
+                        customStyles?.notificationCard?.descriptionFontWeight
+                            ?: defaultCustomStyles.notificationCard?.descriptionFontWeight,
                     dateColor =
                         modeAppliedClientTheme?.colors?.dateColor
                             ?: modeAppliedDefaultTheme?.colors?.dateColor

@@ -34,6 +34,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
@@ -88,7 +89,7 @@ fun NotificationCard(
     ) {
         val borderStroke =
             if (notification?.isRead == false) {
-                BorderStroke(5.dp, themeColors?.primaryColor!!)
+                BorderStroke(4.dp, themeColors?.primaryColor!!)
             } else {
                 BorderStroke(1.dp, Color.Transparent)
             }
@@ -98,7 +99,7 @@ fun NotificationCard(
                 modifier
                     .border(
                         borderStroke,
-                        shape = borderShape(thickness = if (notification?.isRead == false) 5.dp else 1.dp),
+                        shape = borderShape(thickness = if (notification?.isRead == false) 4.dp else 1.dp),
                     )
                     .clickable {
                         onCardClick.let {
@@ -140,46 +141,49 @@ fun NotificationCard(
                 modifier =
                     Modifier
                         .weight(5f)
-                        .padding(start = 5.dp),
+                        .padding(start = 8.dp),
             ) {
                 notification?.message?.let { message ->
                     message.header?.let { header ->
                         Text(
                             text = header,
                             color = notificationCardStyle.titleColor!!,
-                            maxLines = 1,
                             fontWeight = notificationCardStyle.titleFontWeight!!,
                             fontSize = notificationCardStyle.titleSize!!,
+                            maxLines = 2,
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
                 notification?.message?.let { message ->
                     message.subHeader?.let { subHeader ->
                         Text(
                             text = subHeader,
                             color = notificationCardStyle.descriptionColor!!,
-                            maxLines = 1,
+                            fontWeight = notificationCardStyle.subTitleFontWeight!!,
                             fontSize = notificationCardStyle.descriptionSize!!,
+                            maxLines = 2,
+                            lineHeight = TextUnit.Unspecified,
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
                 notification?.message?.let { message ->
                     Text(
                         text = message.body,
                         color = notificationCardStyle.descriptionColor!!,
+                        fontWeight = notificationCardStyle.descriptionFontWeight!!,
                         fontSize = notificationCardStyle.descriptionSize!!,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
 
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(

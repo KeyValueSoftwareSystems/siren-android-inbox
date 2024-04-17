@@ -62,7 +62,7 @@ fun Header(
                     .height(height)
                     .fillMaxWidth()
                     .background(backgroundColor)
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                    .padding(horizontal = 18.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -84,6 +84,7 @@ fun Header(
                                         }
                                     }
                                     .semantics { contentDescription = "siren-header-back" },
+                            tint = titleColor,
                         )
                 }
                 Text(
@@ -119,7 +120,7 @@ fun Header(
                         fontWeight = FontWeight.Bold,
                         modifier =
                             Modifier
-                                .padding(start = 3.dp, end = 7.dp),
+                                .padding(start = 3.dp, end = 3.dp),
                     )
                 }
             }
