@@ -1,6 +1,7 @@
 package com.keyvalue.siren.androidsdk.helper.client
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
@@ -55,6 +56,7 @@ data class CardProps(
     val disableAutoMarkAsRead: Boolean? = false,
     val hideDelete: Boolean? = false,
     val deleteIcon: @Composable (() -> Unit)? = null,
+    val cardStyle: Modifier? = null,
 )
 
 data class InboxHeaderProps(

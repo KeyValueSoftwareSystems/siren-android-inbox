@@ -85,6 +85,7 @@ fun NotificationCard(
                     width = notificationCardStyle?.borderWidth!!,
                     color = notificationCardStyle.borderColor!!,
                 )
+                .then(cardProps?.cardStyle ?: Modifier)
                 .semantics { contentDescription = "siren-notification-card-${notification?.id}" },
     ) {
         val borderStroke =
