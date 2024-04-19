@@ -14,12 +14,26 @@ import com.keyvalue.siren.androidsdk.data.model.UnViewedNotificationResponse
 import com.keyvalue.siren.androidsdk.data.networkcallbacks.NetworkCallback
 import com.keyvalue.siren.androidsdk.data.retrofit.RetrofitClient
 import com.keyvalue.siren.androidsdk.data.service.NotificationApiService
+import com.keyvalue.siren.androidsdk.utils.constants.API_ERROR
+import com.keyvalue.siren.androidsdk.utils.constants.BULK_DELETE_FAILED
 import com.keyvalue.siren.androidsdk.utils.constants.BulkUpdateType
-import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_SERVICE_NOT_AVAILABLE
+import com.keyvalue.siren.androidsdk.utils.constants.DELETE_FAILED
+import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_API_ERROR
+import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_BULK_DELETE_FAILED
+import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_DELETE_FAILED
+import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_MARK_ALL_AS_READ_FAILED
+import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_MARK_ALL_AS_VIEWED_FAILED
+import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_MARK_AS_READ_FAILED
+import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_NOTIFICATION_FETCH_FAILED
 import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_TIMED_OUT
-import com.keyvalue.siren.androidsdk.utils.constants.GENERIC_API_ERROR
+import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_UNVIEWED_COUNT_FETCH_FAILED
+import com.keyvalue.siren.androidsdk.utils.constants.MARK_ALL_AS_READ_FAILED
+import com.keyvalue.siren.androidsdk.utils.constants.MARK_ALL_AS_VIEWED_FAILED
+import com.keyvalue.siren.androidsdk.utils.constants.MARK_AS_READ_FAILED
+import com.keyvalue.siren.androidsdk.utils.constants.NOTIFICATION_FETCH_FAILED
 import com.keyvalue.siren.androidsdk.utils.constants.SirenErrorTypes
 import com.keyvalue.siren.androidsdk.utils.constants.TIMED_OUT
+import com.keyvalue.siren.androidsdk.utils.constants.UNVIEWED_COUNT_FETCH_FAILED
 import org.json.JSONObject
 import java.net.SocketTimeoutException
 
@@ -56,22 +70,22 @@ class NotificationRepositoryImplementation(baseURL: String) : NotificationReposi
                         )
                     networkCallback.onError(
                         JSONObject().put("type", SirenErrorTypes.ERROR)
-                            .put("code", errors.error?.errorCode ?: GENERIC_API_ERROR).put(
+                            .put("code", errors.error?.errorCode ?: UNVIEWED_COUNT_FETCH_FAILED).put(
                                 "message",
                                 errors.error?.message
-                                    ?: "HTTP error! status: ${parentResponse.raw().code} ${parentResponse.raw().message}",
+                                    ?: ERROR_MESSAGE_UNVIEWED_COUNT_FETCH_FAILED,
                             ),
                     )
                 }
             }
         } catch (e: SocketTimeoutException) {
             networkCallback.onError(
-                JSONObject().put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
             )
         } catch (e: Exception) {
             networkCallback.onError(
-                JSONObject().put("code", GENERIC_API_ERROR)
-                    .put("message", ERROR_MESSAGE_SERVICE_NOT_AVAILABLE),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", API_ERROR)
+                    .put("message", ERROR_MESSAGE_API_ERROR),
             )
         }
     }
@@ -110,22 +124,22 @@ class NotificationRepositoryImplementation(baseURL: String) : NotificationReposi
                         )
                     networkCallback.onError(
                         JSONObject().put("type", SirenErrorTypes.ERROR)
-                            .put("code", errors.error?.errorCode ?: GENERIC_API_ERROR).put(
+                            .put("code", errors.error?.errorCode ?: NOTIFICATION_FETCH_FAILED).put(
                                 "message",
                                 errors.error?.message
-                                    ?: "HTTP error! status: ${parentResponse.raw().code} ${parentResponse.raw().message}",
+                                    ?: ERROR_MESSAGE_NOTIFICATION_FETCH_FAILED,
                             ),
                     )
                 }
             }
         } catch (e: SocketTimeoutException) {
             networkCallback.onError(
-                JSONObject().put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
             )
         } catch (e: Exception) {
             networkCallback.onError(
-                JSONObject().put("code", GENERIC_API_ERROR)
-                    .put("message", ERROR_MESSAGE_SERVICE_NOT_AVAILABLE),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", API_ERROR)
+                    .put("message", ERROR_MESSAGE_API_ERROR),
             )
         }
     }
@@ -157,22 +171,22 @@ class NotificationRepositoryImplementation(baseURL: String) : NotificationReposi
                         )
                     networkCallback.onError(
                         JSONObject().put("type", SirenErrorTypes.ERROR)
-                            .put("code", errors.error?.errorCode ?: GENERIC_API_ERROR).put(
+                            .put("code", errors.error?.errorCode ?: MARK_AS_READ_FAILED).put(
                                 "message",
                                 errors.error?.message
-                                    ?: "HTTP error! status: ${parentResponse.raw().code} ${parentResponse.raw().message}",
+                                    ?: ERROR_MESSAGE_MARK_AS_READ_FAILED,
                             ),
                     )
                 }
             }
         } catch (e: SocketTimeoutException) {
             networkCallback.onError(
-                JSONObject().put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
             )
         } catch (e: Exception) {
             networkCallback.onError(
-                JSONObject().put("code", GENERIC_API_ERROR)
-                    .put("message", ERROR_MESSAGE_SERVICE_NOT_AVAILABLE),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", API_ERROR)
+                    .put("message", ERROR_MESSAGE_API_ERROR),
             )
         }
     }
@@ -206,22 +220,22 @@ class NotificationRepositoryImplementation(baseURL: String) : NotificationReposi
                         )
                     networkCallback.onError(
                         JSONObject().put("type", SirenErrorTypes.ERROR)
-                            .put("code", errors.error?.errorCode ?: GENERIC_API_ERROR).put(
+                            .put("code", errors.error?.errorCode ?: MARK_ALL_AS_READ_FAILED).put(
                                 "message",
                                 errors.error?.message
-                                    ?: "HTTP error! status: ${parentResponse.raw().code} ${parentResponse.raw().message}",
+                                    ?: ERROR_MESSAGE_MARK_ALL_AS_READ_FAILED,
                             ),
                     )
                 }
             }
         } catch (e: SocketTimeoutException) {
             networkCallback.onError(
-                JSONObject().put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
             )
         } catch (e: Exception) {
             networkCallback.onError(
-                JSONObject().put("code", GENERIC_API_ERROR)
-                    .put("message", ERROR_MESSAGE_SERVICE_NOT_AVAILABLE),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", API_ERROR)
+                    .put("message", ERROR_MESSAGE_API_ERROR),
             )
         }
     }
@@ -254,22 +268,22 @@ class NotificationRepositoryImplementation(baseURL: String) : NotificationReposi
                         )
                     networkCallback.onError(
                         JSONObject().put("type", SirenErrorTypes.ERROR)
-                            .put("code", errors.error?.errorCode ?: GENERIC_API_ERROR).put(
+                            .put("code", errors.error?.errorCode ?: MARK_ALL_AS_VIEWED_FAILED).put(
                                 "message",
                                 errors.error?.message
-                                    ?: "HTTP error! status: ${parentResponse.raw().code} ${parentResponse.raw().message}",
+                                    ?: ERROR_MESSAGE_MARK_ALL_AS_VIEWED_FAILED,
                             ),
                     )
                 }
             }
         } catch (e: SocketTimeoutException) {
             networkCallback.onError(
-                JSONObject().put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
             )
         } catch (e: Exception) {
             networkCallback.onError(
-                JSONObject().put("code", GENERIC_API_ERROR)
-                    .put("message", ERROR_MESSAGE_SERVICE_NOT_AVAILABLE),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", API_ERROR)
+                    .put("message", ERROR_MESSAGE_API_ERROR),
             )
         }
     }
@@ -297,22 +311,22 @@ class NotificationRepositoryImplementation(baseURL: String) : NotificationReposi
                         Gson().fromJson(errorBody, DeleteNotificationByIdResponse::class.java)
                     networkCallback.onError(
                         JSONObject().put("type", SirenErrorTypes.ERROR)
-                            .put("code", errors.error?.errorCode ?: GENERIC_API_ERROR).put(
+                            .put("code", errors.error?.errorCode ?: DELETE_FAILED).put(
                                 "message",
                                 errors.error?.message
-                                    ?: "HTTP error! status: ${parentResponse.raw().code} ${parentResponse.raw().message}",
+                                    ?: ERROR_MESSAGE_DELETE_FAILED,
                             ),
                     )
                 }
             }
         } catch (e: SocketTimeoutException) {
             networkCallback.onError(
-                JSONObject().put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
             )
         } catch (e: Exception) {
             networkCallback.onError(
-                JSONObject().put("code", GENERIC_API_ERROR)
-                    .put("message", ERROR_MESSAGE_SERVICE_NOT_AVAILABLE),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", API_ERROR)
+                    .put("message", ERROR_MESSAGE_API_ERROR),
             )
         }
     }
@@ -346,22 +360,22 @@ class NotificationRepositoryImplementation(baseURL: String) : NotificationReposi
                         )
                     networkCallback.onError(
                         JSONObject().put("type", SirenErrorTypes.ERROR)
-                            .put("code", errors.error?.errorCode ?: GENERIC_API_ERROR).put(
+                            .put("code", errors.error?.errorCode ?: BULK_DELETE_FAILED).put(
                                 "message",
                                 errors.error?.message
-                                    ?: "HTTP error! status: ${parentResponse.raw().code} ${parentResponse.raw().message}",
+                                    ?: ERROR_MESSAGE_BULK_DELETE_FAILED,
                             ),
                     )
                 }
             }
         } catch (e: SocketTimeoutException) {
             networkCallback.onError(
-                JSONObject().put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", TIMED_OUT).put("message", ERROR_MESSAGE_TIMED_OUT),
             )
         } catch (e: Exception) {
             networkCallback.onError(
-                JSONObject().put("code", GENERIC_API_ERROR)
-                    .put("message", ERROR_MESSAGE_SERVICE_NOT_AVAILABLE),
+                JSONObject().put("type", SirenErrorTypes.ERROR).put("code", API_ERROR)
+                    .put("message", ERROR_MESSAGE_API_ERROR),
             )
         }
     }
