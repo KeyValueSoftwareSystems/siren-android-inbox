@@ -29,7 +29,7 @@ interface SirenSDKClient {
      * @param untilDate The end date until which notifications should be marked as read.
      * @param callback The callback interface for handling the result of the operation.
      */
-    fun markNotificationsAsReadByDate(
+    fun markAsReadByDate(
         untilDate: String?,
         callback: SirenAllNotificationUpdateCallback,
     )
@@ -40,7 +40,7 @@ interface SirenSDKClient {
      * @param untilDate The end date until which notifications should be marked as viewed.
      * @param callback The callback interface for handling the result of the operation.
      */
-    fun markNotificationsAsViewed(
+    fun markAllAsViewed(
         untilDate: String?,
         callback: MarkAsViewedCallback,
     )
@@ -51,7 +51,7 @@ interface SirenSDKClient {
      * @param untilDate The end date until which notifications should be deleted.
      * @param callback The callback interface for handling the result of the operation.
      */
-    fun deleteNotificationsByDate(
+    fun deleteByDate(
         untilDate: String?,
         callback: SirenAllNotificationUpdateCallback,
     )
@@ -59,11 +59,11 @@ interface SirenSDKClient {
     /**
      * Deletes a notification by its ID.
      *
-     * @param notificationId The ID of the notification to delete.
+     * @param id The ID of the notification to delete.
      * @param callback The callback interface for handling the result of the operation.
      */
-    fun deleteNotification(
-        notificationId: String,
+    fun deleteById(
+        id: String,
         callback: SirenAllNotificationUpdateCallback,
     )
 
