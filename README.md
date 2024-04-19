@@ -127,7 +127,7 @@ cardProps | Props for customizing the notification cards | CardProps | null |
 inboxHeaderProps | Props for customizing the header | InboxHeaderProps | null |
 listEmptyComponent | Custom composable function for empty notification list | (@Composable () -> Unit) | null |
 customFooter | Custom footer composable function | (@Composable () -> Unit) | null |
-customNotificationCard | Custom click handler for notification cards | (@Composable (AllNotificationResponseData) -> Unit) | null |
+customCard | Custom notification card composable | (@Composable (AllNotificationResponseData) -> Unit) | null |
 customLoader | Custom composable function to display the initial loading state | (@Composable () -> Unit) | null |
 customErrorWindow | Custom error window | (@Composable () -> Unit) | null |
 itemsPerFetch | Number of notifications fetch per api request (have a max cap of 50) | Int | 20

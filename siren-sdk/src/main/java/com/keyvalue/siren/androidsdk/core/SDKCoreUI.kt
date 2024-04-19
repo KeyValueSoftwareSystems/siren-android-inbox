@@ -590,7 +590,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                     ) {
                         items(notificationListState) { notificationData ->
                             Box {
-                                props.customNotificationCard?.let {
+                                props.customCard?.let {
                                     if (notificationData != null) {
                                         it(notificationData)
                                     }
