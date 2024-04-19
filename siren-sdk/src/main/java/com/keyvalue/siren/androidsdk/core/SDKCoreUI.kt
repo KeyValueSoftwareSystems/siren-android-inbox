@@ -114,7 +114,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
         }
 
         var verificationRetryCount = 1
-        val verificationRetryTimer: Timer = Timer()
+        val verificationRetryTimer = Timer()
 
         Box(
             modifier =
