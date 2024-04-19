@@ -15,9 +15,9 @@ interface SirenInboxCallback {
     fun onError(jsonObject: JSONObject)
 
     /**
-     * Called when a notification card in the Siren inbox is clicked.
+     * Called when a card in the Siren inbox is clicked.
      *
-     * @param notificationItem The data associated with the clicked notification.
+     * @param item The data associated with the clicked notification.
      */
-    fun onCardClick(notificationItem: AllNotificationResponseData)
+    fun onCardClick(item: AllNotificationResponseData)
 }
