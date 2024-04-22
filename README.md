@@ -8,12 +8,12 @@ The `siren-android-inbox` sdk is a comprehensive and customizable android UI kit
 
 You will need your sdk token for initializing your library.
 
-1. Add the JitPack repository to your build file
+1. Add the mavenCentral repository to your build file
 ```kotlin
 allprojects {
     repositories {
         ...
-        maven { url 'https://jitpack.io' }
+        mavenCentral()
     }
 }
 ```
@@ -21,7 +21,7 @@ allprojects {
 
 ```kotlin
 dependencies {
-    implementation 'com.github.KeyValueSoftwareSystems:siren-android-inbox:1.0.1'
+    implementation("io.sirenapp:sirenapp-android-inbox:1.0.0")
 }
 ```
 
