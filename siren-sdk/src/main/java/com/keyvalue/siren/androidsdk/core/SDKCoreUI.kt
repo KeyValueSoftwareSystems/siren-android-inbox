@@ -1,6 +1,10 @@
 package com.keyvalue.siren.androidsdk.core
 
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -65,6 +69,7 @@ import com.keyvalue.siren.androidsdk.utils.constants.TOKEN_VERIFICATION_RETRY_IN
 import com.keyvalue.siren.androidsdk.utils.constants.TokenVerificationStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -132,7 +137,10 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                     painter = painterResource(id = R.drawable.bell_dark),
                     contentDescription = "siren-notification-icon",
                     tint = if (props.darkMode == true) Color.White else Color.Black,
-                    modifier = Modifier.size(iconStyle?.size!!).semantics { contentDescription = "siren-notification-icon" },
+                    modifier =
+                        Modifier
+                            .size(iconStyle?.size!!)
+                            .semantics { contentDescription = "siren-notification-icon" },
                 )
             }
 
@@ -373,22 +381,26 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
             }
         }
 
+        var deletedItem by remember {
+            mutableStateOf("")
+        }
+
+        LaunchedEffect(deletedItem) {
+            if (deletedItem != "") {
+                delay(300)
+                deleteByIdState.emit(deletedItem)
+                deletedItem = ""
+            }
+        }
+
         deleteByIdState.collectAsState().apply {
             if (this.value.isNotEmpty()) {
-                var position: Int
-                notificationListState.mapIndexed { index, responseData ->
-                    if (responseData?.id == this.value) {
-                        position = index
-                        notificationListState = notificationListState.subList(
-                            0, if (position == 0) 0 else position,
-                        ) +
-                            notificationListState.subList(
-                                position + 1, notificationListState.size,
-                            )
-                        if (notificationListState.isEmpty()) {
-                            showListEmptyState = true
-                        }
+                notificationListState =
+                    notificationListState.filter { item ->
+                        item?.id != this.value
                     }
+                if (notificationListState.isEmpty()) {
+                    showListEmptyState = true
                 }
             }
         }
@@ -587,51 +599,53 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                                     if (notificationData != null) {
                                         it(notificationData)
                                     }
-                                } ?: NotificationCard(
-                                    notification = notificationData,
-                                    cardProps = props.cardProps,
-                                    notificationCardStyle,
-                                    onCardClick = {
-                                        callback.onCardClick(it)
-                                    },
-                                    deleteNotificationCallback = {
-                                        notificationData?.id?.let {
-                                            deleteByIdInner(
-                                                it,
-                                            ) { dataStatus, id, jsonObject, isError ->
-                                                CoroutineScope(Dispatchers.Main).launch {
-                                                    if (isError && jsonObject != null) {
-                                                        callback.onError(jsonObject)
-                                                    } else {
-                                                        deleteByIdState.emit(it)
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    },
-                                    themeColors = themeColors,
-                                    darkMode = props.darkMode ?: false,
-                                    defaultCardClickCallback = {
-                                        notificationData?.id?.let {
-                                            markAsReadInner(
-                                                it,
-                                            ) {
-                                                    responseData, errorObject, isError ->
-                                                CoroutineScope(Dispatchers.Main).launch {
-                                                    if (isError && errorObject != null) {
-                                                        callback.onError(errorObject)
-                                                    } else {
-                                                        responseData?.id?.let { id ->
-                                                            markAsReadByIdState.emit(
-                                                                id,
-                                                            )
+                                } ?: this@Column.AnimatedVisibility(visible = deletedItem != notificationData?.id, exit = shrinkVertically(animationSpec = tween(200)), enter = EnterTransition.None) {
+                                    NotificationCard(
+                                        notification = notificationData,
+                                        cardProps = props.cardProps,
+                                        notificationCardStyle,
+                                        onCardClick = {
+                                            callback.onCardClick(it)
+                                        },
+                                        deleteNotificationCallback = {
+                                            notificationData?.id?.let {
+                                                deleteByIdInner(
+                                                    it,
+                                                ) { dataStatus, id, jsonObject, isError ->
+                                                    CoroutineScope(Dispatchers.Main).launch {
+                                                        if (isError && jsonObject != null) {
+                                                            callback.onError(jsonObject)
+                                                        } else {
+                                                            deletedItem = (id ?: "")
                                                         }
                                                     }
                                                 }
                                             }
-                                        }
-                                    },
-                                )
+                                        },
+                                        themeColors = themeColors,
+                                        darkMode = props.darkMode ?: false,
+                                        defaultCardClickCallback = {
+                                            notificationData?.id?.let {
+                                                markAsReadInner(
+                                                    it,
+                                                ) {
+                                                        responseData, errorObject, isError ->
+                                                    CoroutineScope(Dispatchers.Main).launch {
+                                                        if (isError && errorObject != null) {
+                                                            callback.onError(errorObject)
+                                                        } else {
+                                                            responseData?.id?.let { id ->
+                                                                markAsReadByIdState.emit(
+                                                                    id,
+                                                                )
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                    )
+                                }
                             }
                         }
                         item {

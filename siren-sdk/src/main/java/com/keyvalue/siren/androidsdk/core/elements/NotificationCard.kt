@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material.Icon
@@ -27,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
@@ -37,8 +37,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
-import coil.transform.CircleCropTransformation
+import coil.compose.AsyncImage
 import com.keyvalue.siren.androidsdk.R
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
 import com.keyvalue.siren.androidsdk.helper.client.CardProps
@@ -59,18 +58,23 @@ fun NotificationCard(
     darkMode: Boolean,
 ) {
     val avatarImageUrl = notification?.message?.avatar?.imageUrl
+    val avatarContentDescription = "siren-notification-avatar-${notification?.id}"
+    val avatarModifier =
+        Modifier
+            .size(notificationCardStyle?.avatarSize!!)
+            .clip(CircleShape)
+            .conditional(cardProps?.onAvatarClick != null && notification != null) {
+                clickable {
+                    cardProps?.onAvatarClick?.let {
+                        if (notification != null) {
+                            it(notification)
+                        }
+                    }
+                }
+            }
+            .semantics { contentDescription = "siren-notification-avatar-${notification?.id}" }
 
-    val painter =
-        if (avatarImageUrl.isNullOrEmpty()) {
-            painterResource(id = if (darkMode) R.drawable.avatar_dark else R.drawable.avatar_light)
-        } else {
-            rememberImagePainter(
-                data = avatarImageUrl,
-                builder = {
-                    transformations(CircleCropTransformation())
-                },
-            )
-        }
+    val avatarDefaultPainter = painterResource(id = if (darkMode) R.drawable.avatar_dark else R.drawable.avatar_light)
 
     val modifier =
         Modifier
@@ -118,25 +122,23 @@ fun NotificationCard(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             if (cardProps?.hideAvatar != true) {
-                Image(
-                    painter = painter,
-                    contentDescription = "siren-notification-avatar-${notification?.id}",
-                    modifier =
-                        Modifier
-                            .size(notificationCardStyle.avatarSize!!)
-                            .clip(CircleShape)
-                            .weight(1f)
-                            .conditional(cardProps?.onAvatarClick != null && notification != null) {
-                                clickable {
-                                    cardProps?.onAvatarClick?.let {
-                                        if (notification != null) {
-                                            it(notification)
-                                        }
-                                    }
-                                }
-                            }
-                            .semantics { contentDescription = "siren-notification-avatar-${notification?.id}" },
-                )
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                    if (avatarImageUrl.isNullOrEmpty()) {
+                        Image(
+                            painter = avatarDefaultPainter,
+                            contentDescription = avatarContentDescription,
+                            contentScale = ContentScale.FillBounds,
+                            modifier = avatarModifier,
+                        )
+                    } else {
+                        AsyncImage(
+                            model = avatarImageUrl,
+                            contentDescription = avatarContentDescription,
+                            contentScale = ContentScale.FillBounds,
+                            modifier = avatarModifier,
+                        )
+                    }
+                }
             }
             Column(
                 modifier =
