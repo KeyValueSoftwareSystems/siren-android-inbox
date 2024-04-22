@@ -177,7 +177,7 @@ val defaultTheme =
                         borderColor = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.BorderColor),
                         background = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.HighlightedCardColor),
                         titleColor = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.TextColor),
-                        subTitleColor = COLORS[ThemeModeEnum.LIGHT]?.get(ThemeColorsEnum.TextColor),
+                        subTitleColor = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.TextColor),
                         descriptionColor = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.TextColor),
                     ),
             ),
