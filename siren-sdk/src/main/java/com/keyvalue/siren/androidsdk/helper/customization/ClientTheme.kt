@@ -74,7 +74,7 @@ data class SirenInboxIconProps(
  * @property inboxHeaderProps  Properties for customizing the header
  * @property listEmptyComponent Custom composable function to display when the notification list is empty.
  * @property customFooter Custom composable function to be displayed below the inbox list.
- * @property customNotificationCard Custom composable function for rendering individual notification cards.
+ * @property customCard Custom composable function for rendering individual notification cards.
  * @property customLoader Custom composable function for loader to be displayed when the notification list is loading.
  * @property customErrorWindow Custom composable function for error window to be displayed when an error occurs.
  * @property itemsPerFetch Number of notifications to be fetched each time
@@ -88,7 +88,7 @@ data class SirenInboxProps(
     val listEmptyComponent: (@Composable () -> Unit)? = null,
     val inboxHeaderProps: InboxHeaderProps? = null,
     val customFooter: (@Composable () -> Unit)? = null,
-    val customNotificationCard: (@Composable (AllNotificationResponseData) -> Unit)? = null,
+    val customCard: (@Composable (AllNotificationResponseData) -> Unit)? = null,
     val customLoader: (@Composable () -> Unit)? = null,
     val customErrorWindow: (@Composable () -> Unit)? = null,
     val itemsPerFetch: Int? = 20,

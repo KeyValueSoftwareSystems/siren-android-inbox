@@ -30,7 +30,7 @@ abstract class SDKCore(var context: Context, var userToken: String, var recipien
         }
     }
 
-    protected fun markNotificationsAsViewedInner(
+    protected fun markAllAsViewedInner(
         startDate: String?,
         callback: (MarkAsViewedResponseData?, JSONObject?, Boolean) -> Unit,
     ) {
@@ -83,7 +83,7 @@ abstract class SDKCore(var context: Context, var userToken: String, var recipien
         }
     }
 
-    protected fun deleteNotificationsByDateInner(
+    protected fun deleteByDateInner(
         startDate: String?,
         callback: (DataStatus?, JSONObject?, Boolean) -> Unit,
     ) {
@@ -109,7 +109,7 @@ abstract class SDKCore(var context: Context, var userToken: String, var recipien
         }
     }
 
-    protected fun deleteNotificationInner(
+    protected fun deleteByIdInner(
         notificationId: String,
         callback: (DataStatus?, String?, JSONObject?, Boolean) -> Unit,
     ) {
