@@ -1,6 +1,7 @@
 package com.keyvalue.siren.androidsdk.core
 
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.shrinkVertically
@@ -598,7 +599,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                                     if (notificationData != null) {
                                         it(notificationData)
                                     }
-                                } ?: androidx.compose.animation.AnimatedVisibility(visible = deletedItem != notificationData?.id, exit = shrinkVertically(animationSpec = tween(200)), enter = EnterTransition.None) {
+                                } ?: this@Column.AnimatedVisibility(visible = deletedItem != notificationData?.id, exit = shrinkVertically(animationSpec = tween(200)), enter = EnterTransition.None) {
                                     NotificationCard(
                                         notification = notificationData,
                                         cardProps = props.cardProps,
