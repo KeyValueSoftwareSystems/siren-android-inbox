@@ -114,7 +114,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
         }
 
         var verificationRetryCount = 1
-        val verificationRetryTimer: Timer = Timer()
+        val verificationRetryTimer = Timer()
 
         Box(
             modifier =
@@ -254,7 +254,6 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
             mutableStateOf(false)
         }
         val isLoading = remember { mutableStateOf(false) }
-        val isRetry = remember { mutableStateOf(false) }
         val listState = rememberLazyListState()
         val endTime = remember { mutableStateOf("") }
         val startTime = remember { mutableStateOf("") }
@@ -320,7 +319,6 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                 }
                 isRefreshing = false
                 isInitialListCall = false
-                isRetry.value = false
                 if (isError) {
                     error?.let { callback.onError(it) }
                     notificationListState = notificationListState.ifEmpty { emptyList() }
@@ -360,12 +358,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
 
         val enableClearAllButton =
             notificationListState.isNotEmpty() && !showListEmptyState && !showListErrorState &&
-                !isLoading.value && !isRefreshing && !isRetry.value
-
-        fun retryFetch() {
-            isRetry.value = true
-            fetchNotifications()
-        }
+                !isLoading.value && !isRefreshing
 
         authenticationState.collectAsState().apply {
             if (this.value == TokenVerificationStatus.FAILED) {
@@ -559,7 +552,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                     }
                 }
 
-                if (isInitialListCall || isRetry.value || isRefreshing) {
+                if (isInitialListCall || isRefreshing) {
                     props.customLoader?.let { it() } ?: SkeletonLoader(isDarkMode = props.darkMode, hideAvatar = props.cardProps?.hideAvatar)
                 } else if (showListEmptyState) {
                     props.listEmptyComponent?.let { it() } ?: InboxEmptyScreen(
