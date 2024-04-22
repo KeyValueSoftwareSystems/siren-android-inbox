@@ -1,8 +1,7 @@
 package com.keyvalue.siren.androidsdk.utils.constants
 
 const val ERROR_MESSAGE_TIMED_OUT = "Request timed out"
-const val ERROR_MESSAGE_INVALID_TOKEN = "Invalid token"
-const val ERROR_MESSAGE_INVALID_RECIPIENT_ID = "Invalid recipient id"
+const val ERROR_MESSAGE_INVALID_CREDENTIALS = "Invalid credentials found. Please check your token and recipient ID"
 const val ERROR_MESSAGE_API_ERROR = "Something went wrong"
 const val ERROR_MESSAGE_AUTHENTICATION_FAILED = "Failed to authenticate given credentials"
 const val ERROR_MESSAGE_UNVIEWED_COUNT_FETCH_FAILED = "Failed to fetch unviewed notifications count"

@@ -18,10 +18,8 @@ import com.keyvalue.siren.androidsdk.helper.customization.SirenInboxProps
 import com.keyvalue.siren.androidsdk.presenter.AuthenticationPresenter
 import com.keyvalue.siren.androidsdk.presenter.CorePresenter
 import com.keyvalue.siren.androidsdk.presenter.NotificationPresenter
-import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_INVALID_RECIPIENT_ID
-import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_INVALID_TOKEN
-import com.keyvalue.siren.androidsdk.utils.constants.INVALID_RECIPIENT_ID
-import com.keyvalue.siren.androidsdk.utils.constants.INVALID_TOKEN
+import com.keyvalue.siren.androidsdk.utils.constants.ERROR_MESSAGE_INVALID_CREDENTIALS
+import com.keyvalue.siren.androidsdk.utils.constants.INVALID_CREDENTIALS
 import com.keyvalue.siren.androidsdk.utils.constants.SdkState
 import com.keyvalue.siren.androidsdk.utils.constants.SirenErrorTypes
 import com.keyvalue.siren.androidsdk.utils.constants.TokenVerificationStatus
@@ -46,24 +44,14 @@ class SirenSDKCore(
         userToken: String,
         recipientId: String,
     ) {
-        if (userToken.isEmpty()) {
+        if (userToken.isEmpty() || recipientId.isEmpty()) {
             errorCallback.onError(
                 JSONObject().put("type", SirenErrorTypes.CONFIG_ERROR)
-                    .put("code", INVALID_TOKEN).put("message", ERROR_MESSAGE_INVALID_TOKEN),
+                    .put("code", INVALID_CREDENTIALS).put("message", ERROR_MESSAGE_INVALID_CREDENTIALS),
             )
         } else {
             this.userToken = userToken
-        }
-        if (recipientId.isEmpty()) {
-            errorCallback.onError(
-                JSONObject().put("type", SirenErrorTypes.CONFIG_ERROR)
-                    .put("code", INVALID_RECIPIENT_ID)
-                    .put("message", ERROR_MESSAGE_INVALID_RECIPIENT_ID),
-            )
-        } else {
             this.recipientId = recipientId
-        }
-        if (userToken.isNotEmpty() && recipientId.isNotEmpty()) {
             val authenticationPresenter =
                 context?.let { AuthenticationPresenter(it, userToken, recipientId) }
             authenticationStatus = TokenVerificationStatus.PENDING
