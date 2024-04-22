@@ -1,7 +1,6 @@
 package com.keyvalue.siren.androidsdk.helper.client
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
@@ -47,6 +46,7 @@ data class NotificationCardThemeProps(
     val borderColor: Color? = null,
     val background: Color? = null,
     val titleColor: Color? = null,
+    val subTitleColor: Color? = null,
     val descriptionColor: Color? = null,
 )
 
@@ -56,7 +56,6 @@ data class CardProps(
     val disableAutoMarkAsRead: Boolean? = false,
     val hideDelete: Boolean? = false,
     val deleteIcon: @Composable (() -> Unit)? = null,
-    val cardStyle: Modifier? = null,
 )
 
 data class InboxHeaderProps(
@@ -102,6 +101,7 @@ data class NotificationCardStyle(
     val descriptionFontWeight: FontWeight? = null,
     val titleSize: TextUnit? = null,
     val descriptionSize: TextUnit? = null,
+    val subTitleSize: TextUnit? = null,
     val dateSize: TextUnit? = null,
 )
 
@@ -171,6 +171,8 @@ data class CombinedNotificationCardThemeProps(
     val titleColor: Color? = null,
     val titleFontWeight: FontWeight? = null,
     val titleSize: TextUnit? = null,
+    val subTitleColor: Color? = null,
+    val subTitleSize: TextUnit? = null,
     val subTitleFontWeight: FontWeight? = null,
     val descriptionColor: Color? = null,
     val descriptionSize: TextUnit? = null,
