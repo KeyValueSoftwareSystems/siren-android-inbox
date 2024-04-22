@@ -93,7 +93,7 @@ class SirenSDKCore(
         }
     }
 
-    private fun markNotificationsAsReadByDateInner(
+    private fun markAsReadByDateInner(
         startDate: String?,
         callback: (DataStatus?, JSONObject?, Boolean) -> Unit,
     ) {
@@ -120,11 +120,11 @@ class SirenSDKCore(
         }
     }
 
-    override fun markNotificationsAsReadByDate(
+    override fun markAsReadByDate(
         untilDate: String?,
         callback: SirenAllNotificationUpdateCallback,
     ) {
-        markNotificationsAsReadByDateInner(untilDate) { responseData, jsonObject, isError ->
+        markAsReadByDateInner(untilDate) { responseData, jsonObject, isError ->
             CoroutineScope(Dispatchers.Main).launch {
                 if (isError && jsonObject != null) {
                     callback.onError(jsonObject)
@@ -140,11 +140,11 @@ class SirenSDKCore(
         }
     }
 
-    override fun markNotificationsAsViewed(
+    override fun markAllAsViewed(
         untilDate: String?,
         callback: MarkAsViewedCallback,
     ) {
-        markNotificationsAsViewedInner(untilDate) { responseData, jsonObject, isError ->
+        markAllAsViewedInner(untilDate) { responseData, jsonObject, isError ->
             CoroutineScope(Dispatchers.Main).launch {
                 if (isError && jsonObject != null) {
                     callback.onError(jsonObject)
@@ -156,11 +156,11 @@ class SirenSDKCore(
         }
     }
 
-    override fun deleteNotificationsByDate(
+    override fun deleteByDate(
         untilDate: String?,
         callback: SirenAllNotificationUpdateCallback,
     ) {
-        deleteNotificationsByDateInner(untilDate) { dataStatus, jsonObject, isError ->
+        deleteByDateInner(untilDate) { dataStatus, jsonObject, isError ->
             CoroutineScope(Dispatchers.Main).launch {
                 if (isError && jsonObject != null) {
                     callback.onError(jsonObject)
@@ -172,11 +172,11 @@ class SirenSDKCore(
         }
     }
 
-    override fun deleteNotification(
-        notificationId: String,
+    override fun deleteById(
+        id: String,
         callback: SirenAllNotificationUpdateCallback,
     ) {
-        deleteNotificationInner(notificationId) { dataStatus, id, jsonObject, isError ->
+        deleteByIdInner(id) { dataStatus, id, jsonObject, isError ->
             CoroutineScope(Dispatchers.Main).launch {
                 deleteByIdState.emit(id ?: "")
                 if (isError && jsonObject != null) {

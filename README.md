@@ -127,7 +127,7 @@ cardProps | Props for customizing the notification cards | CardProps | null |
 inboxHeaderProps | Props for customizing the header | InboxHeaderProps | null |
 listEmptyComponent | Custom composable function for empty notification list | (@Composable () -> Unit) | null |
 customFooter | Custom footer composable function | (@Composable () -> Unit) | null |
-customNotificationCard | Custom click handler for notification cards | (@Composable (AllNotificationResponseData) -> Unit) | null |
+customCard | Custom notification card composable | (@Composable (AllNotificationResponseData) -> Unit) | null |
 customLoader | Custom composable function to display the initial loading state | (@Composable () -> Unit) | null |
 customErrorWindow | Custom error window | (@Composable () -> Unit) | null |
 itemsPerFetch | Number of notifications fetch per api request (have a max cap of 50) | Int | 20
@@ -291,11 +291,11 @@ Utility functions for modifying notifications:
 
 Functions | Parameters | Type | Description |
 ----------|------------|-------|------------|
-markNotificationsAsReadByDate | startDate | ISO date string | Sets the read status of notifications to true until the given date |
+markAsReadByDate | startDate | ISO date string | Sets the read status of notifications to true until the given date |
 markAsRead | id | string | Set read status of a notification to true          |
-deleteNotification |  id | string  | Delete a notification by id |
-deleteNotificationsByDate | startDate | ISO date string | Delete all notifications until given date |
-markNotificationsAsViewed | startDate | ISO date string |Sets the viewed status of notifications to true until the given date |
+deleteById |  id | string  | Delete a notification by id |
+deleteByDate | startDate | ISO date string | Delete all notifications until given date |
+markAllAsViewed | startDate | ISO date string |Sets the viewed status of notifications to true until the given date |
 updateToken | userToken, recipientId | string | To change the tokens
 
 Sample code:
@@ -317,7 +317,7 @@ import com.keyvalue.siren.androidsdk.helper.client.callbacks.MarkAsReadByIdCallb
         )
     fun markAsRead() {
         sirenSDK.markAsRead(
-            notificationId = "notificationId",
+            id = "ID_VALUE",
             callback = object : MarkAsReadByIdCallback {
                 override fun onSuccess(responseData: MarkAsReadByIdResponseData?) {
                     // onSuccess
@@ -411,8 +411,8 @@ import com.keyvalue.siren.androidsdk.helper.customization.SirenInboxProps
     )
 
     fun deleteNotification() {
-        sirenSDK.deleteNotification(
-            notificationId = "notificationId",
+        sirenSDK.deleteById(
+            id = "ID_VALUE",
             callback = object : SirenAllNotificationUpdateCallback {
                 override fun onSuccess(dataStatus: DataStatus?) {
                     // onSuccess

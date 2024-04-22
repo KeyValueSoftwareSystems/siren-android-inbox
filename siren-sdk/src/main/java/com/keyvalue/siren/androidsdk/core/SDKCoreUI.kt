@@ -287,7 +287,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
             }
 
         fun executeMarkAsViewed(startDate: String) {
-            markNotificationsAsViewedInner(
+            markAllAsViewedInner(
                 startDate,
             ) { _, _, _ ->
             }
@@ -537,7 +537,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                         backButton = props.inboxHeaderProps?.backButton,
                         clearAllIconSize = styles.windowHeader.clearAllIconSize!!,
                     ) {
-                        deleteNotificationsByDateInner(
+                        deleteByDateInner(
                             startDate = null,
                         ) { dataStatus, jsonObject, isError ->
                             CoroutineScope(Dispatchers.Main).launch {
@@ -583,7 +583,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                     ) {
                         items(notificationListState) { notificationData ->
                             Box {
-                                props.customNotificationCard?.let {
+                                props.customCard?.let {
                                     if (notificationData != null) {
                                         it(notificationData)
                                     }
@@ -596,7 +596,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                                     },
                                     deleteNotificationCallback = {
                                         notificationData?.id?.let {
-                                            deleteNotificationInner(
+                                            deleteByIdInner(
                                                 it,
                                             ) { dataStatus, id, jsonObject, isError ->
                                                 CoroutineScope(Dispatchers.Main).launch {
