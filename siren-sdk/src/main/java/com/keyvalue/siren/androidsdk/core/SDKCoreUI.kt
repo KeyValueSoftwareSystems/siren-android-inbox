@@ -97,13 +97,13 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
         MutableStateFlow(TokenVerificationStatus.PENDING)
     protected var markAsViewedState: MutableStateFlow<MarkAsViewedResponseData?> =
         MutableStateFlow(null)
+    private var isNotificationFetchScheduled = false
 
     @Composable
     fun SirenCoreInboxIcon(
         props: SirenInboxIconProps,
         callback: SirenInboxIconCallback,
     ) {
-        var isNotificationFetchScheduled = false
         val styles =
             SirenSDKUtils.applyTheme(
                 clientTheme = props.theme,
@@ -164,6 +164,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
         }
 
         fun scheduleUnViewedNotificationsTimer(task: TimerTask) {
+            unViewedNotificationTimer = Timer()
             unViewedNotificationTimer.scheduleAtFixedRate(task, 1000, DATA_FETCH_INTERVAL)
         }
 
@@ -224,6 +225,7 @@ abstract class SDKCoreUI(context: Context, userToken: String, recipientId: Strin
                 fetchCount()
             }
             onDispose {
+                isNotificationFetchScheduled = false
                 unViewedNotificationTimer.cancel()
             }
         }
