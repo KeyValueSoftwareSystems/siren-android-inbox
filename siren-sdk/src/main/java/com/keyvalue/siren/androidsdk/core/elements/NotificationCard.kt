@@ -89,7 +89,6 @@ fun NotificationCard(
                     width = notificationCardStyle?.borderWidth!!,
                     color = notificationCardStyle.borderColor!!,
                 )
-                .then(cardProps?.cardStyle ?: Modifier)
                 .semantics { contentDescription = "siren-notification-card-${notification?.id}" },
     ) {
         val borderStroke =
@@ -164,9 +163,9 @@ fun NotificationCard(
                     message.subHeader?.let { subHeader ->
                         Text(
                             text = subHeader,
-                            color = notificationCardStyle.descriptionColor!!,
+                            color = notificationCardStyle.subTitleColor!!,
                             fontWeight = notificationCardStyle.subTitleFontWeight!!,
-                            fontSize = notificationCardStyle.descriptionSize!!,
+                            fontSize = notificationCardStyle.subTitleSize!!,
                             maxLines = 2,
                             lineHeight = TextUnit.Unspecified,
                         )

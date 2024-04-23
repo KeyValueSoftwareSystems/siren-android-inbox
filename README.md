@@ -206,6 +206,7 @@ data class NotificationCardThemeProps(
     val borderColor: Color? = null,
     val background: Color? = null,
     val titleColor: Color? = null,
+    val subTitleColor: Color? = null,
     val descriptionColor: Color? = null,
 )
 ```
@@ -259,6 +260,7 @@ data class NotificationCardStyle(
     val avatarSize: Dp? = null,
     val titleFontWeight: FontWeight? = null,
     val titleSize: TextUnit? = null,
+    val subTitleSize: TextUnit? = null,
     val descriptionSize: TextUnit? = null,
     val dateSize: TextUnit? = null,
 )
