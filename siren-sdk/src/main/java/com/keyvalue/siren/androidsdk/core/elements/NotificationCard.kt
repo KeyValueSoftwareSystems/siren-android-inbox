@@ -163,9 +163,9 @@ fun NotificationCard(
                     message.subHeader?.let { subHeader ->
                         Text(
                             text = subHeader,
-                            color = notificationCardStyle.subTitleColor!!,
-                            fontWeight = notificationCardStyle.subTitleFontWeight!!,
-                            fontSize = notificationCardStyle.subTitleSize!!,
+                            color = notificationCardStyle.subtitleColor!!,
+                            fontWeight = notificationCardStyle.subtitleFontWeight!!,
+                            fontSize = notificationCardStyle.subtitleSize!!,
                             maxLines = 2,
                             lineHeight = TextUnit.Unspecified,
                         )

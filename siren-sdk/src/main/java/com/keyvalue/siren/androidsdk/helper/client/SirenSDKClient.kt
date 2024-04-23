@@ -18,7 +18,7 @@ interface SirenSDKClient {
      * @param notificationId The ID of the notification to mark as read.
      * @param callback The callback interface for handling the result of the operation.
      */
-    fun markAsRead(
+    fun markAsReadById(
         notificationId: String,
         callback: MarkAsReadByIdCallback,
     )

@@ -206,7 +206,7 @@ data class NotificationCardThemeProps(
     val borderColor: Color? = null,
     val background: Color? = null,
     val titleColor: Color? = null,
-    val subTitleColor: Color? = null,
+    val subtitleColor: Color? = null,
     val descriptionColor: Color? = null,
 )
 ```
@@ -260,7 +260,7 @@ data class NotificationCardStyle(
     val avatarSize: Dp? = null,
     val titleFontWeight: FontWeight? = null,
     val titleSize: TextUnit? = null,
-    val subTitleSize: TextUnit? = null,
+    val subtitleSize: TextUnit? = null,
     val descriptionSize: TextUnit? = null,
     val dateSize: TextUnit? = null,
 )
@@ -294,7 +294,7 @@ Utility functions for modifying notifications:
 Functions | Parameters | Type | Description |
 ----------|------------|-------|------------|
 markAsReadByDate | startDate | ISO date string | Sets the read status of notifications to true until the given date |
-markAsRead | id | string | Set read status of a notification to true          |
+markAsReadById | id | string | Set read status of a notification to true          |
 deleteById |  id | string  | Delete a notification by id |
 deleteByDate | startDate | ISO date string | Delete all notifications until given date |
 markAllAsViewed | startDate | ISO date string |Sets the viewed status of notifications to true until the given date |
@@ -317,8 +317,8 @@ import com.keyvalue.siren.androidsdk.helper.client.callbacks.MarkAsReadByIdCallb
                 }
             },
         )
-    fun markAsRead() {
-        sirenSDK.markAsRead(
+    fun markAsReadById() {
+        sirenSDK.markAsReadById(
             id = "ID_VALUE",
             callback = object : MarkAsReadByIdCallback {
                 override fun onSuccess(responseData: MarkAsReadByIdResponseData?) {

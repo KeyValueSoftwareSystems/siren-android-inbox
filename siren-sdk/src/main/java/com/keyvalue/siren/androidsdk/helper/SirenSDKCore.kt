@@ -63,7 +63,7 @@ class SirenSDKCore(
         }
     }
 
-    override fun markAsRead(
+    override fun markAsReadById(
         notificationId: String,
         callback: MarkAsReadByIdCallback,
     ) {
