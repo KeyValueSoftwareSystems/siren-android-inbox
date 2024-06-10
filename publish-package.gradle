@@ -50,7 +50,7 @@ afterEvaluate {
                 version '1.0.0'
                 pom {
                     name = "$System.env.ARTIFACT_ID"
-                    description = Sytem.getenv("POM_DESCRIPTION")
+                    description = "$System.env.POM_DESCRIPTION"
                     url = 'https://github.com/KeyValueSoftwareSystems/siren-android-inbox'
                     licenses {
                         license {
@@ -64,9 +64,9 @@ afterEvaluate {
                     }
                     developers {
                         developer {
-                            id = System.getenv("POM_DEVELOPER_ID")
-                            name = Sytem.getenv("POM_DEVELOPER_NAME")
-                            email = System.getenv("POM_DEVELOPER_EMAIL")
+                            id = "$System.env.POM_DEVELOPER_ID"
+                            name = "$Sytsem.env.POM_DEVELOPER_NAME"
+                            email = "$System.env.POM_DEVELOPER_EMAIL"
                         }
                     }
                 }
@@ -79,8 +79,8 @@ afterEvaluate {
                 url = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 
                 credentials {
-                    username System.getenv("ossrhUsername")
-                    password System.getenv("ossrhPassword")
+                    username "$System.env.ossrhUsername"
+                    password "$System.env.ossrhPassword"
                 }
             }
 
@@ -90,8 +90,8 @@ afterEvaluate {
                 url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
 
                 credentials {
-                    username System.getenv("ossrhUsername")
-                    password System.getenv("ossrhPassword")
+                    username "$System.env.ossrhUsername"
+                    password "$System.env.ossrhPassword"
                 }
             }
         }
