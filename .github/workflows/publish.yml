@@ -37,8 +37,8 @@ jobs:
           POM_DEVELOPER_ID: ${{ secrets.POM_DEVELOPER_ID }}
           POM_DEVELOPER_NAME: ${{ secrets.POM_DEVELOPER_NAME }}
           POM_DEVELOPER_EMAIL: ${{ secrets.POM_DEVELOPER_EMAIL }}
-        run: echo "publishing to maven central"
-        # run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+        # run: echo "publishing to maven central"
+        run: ./gradlew publishToSonatype
 
       # Step to import GPG key and sign the artifacts
       - name: Sign artifacts
@@ -49,7 +49,6 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-            echo "signing"
-        #   echo $GPG_PRIVATE_KEY | base64 --decode > gpg_private_key.asc
-        #   gpg --import --batch --yes gpg_private_key.asc
-        #   ./gradlew signMavenPublication
+          echo $GPG_PRIVATE_KEY | base64 --decode > gpg_private_key.asc
+          gpg --import --batch --yes gpg_private_key.asc
+          ./gradlew signMavenPublication
