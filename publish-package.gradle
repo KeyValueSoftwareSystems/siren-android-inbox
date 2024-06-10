@@ -65,7 +65,7 @@ afterEvaluate {
                     developers {
                         developer {
                             id = "$System.env.POM_DEVELOPER_ID"
-                            name = "$Systsem.env.POM_DEVELOPER_NAME"
+                            name = "$System.env.POM_DEVELOPER_NAME"
                             email = "$System.env.POM_DEVELOPER_EMAIL"
                         }
                     }
