@@ -1,7 +1,6 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-name = "$System.env.ARTIFACT_ID"
 
 task androidJavadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
