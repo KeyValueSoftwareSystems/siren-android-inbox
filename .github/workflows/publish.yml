@@ -31,7 +31,7 @@ jobs:
 
       # Step to build the project and publish artifacts to Maven Central
       - name: Build and publish
-        working-directory: siren-sdk
+        # working-directory: siren-sdk
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
@@ -45,7 +45,7 @@ jobs:
 
       # Step to import GPG key and sign the artifacts
       - name: Sign artifacts
-        working-directory: siren-sdk
+        # working-directory: siren-sdk
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
