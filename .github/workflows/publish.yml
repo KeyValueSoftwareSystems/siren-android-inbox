@@ -1,7 +1,10 @@
 name: Publish to Maven Central
 
 on:
-  workflow_dispatch:
+    push:
+        branches:
+            add/workflow-maven-publish
+#   workflow_dispatch:
 jobs:
   publish:
     runs-on: ubuntu-latest
