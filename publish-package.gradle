@@ -100,7 +100,7 @@ afterEvaluate {
 
 signing {
     useInMemoryPgpKeys(
-            "FDADDB51",
+            "A8782DCB",
             "12345678"
     )
     sign publishing.publications
