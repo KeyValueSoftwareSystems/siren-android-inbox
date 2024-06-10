@@ -38,7 +38,7 @@ jobs:
           POM_DEVELOPER_NAME: ${{ secrets.POM_DEVELOPER_NAME }}
           POM_DEVELOPER_EMAIL: ${{ secrets.POM_DEVELOPER_EMAIL }}
         # run: echo "publishing to maven central"
-        run: ./gradlew publishToSonatype
+        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
 
       # Step to import GPG key and sign the artifacts
       - name: Sign artifacts
