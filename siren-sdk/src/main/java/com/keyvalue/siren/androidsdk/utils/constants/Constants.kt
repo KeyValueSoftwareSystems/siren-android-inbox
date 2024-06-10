@@ -73,20 +73,20 @@ val COLORS =
     mapOf(
         ThemeModeEnum.LIGHT to
             mapOf(
-                ThemeColorsEnum.PrimaryColor to Color(0xFFF56630),
+                ThemeColorsEnum.PrimaryColor to Color(0xFFFA9874),
                 ThemeColorsEnum.HighlightedCardColor to Color(0xFFFFECE5),
                 ThemeColorsEnum.TextColor to Color(0xFF344054),
                 ThemeColorsEnum.NeutralColor to Color(0xFFFFFFFF),
                 ThemeColorsEnum.BorderColor to Color(0xFFD0D5DD),
                 ThemeColorsEnum.DateColor to Color(0xFF667185),
-                ThemeColorsEnum.DeleteIcon to Color(0xFF34405499),
+                ThemeColorsEnum.DeleteIcon to Color(0xFF9882B3),
                 ThemeColorsEnum.TimerIcon to Color(0xFF667185),
                 ThemeColorsEnum.ClearAllIcon to Color(0xFF667185),
                 ThemeColorsEnum.InfiniteLoader to Color(0xFF4D2E6B),
             ),
         ThemeModeEnum.DARK to
             mapOf(
-                ThemeColorsEnum.PrimaryColor to Color(0xFFF56630),
+                ThemeColorsEnum.PrimaryColor to Color(0xFFFA9874),
                 ThemeColorsEnum.HighlightedCardColor to Color(0xFF2E2D30),
                 ThemeColorsEnum.TextColor to Color(0xFFFFFFFF),
                 ThemeColorsEnum.NeutralColor to Color(0xFF232326),
@@ -125,7 +125,7 @@ val defaultTheme =
                     WindowHeaderThemeProps(
                         background = COLORS[ThemeModeEnum.LIGHT]?.get(ThemeColorsEnum.NeutralColor),
                         titleColor = COLORS[ThemeModeEnum.LIGHT]?.get(ThemeColorsEnum.TextColor),
-                        headerActionColor = COLORS[ThemeModeEnum.LIGHT]?.get(ThemeColorsEnum.TextColor),
+                        headerActionColor = COLORS[ThemeModeEnum.LIGHT]?.get(ThemeColorsEnum.ClearAllIcon),
                         borderColor = COLORS[ThemeModeEnum.LIGHT]?.get(ThemeColorsEnum.BorderColor),
                     ),
                 windowContainer =
@@ -137,6 +137,7 @@ val defaultTheme =
                         borderColor = COLORS[ThemeModeEnum.LIGHT]?.get(ThemeColorsEnum.BorderColor),
                         background = COLORS[ThemeModeEnum.LIGHT]?.get(ThemeColorsEnum.HighlightedCardColor),
                         titleColor = COLORS[ThemeModeEnum.LIGHT]?.get(ThemeColorsEnum.TextColor),
+                        subtitleColor = COLORS[ThemeModeEnum.LIGHT]?.get(ThemeColorsEnum.TextColor),
                         descriptionColor = COLORS[ThemeModeEnum.LIGHT]?.get(ThemeColorsEnum.TextColor),
                     ),
             ),
@@ -164,7 +165,7 @@ val defaultTheme =
                     WindowHeaderThemeProps(
                         background = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.NeutralColor),
                         titleColor = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.TextColor),
-                        headerActionColor = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.TextColor),
+                        headerActionColor = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.ClearAllIcon),
                         borderColor = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.BorderColor),
                     ),
                 windowContainer =
@@ -176,6 +177,7 @@ val defaultTheme =
                         borderColor = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.BorderColor),
                         background = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.HighlightedCardColor),
                         titleColor = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.TextColor),
+                        subtitleColor = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.TextColor),
                         descriptionColor = COLORS[ThemeModeEnum.DARK]?.get(ThemeColorsEnum.TextColor),
                     ),
             ),
@@ -195,8 +197,8 @@ val defaultCustomStyles =
         windowHeader =
             WindowHeaderStyle(
                 height = 50.dp,
-                titleFontWeight = FontWeight.W500,
-                titleSize = 20.sp,
+                titleFontWeight = FontWeight.W600,
+                titleSize = 18.sp,
                 titlePadding = 0.dp,
             ),
         windowContainer =
@@ -205,13 +207,16 @@ val defaultCustomStyles =
             ),
         notificationCard =
             NotificationCardStyle(
-                padding = 10.dp,
-                borderWidth = 0.6.dp,
+                padding = 12.dp,
+                borderWidth = 0.2.dp,
                 avatarSize = 40.dp,
-                titleFontWeight = FontWeight.W500,
+                titleFontWeight = FontWeight.W600,
+                subtitleFontWeight = FontWeight.W500,
+                descriptionFontWeight = FontWeight.W400,
                 titleSize = 14.sp,
+                subtitleSize = 14.sp,
                 descriptionSize = 14.sp,
-                dateSize = 14.sp,
+                dateSize = 12.sp,
             ),
         badgeStyle =
             BadgeStyle(
@@ -223,11 +228,11 @@ val defaultCustomStyles =
             ),
         deleteIcon =
             DeleteIconStyle(
-                size = 22.dp,
+                size = 18.dp,
             ),
         dateIcon =
             DateIconStyle(
-                size = 25.dp,
+                size = 18.dp,
             ),
         clearAllIcon =
             ClearAllIconStyle(

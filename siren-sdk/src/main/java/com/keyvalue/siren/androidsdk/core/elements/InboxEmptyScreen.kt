@@ -1,4 +1,4 @@
-package com.keyvalue.siren.androidsdk.helper
+package com.keyvalue.siren.androidsdk.core.elements
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,7 +28,7 @@ import com.keyvalue.siren.androidsdk.utils.constants.INBOX_EMPTY_TITLE
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun InboxEmptyState(
+fun InboxEmptyScreen(
     pullRefreshState: PullRefreshState,
     backgroundColor: Color,
     titleColor: Color,
@@ -41,7 +43,8 @@ fun InboxEmptyState(
                 .fillMaxSize()
                 .shadow(0.dp)
                 .pullRefresh(pullRefreshState)
-                .background(backgroundColor),
+                .background(backgroundColor)
+                .semantics { contentDescription = "siren-empty-state" },
     ) {
         item {
             Image(painter = painterResource(id = if (isDarkMode) R.drawable.empty_state_dark else R.drawable.empty_state_light), contentDescription = "Error state", modifier = Modifier.size(150.dp))

@@ -8,6 +8,12 @@ android {
     namespace = "com.keyvalue.siren.androidsdk"
     compileSdk = 34
 
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+
     defaultConfig {
         minSdk = 24
         targetSdk = 34
@@ -78,18 +84,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     // Coil
-    implementation("io.coil-kt:coil-compose:1.4.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("release") {
-                from(components["release"])
-                groupId = "com.github.KeyValueSoftwareSystems"
-                artifactId = "siren-android-inbox"
-                version = "1.0.0"
-            }
-        }
-    }
-}
+apply(from = "../publish-package.gradle")

@@ -219,6 +219,16 @@ object SirenSDKUtils {
                     titleSize =
                         customStyles?.notificationCard?.titleSize
                             ?: defaultCustomStyles.notificationCard?.titleSize,
+                    subtitleColor =
+                        modeAppliedClientTheme?.notificationCard?.subtitleColor
+                            ?: modeAppliedClientTheme?.colors?.textColor
+                            ?: modeAppliedDefaultTheme?.notificationCard?.subtitleColor,
+                    subtitleSize =
+                        customStyles?.notificationCard?.subtitleSize
+                            ?: defaultCustomStyles.notificationCard?.subtitleSize,
+                    subtitleFontWeight =
+                        customStyles?.notificationCard?.subtitleFontWeight
+                            ?: defaultCustomStyles.notificationCard?.subtitleFontWeight,
                     descriptionColor =
                         modeAppliedClientTheme?.notificationCard?.descriptionColor
                             ?: modeAppliedClientTheme?.colors?.textColor
@@ -226,6 +236,9 @@ object SirenSDKUtils {
                     descriptionSize =
                         customStyles?.notificationCard?.descriptionSize
                             ?: defaultCustomStyles.notificationCard?.descriptionSize,
+                    descriptionFontWeight =
+                        customStyles?.notificationCard?.descriptionFontWeight
+                            ?: defaultCustomStyles.notificationCard?.descriptionFontWeight,
                     dateColor =
                         modeAppliedClientTheme?.colors?.dateColor
                             ?: modeAppliedDefaultTheme?.colors?.dateColor

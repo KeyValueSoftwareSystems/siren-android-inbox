@@ -8,12 +8,12 @@ The `siren-android-inbox` sdk is a comprehensive and customizable android UI kit
 
 You will need your sdk token for initializing your library.
 
-1. Add the JitPack repository to your build file
+1. Add the mavenCentral repository to your build file
 ```kotlin
 allprojects {
     repositories {
         ...
-        maven { url 'https://jitpack.io' }
+        mavenCentral()
     }
 }
 ```
@@ -21,7 +21,7 @@ allprojects {
 
 ```kotlin
 dependencies {
-    implementation 'com.github.KeyValueSoftwareSystems:siren-android-inbox:1.0.1'
+    implementation("io.sirenapp:sirenapp-android-inbox:1.0.0")
 }
 ```
 
@@ -122,14 +122,12 @@ Parameter | Description | Type | Default value |
 theme | Data class defining the theme configuration |  Theme | null |
 customStyles | Data class defining the customizable styles |  Theme | null |
 title |  Title of the notification inbox |  String | "Notifications" |
-hideHeader | Toggle to hide the header section |  Boolean | false |
-hideClearAll | Toggle to hide the clear all button |  Boolean | false |
 darkMode | Toggle to enable dark mode |  Boolean | false |
 cardProps | Props for customizing the notification cards | CardProps | null |
+inboxHeaderProps | Props for customizing the header | InboxHeaderProps | null |
 listEmptyComponent | Custom composable function for empty notification list | (@Composable () -> Unit) | null |
-customHeader | Custom header composable function | (@Composable () -> Unit) | null |
 customFooter | Custom footer composable function | (@Composable () -> Unit) | null |
-customNotificationCard | Custom click handler for notification cards | (@Composable (AllNotificationResponseData) -> Unit) | null |
+customCard | Custom notification card composable | (@Composable (AllNotificationResponseData) -> Unit) | null |
 customLoader | Custom composable function to display the initial loading state | (@Composable () -> Unit) | null |
 customErrorWindow | Custom error window | (@Composable () -> Unit) | null |
 itemsPerFetch | Number of notifications fetch per api request (have a max cap of 50) | Int | 20
@@ -138,6 +136,20 @@ itemsPerFetch | Number of notifications fetch per api request (have a max cap of
 ```kotlin
 data class CardProps(
     val hideAvatar: Boolean? = false,
+    val disableAutoMarkAsRead: Boolean? = false,
+    val onAvatarClick: ((AllNotificationResponseData) -> Unit)? = null,
+    val hideDelete: Boolean? = false,
+)
+```
+##### InboxHeaderProps
+```kotlin
+data class InboxHeaderProps(
+    val hideHeader: Boolean? = false,
+    val hideClearAll: Boolean? = false,
+    val customHeader: (@Composable () -> Unit)? = null,
+    val showBackButton: Boolean? = false,
+    val backButton: (@Composable () -> Unit)? = null,
+    val handleBackNavigation: (() -> Unit)? = null,
 )
 ```
 #### Theme customization
@@ -194,6 +206,7 @@ data class NotificationCardThemeProps(
     val borderColor: Color? = null,
     val background: Color? = null,
     val titleColor: Color? = null,
+    val subtitleColor: Color? = null,
     val descriptionColor: Color? = null,
 )
 ```
@@ -247,6 +260,7 @@ data class NotificationCardStyle(
     val avatarSize: Dp? = null,
     val titleFontWeight: FontWeight? = null,
     val titleSize: TextUnit? = null,
+    val subtitleSize: TextUnit? = null,
     val descriptionSize: TextUnit? = null,
     val dateSize: TextUnit? = null,
 )
@@ -279,11 +293,11 @@ Utility functions for modifying notifications:
 
 Functions | Parameters | Type | Description |
 ----------|------------|-------|------------|
-markNotificationsAsReadByDate | startDate | ISO date string | Sets the read status of notifications to true until the given date |
-markAsRead | id | string | Set read status of a notification to true          |
-deleteNotification |  id | string  | Delete a notification by id |
-deleteNotificationsByDate | startDate | ISO date string | Delete all notifications until given date |
-markNotificationsAsViewed | startDate | ISO date string |Sets the viewed status of notifications to true until the given date |
+markAsReadByDate | startDate | ISO date string | Sets the read status of notifications to true until the given date |
+markAsReadById | id | string | Set read status of a notification to true          |
+deleteById |  id | string  | Delete a notification by id |
+deleteByDate | startDate | ISO date string | Delete all notifications until given date |
+markAllAsViewed | startDate | ISO date string |Sets the viewed status of notifications to true until the given date |
 updateToken | userToken, recipientId | string | To change the tokens
 
 Sample code:
@@ -303,9 +317,9 @@ import com.keyvalue.siren.androidsdk.helper.client.callbacks.MarkAsReadByIdCallb
                 }
             },
         )
-    fun markAsRead() {
-        sirenSDK.markAsRead(
-            notificationId = "notificationId",
+    fun markAsReadById() {
+        sirenSDK.markAsReadById(
+            id = "ID_VALUE",
             callback = object : MarkAsReadByIdCallback {
                 override fun onSuccess(responseData: MarkAsReadByIdResponseData?) {
                     // onSuccess
@@ -355,8 +369,8 @@ import com.keyvalue.siren.androidsdk.helper.customization.SirenInboxProps
     val sirenSDK =
         SirenSDK.getInstance(
             this,
-            "userToken",
-            "recipientId",
+            "YOUR_USER_TOKEN",
+            "YOUR_RECIPIENT_ID",
             object : ErrorCallback {
                 override fun onError(jsonObject: JSONObject) {
                 }
@@ -399,8 +413,8 @@ import com.keyvalue.siren.androidsdk.helper.customization.SirenInboxProps
     )
 
     fun deleteNotification() {
-        sirenSDK.deleteNotification(
-            notificationId = "notificationId",
+        sirenSDK.deleteById(
+            id = "ID_VALUE",
             callback = object : SirenAllNotificationUpdateCallback {
                 override fun onSuccess(dataStatus: DataStatus?) {
                     // onSuccess

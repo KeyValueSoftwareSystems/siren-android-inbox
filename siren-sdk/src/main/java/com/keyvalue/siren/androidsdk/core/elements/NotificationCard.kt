@@ -1,4 +1,4 @@
-package com.keyvalue.siren.androidsdk.helper
+package com.keyvalue.siren.androidsdk.core.elements
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material.Icon
@@ -27,49 +26,59 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
-import coil.transform.CircleCropTransformation
+import coil.compose.AsyncImage
 import com.keyvalue.siren.androidsdk.R
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
+import com.keyvalue.siren.androidsdk.helper.client.CardProps
 import com.keyvalue.siren.androidsdk.helper.client.CombinedNotificationCardThemeProps
-import com.keyvalue.siren.androidsdk.helper.client.NotificationCardProps
 import com.keyvalue.siren.androidsdk.helper.client.ThemeColors
 import com.keyvalue.siren.androidsdk.utils.SirenSDKUtils
 import com.keyvalue.siren.androidsdk.utils.SirenSDKUtils.conditional
 
 @Composable
 fun NotificationCard(
-    props: NotificationCardProps,
+    notification: AllNotificationResponseData?,
+    cardProps: CardProps?,
     notificationCardStyle: CombinedNotificationCardThemeProps?,
+    defaultCardClickCallback: () -> Unit,
     deleteNotificationCallback: () -> Unit,
     onCardClick: ((AllNotificationResponseData) -> Unit),
     themeColors: ThemeColors?,
     darkMode: Boolean,
 ) {
-    val avatarImageUrl = props.notification?.message?.avatar?.imageUrl
+    val avatarImageUrl = notification?.message?.avatar?.imageUrl
+    val avatarContentDescription = "siren-notification-avatar-${notification?.id}"
+    val avatarModifier =
+        Modifier
+            .size(notificationCardStyle?.avatarSize!!)
+            .clip(CircleShape)
+            .conditional(cardProps?.onAvatarClick != null && notification != null) {
+                clickable {
+                    cardProps?.onAvatarClick?.let {
+                        if (notification != null) {
+                            it(notification)
+                        }
+                    }
+                }
+            }
+            .semantics { contentDescription = "siren-notification-avatar-${notification?.id}" }
 
-    val painter =
-        if (avatarImageUrl.isNullOrEmpty()) {
-            painterResource(id = if (darkMode) R.drawable.avatar_dark else R.drawable.avatar_light)
-        } else {
-            rememberImagePainter(
-                data = avatarImageUrl,
-                builder = {
-                    transformations(CircleCropTransformation())
-                },
-            )
-        }
+    val avatarDefaultPainter = painterResource(id = if (darkMode) R.drawable.avatar_dark else R.drawable.avatar_light)
 
     val modifier =
         Modifier
-            .conditional(props.notification?.isRead == false) {
+            .conditional(notification?.isRead == false) {
                 background(notificationCardStyle?.background!!)
             }
 
@@ -79,11 +88,12 @@ fun NotificationCard(
                 .border(
                     width = notificationCardStyle?.borderWidth!!,
                     color = notificationCardStyle.borderColor!!,
-                ),
+                )
+                .semantics { contentDescription = "siren-notification-card-${notification?.id}" },
     ) {
         val borderStroke =
-            if (props.notification?.isRead == false) {
-                BorderStroke(5.dp, themeColors?.primaryColor!!)
+            if (notification?.isRead == false) {
+                BorderStroke(4.dp, themeColors?.primaryColor!!)
             } else {
                 BorderStroke(1.dp, Color.Transparent)
             }
@@ -93,11 +103,14 @@ fun NotificationCard(
                 modifier
                     .border(
                         borderStroke,
-                        shape = borderShape(thickness = if (props.notification?.isRead == false) 5.dp else 1.dp),
+                        shape = borderShape(thickness = if (notification?.isRead == false) 4.dp else 1.dp),
                     )
                     .clickable {
                         onCardClick.let {
-                            props.notification?.let { notification ->
+                            if (cardProps?.disableAutoMarkAsRead != true) {
+                                defaultCardClickCallback()
+                            }
+                            notification?.let { notification ->
                                 it(
                                     notification,
                                 )
@@ -107,65 +120,72 @@ fun NotificationCard(
                     .padding(notificationCardStyle.padding!!),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            if (props.cardProps?.hideAvatar != true) {
-                Image(
-                    painter = painter,
-                    contentDescription = null,
-                    modifier =
-                        Modifier
-                            .size(notificationCardStyle.avatarSize!!)
-                            .clip(CircleShape)
-                            .weight(1f),
-                )
-            } else {
-                Spacer(
-                    modifier = Modifier.size(notificationCardStyle.avatarSize!!).weight(1f),
-                )
+            if (cardProps?.hideAvatar != true) {
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                    if (avatarImageUrl.isNullOrEmpty()) {
+                        Image(
+                            painter = avatarDefaultPainter,
+                            contentDescription = avatarContentDescription,
+                            contentScale = ContentScale.FillBounds,
+                            modifier = avatarModifier,
+                        )
+                    } else {
+                        AsyncImage(
+                            model = avatarImageUrl,
+                            contentDescription = avatarContentDescription,
+                            contentScale = ContentScale.FillBounds,
+                            modifier = avatarModifier,
+                        )
+                    }
+                }
             }
             Column(
                 modifier =
                     Modifier
                         .weight(5f)
-                        .padding(start = 5.dp),
+                        .padding(start = 8.dp),
             ) {
-                props.notification?.message?.let { message ->
+                notification?.message?.let { message ->
                     message.header?.let { header ->
                         Text(
                             text = header,
                             color = notificationCardStyle.titleColor!!,
-                            maxLines = 1,
                             fontWeight = notificationCardStyle.titleFontWeight!!,
                             fontSize = notificationCardStyle.titleSize!!,
+                            maxLines = 2,
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
-                props.notification?.message?.let { message ->
+                notification?.message?.let { message ->
                     message.subHeader?.let { subHeader ->
                         Text(
                             text = subHeader,
-                            color = notificationCardStyle.descriptionColor!!,
-                            maxLines = 1,
-                            fontSize = notificationCardStyle.descriptionSize!!,
+                            color = notificationCardStyle.subtitleColor!!,
+                            fontWeight = notificationCardStyle.subtitleFontWeight!!,
+                            fontSize = notificationCardStyle.subtitleSize!!,
+                            maxLines = 2,
+                            lineHeight = TextUnit.Unspecified,
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
-                props.notification?.message?.let { message ->
+                notification?.message?.let { message ->
                     Text(
                         text = message.body,
                         color = notificationCardStyle.descriptionColor!!,
+                        fontWeight = notificationCardStyle.descriptionFontWeight!!,
                         fontSize = notificationCardStyle.descriptionSize!!,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
 
-                Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
@@ -177,7 +197,7 @@ fun NotificationCard(
                                 .size(notificationCardStyle.dateIconSize!!)
                                 .padding(end = 5.dp),
                     )
-                    props.notification?.let { responseData ->
+                    notification?.let { responseData ->
                         responseData.createdAt.let { createdAt ->
                             val elapsedTimeText = SirenSDKUtils.generateElapsedTimeText(createdAt)
                             Text(
@@ -192,16 +212,25 @@ fun NotificationCard(
                 }
             }
 
-            Box(modifier = Modifier.weight(1f).padding(end = 6.dp), contentAlignment = Alignment.CenterEnd) {
-                Icon(
-                    imageVector = Icons.Default.Clear,
-                    contentDescription = "Delete icon",
-                    tint = themeColors?.deleteIcon!!,
-                    modifier =
-                        Modifier
-                            .size(notificationCardStyle.deleteIconSize!!)
-                            .clickable { deleteNotificationCallback() },
-                )
+            if (cardProps?.hideDelete != true) {
+                if (cardProps?.deleteIcon != null) {
+                    cardProps.deleteIcon.also {
+                        it()
+                    }
+                } else {
+                    Box(modifier = Modifier.weight(1f).padding(end = 6.dp), contentAlignment = Alignment.CenterEnd) {
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "siren-notification-delete-${notification?.id}",
+                            tint = themeColors?.deleteIcon!!,
+                            modifier =
+                                Modifier
+                                    .size(notificationCardStyle.deleteIconSize!!)
+                                    .clickable { deleteNotificationCallback() }
+                                    .semantics { contentDescription = "siren-notification-delete-${notification?.id}" },
+                        )
+                    }
+                }
             }
         }
     }

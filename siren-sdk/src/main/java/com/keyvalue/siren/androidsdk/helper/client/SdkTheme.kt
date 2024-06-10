@@ -1,5 +1,6 @@
 package com.keyvalue.siren.androidsdk.helper.client
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
@@ -45,16 +46,25 @@ data class NotificationCardThemeProps(
     val borderColor: Color? = null,
     val background: Color? = null,
     val titleColor: Color? = null,
+    val subtitleColor: Color? = null,
     val descriptionColor: Color? = null,
 )
 
 data class CardProps(
     val hideAvatar: Boolean? = false,
+    val onAvatarClick: ((AllNotificationResponseData) -> Unit)? = null,
+    val disableAutoMarkAsRead: Boolean? = false,
+    val hideDelete: Boolean? = false,
+    val deleteIcon: @Composable (() -> Unit)? = null,
 )
 
-data class NotificationCardProps(
-    val notification: AllNotificationResponseData? = null,
-    val cardProps: CardProps? = null,
+data class InboxHeaderProps(
+    val hideHeader: Boolean? = false,
+    val hideClearAll: Boolean? = false,
+    val customHeader: (@Composable () -> Unit)? = null,
+    val showBackButton: Boolean? = false,
+    val backButton: (@Composable () -> Unit)? = null,
+    val handleBackNavigation: (() -> Unit)? = null,
 )
 
 data class NotificationIconProps(
@@ -87,8 +97,11 @@ data class NotificationCardStyle(
     val borderWidth: Dp? = null,
     val avatarSize: Dp? = null,
     val titleFontWeight: FontWeight? = null,
+    val subtitleFontWeight: FontWeight? = null,
+    val descriptionFontWeight: FontWeight? = null,
     val titleSize: TextUnit? = null,
     val descriptionSize: TextUnit? = null,
+    val subtitleSize: TextUnit? = null,
     val dateSize: TextUnit? = null,
 )
 
@@ -158,8 +171,12 @@ data class CombinedNotificationCardThemeProps(
     val titleColor: Color? = null,
     val titleFontWeight: FontWeight? = null,
     val titleSize: TextUnit? = null,
+    val subtitleColor: Color? = null,
+    val subtitleSize: TextUnit? = null,
+    val subtitleFontWeight: FontWeight? = null,
     val descriptionColor: Color? = null,
     val descriptionSize: TextUnit? = null,
+    val descriptionFontWeight: FontWeight? = null,
     val dateColor: Color? = null,
     val dateSize: TextUnit? = null,
     val dateIconSize: Dp? = null,
