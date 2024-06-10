@@ -99,8 +99,8 @@ afterEvaluate {
 }
 
 signing {
-    val signingKey: String? by project
-    val signingPassword: String? by project
+    val signingKey: String? = "$System.env.ORG_GRADLE_PROJECT_signingKey"
+    val signingPassword: String? = "$System.env.ORG_GRADLE_PROJECT_signingPassword"
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications
 }
