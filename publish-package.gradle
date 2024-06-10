@@ -1,6 +1,8 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+name = "$System.env.ARTIFACT_ID"
+
 task androidJavadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
@@ -48,7 +50,7 @@ afterEvaluate {
                 artifactId 'sirenapp-android-inbox'
                 version '1.0.0'
                 pom {
-                    name = String.valueOf(System.gentenv("ARTIFACT_ID"))
+                    name = "$System.env.ARTIFACT_ID"
                     description = Sytem.getenv("POM_DESCRIPTION")
                     url = 'https://github.com/KeyValueSoftwareSystems/siren-android-inbox'
                     licenses {
