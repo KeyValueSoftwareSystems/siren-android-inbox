@@ -79,8 +79,8 @@ afterEvaluate {
                 url = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 
                 credentials {
-                    username "$System.env.ossrhUsername"
-                    password "$System.env.ossrhPassword"
+                    username "$System.env.OSSRH_USERNAME"
+                    password "$System.env.OSSRH_PASSWORD"
                 }
             }
 
@@ -90,8 +90,8 @@ afterEvaluate {
                 url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
 
                 credentials {
-                    username "$System.env.ossrhUsername"
-                    password "$System.env.ossrhPassword"
+                    username "$System.env.OSSRH_USERNAME"
+                    password "$System.env.OSSRH_PASSWORD"
                 }
             }
         }
@@ -99,8 +99,10 @@ afterEvaluate {
 }
 
 signing {
-    def signingKey = "$System.env.ORG_GRADLE_PROJECT_signingKey"
-    def signingPassword = "$System.env.ORG_GRADLE_PROJECT_signingPassword"
-    useInMemoryPgpKeys("$System.env.ORG_GRADLE_PROJECT_signingKey", "$System.env.ORG_GRADLE_PROJECT_signingPassword")
+    useInMemoryPgpKeys(
+            "$System.env.OSS_SIGNING_KEY_ID",
+            "$System.env.OSS_SIGNING_KEY",
+            "$System.env.OSS_SIGNING_PASSWORD"
+    )
     sign publishing.publications
 }
