@@ -1,0 +1,50 @@
+name: Publish to Maven Central
+
+on:
+  workflow_dispatch:
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step to check out the repository's code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step to set up JDK 17, which is required for Gradle to run
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      # Step to grant execute permissions to the Gradle wrapper script
+      - name: Grant execute permission for gradlew
+        run: chmod +x siren-sdk/gradlew
+
+      # Step to build the project and publish artifacts to Maven Central
+      - name: Build and publish
+        working-directory: siren-sdk
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          POM_DEVELOPER_ID: ${{ secrets.POM_DEVELOPER_ID }}
+          POM_DEVELOPER_NAME: ${{ secrets.POM_DEVELOPER_NAME }}
+          POM_DEVELOPER_EMAIL: ${{ secrets.POM_DEVELOPER_EMAIL }}
+        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+
+      # Step to import GPG key and sign the artifacts
+      - name: Sign artifacts
+        working-directory: siren-sdk
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          echo $GPG_PRIVATE_KEY | base64 --decode > gpg_private_key.asc
+          gpg --import --batch --yes gpg_private_key.asc
+          ./gradlew signMavenPublication

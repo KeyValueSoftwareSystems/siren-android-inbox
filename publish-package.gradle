@@ -48,8 +48,8 @@ afterEvaluate {
                 artifactId 'sirenapp-android-inbox'
                 version '1.0.0'
                 pom {
-                    name = artifactId
-                    description = POM_DESCRIPTION
+                    name = System.gentenv("ARTIFACT_ID")
+                    description = Sytem.getenv("POM_DESCRIPTION")
                     url = 'https://github.com/KeyValueSoftwareSystems/siren-android-inbox'
                     licenses {
                         license {
@@ -63,9 +63,9 @@ afterEvaluate {
                     }
                     developers {
                         developer {
-                            id = POM_DEVELOPER_ID
-                            name = POM_DEVELOPER_NAME
-                            email = POM_DEVELOPER_EMAIL
+                            id = System.getenv("POM_DEVELOPER_ID")
+                            name = Sytem.getenv("POM_DEVELOPER_NAME")
+                            email = System.getenv("POM_DEVELOPER_EMAIL")
                         }
                     }
                 }
@@ -78,8 +78,8 @@ afterEvaluate {
                 url = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 
                 credentials {
-                    username ossrhUsername
-                    password ossrhPassword
+                    username System.getenv("ossrhUsername")
+                    password System.getenv("ossrhPassword")
                 }
             }
 
@@ -89,8 +89,8 @@ afterEvaluate {
                 url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
 
                 credentials {
-                    username ossrhUsername
-                    password ossrhPassword
+                    username System.getenv("ossrhUsername")
+                    password System.getenv("ossrhPassword")
                 }
             }
         }
