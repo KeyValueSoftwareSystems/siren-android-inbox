@@ -24,7 +24,7 @@ jobs:
 
       # Step to grant execute permissions to the Gradle wrapper script
       - name: Grant execute permission for gradlew
-        run: chmod +x siren-sdk/gradlew
+        run: chmod +x gradlew
 
       # Step to build the project and publish artifacts to Maven Central
       - name: Build and publish
