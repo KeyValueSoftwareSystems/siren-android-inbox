@@ -29,18 +29,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-    #   - name: Sign artifacts
-    #     # working-directory: siren-sdk
-    #     env:
-    #       OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-    #       OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-    #       GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-    #       GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-    #     run: |
-    #       echo $GPG_PRIVATE_KEY | base64 --decode > gpg_private_key.asc
-    #       gpg --import --batch --yes gpg_private_key.asc
-    #       ./gradlew signMavenPublication
-  
+    
 
       # Step to build the project and publish artifacts to Maven Central
       - name: Build and publish
