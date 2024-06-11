@@ -5,16 +5,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.GenericShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
@@ -38,6 +41,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.keyvalue.siren.androidsdk.R
 import com.keyvalue.siren.androidsdk.data.model.AllNotificationResponseData
 import com.keyvalue.siren.androidsdk.helper.client.CardProps
@@ -58,7 +62,9 @@ fun NotificationCard(
     darkMode: Boolean,
 ) {
     val avatarImageUrl = notification?.message?.avatar?.imageUrl
+    val thumbnailUrl = notification?.message?.thumbnailUrl
     val avatarContentDescription = "siren-notification-avatar-${notification?.id}"
+    val thumbnailContentDescription = "siren-notification-thumbnail-${notification?.id}"
     val avatarModifier =
         Modifier
             .size(notificationCardStyle?.avatarSize!!)
@@ -74,7 +80,10 @@ fun NotificationCard(
             }
             .semantics { contentDescription = "siren-notification-avatar-${notification?.id}" }
 
-    val avatarDefaultPainter = painterResource(id = if (darkMode) R.drawable.avatar_dark else R.drawable.avatar_light)
+    val avatarDefaultPainter =
+        painterResource(id = if (darkMode) R.drawable.avatar_dark else R.drawable.avatar_light)
+    val thumbnailDefaultPainter =
+        painterResource(id = if (darkMode) R.drawable.thumbnail_dark else R.drawable.thumbnail_light)
 
     val modifier =
         Modifier
@@ -84,12 +93,12 @@ fun NotificationCard(
 
     Box(
         modifier =
-            modifier
-                .border(
-                    width = notificationCardStyle?.borderWidth!!,
-                    color = notificationCardStyle.borderColor!!,
-                )
-                .semantics { contentDescription = "siren-notification-card-${notification?.id}" },
+        modifier
+            .border(
+                width = notificationCardStyle?.borderWidth!!,
+                color = notificationCardStyle.borderColor!!,
+            )
+            .semantics { contentDescription = "siren-notification-card-${notification?.id}" },
     ) {
         val borderStroke =
             if (notification?.isRead == false) {
@@ -100,25 +109,24 @@ fun NotificationCard(
 
         Row(
             modifier =
-                modifier
-                    .border(
-                        borderStroke,
-                        shape = borderShape(thickness = if (notification?.isRead == false) 4.dp else 1.dp),
-                    )
-                    .clickable {
-                        onCardClick.let {
-                            if (cardProps?.disableAutoMarkAsRead != true) {
-                                defaultCardClickCallback()
-                            }
-                            notification?.let { notification ->
-                                it(
-                                    notification,
-                                )
-                            }
+            modifier
+                .border(
+                    borderStroke,
+                    shape = borderShape(thickness = if (notification?.isRead == false) 4.dp else 1.dp),
+                )
+                .clickable {
+                    onCardClick.let {
+                        if (cardProps?.disableAutoMarkAsRead != true) {
+                            defaultCardClickCallback()
+                        }
+                        notification?.let { notification ->
+                            it(
+                                notification,
+                            )
                         }
                     }
-                    .padding(notificationCardStyle.padding!!),
-            horizontalArrangement = Arrangement.SpaceBetween,
+                }
+                .padding(notificationCardStyle.padding!!),
         ) {
             if (cardProps?.hideAvatar != true) {
                 Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
@@ -141,19 +149,48 @@ fun NotificationCard(
             }
             Column(
                 modifier =
-                    Modifier
-                        .weight(5f)
-                        .padding(start = 8.dp),
+                Modifier
+                    .weight(5f)
+                    .padding(start = 3.dp),
             ) {
-                notification?.message?.let { message ->
-                    message.header?.let { header ->
-                        Text(
-                            text = header,
-                            color = notificationCardStyle.titleColor!!,
-                            fontWeight = notificationCardStyle.titleFontWeight!!,
-                            fontSize = notificationCardStyle.titleSize!!,
-                            maxLines = 2,
-                        )
+                Row {
+                    notification?.message?.let { message ->
+                        message.header?.let { header ->
+                            Text(
+                                text = header,
+                                color = notificationCardStyle.titleColor!!,
+                                fontWeight = notificationCardStyle.titleFontWeight!!,
+                                fontSize = notificationCardStyle.titleSize!!,
+                                maxLines = 2,
+                            )
+                        }
+                    }
+                    if (cardProps?.hideDelete != true) {
+                        if (cardProps?.deleteIcon != null) {
+                            cardProps.deleteIcon.also {
+                                it()
+                            }
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(end = 6.dp), contentAlignment = Alignment.CenterEnd
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Clear,
+                                    contentDescription = "siren-notification-delete-${notification?.id}",
+                                    tint = themeColors?.deleteIcon!!,
+                                    modifier =
+                                    Modifier
+                                        .size(notificationCardStyle.deleteIconSize!!)
+                                        .clickable { deleteNotificationCallback() }
+                                        .semantics {
+                                            contentDescription =
+                                                "siren-notification-delete-${notification?.id}"
+                                        },
+                                )
+                            }
+                        }
                     }
                 }
 
@@ -187,15 +224,45 @@ fun NotificationCard(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
+                if (cardProps?.hideMediaThumbnail !=true) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = 10.dp)
+                            .aspectRatio(16f / 9f)
+                            .clip(RoundedCornerShape(25.dp))
+                            .clickable {
+                                cardProps?.onMediaThumbnailClick?.let {
+                                    if (notification != null) {
+                                        it(notification)
+                                    }
+                                }
+                            }
+                    ) {
+                        val painter = rememberAsyncImagePainter(
+                            model = thumbnailUrl,
+                            error = thumbnailDefaultPainter
+                        )
+
+                        Image(
+                            painter = painter,
+                            contentDescription = thumbnailContentDescription,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         painter = painterResource(id = R.drawable.clock),
                         contentDescription = "Clock Icon",
                         colorFilter = ColorFilter.tint(themeColors?.timerIcon!!),
                         modifier =
-                            Modifier
-                                .size(notificationCardStyle.dateIconSize!!)
-                                .padding(end = 5.dp),
+                        Modifier
+                            .size(notificationCardStyle.dateIconSize!!)
+                            .padding(end = 5.dp),
                     )
                     notification?.let { responseData ->
                         responseData.createdAt.let { createdAt ->
@@ -211,27 +278,6 @@ fun NotificationCard(
                     }
                 }
             }
-
-            if (cardProps?.hideDelete != true) {
-                if (cardProps?.deleteIcon != null) {
-                    cardProps.deleteIcon.also {
-                        it()
-                    }
-                } else {
-                    Box(modifier = Modifier.weight(1f).padding(end = 6.dp), contentAlignment = Alignment.CenterEnd) {
-                        Icon(
-                            imageVector = Icons.Default.Clear,
-                            contentDescription = "siren-notification-delete-${notification?.id}",
-                            tint = themeColors?.deleteIcon!!,
-                            modifier =
-                                Modifier
-                                    .size(notificationCardStyle.deleteIconSize!!)
-                                    .clickable { deleteNotificationCallback() }
-                                    .semantics { contentDescription = "siren-notification-delete-${notification?.id}" },
-                        )
-                    }
-                }
-            }
         }
     }
 }
@@ -242,8 +288,7 @@ fun borderShape(thickness: Dp): Shape {
         with(LocalDensity.current) {
             thickness.toPx()
         }
-    return GenericShape {
-            size, _ ->
+    return GenericShape { size, _ ->
         moveTo(0f, 0f)
         lineTo(0f, size.height)
         lineTo(lineThicknessInPixels, size.height)

@@ -52,7 +52,9 @@ data class NotificationCardThemeProps(
 
 data class CardProps(
     val hideAvatar: Boolean? = false,
+    val hideMediaThumbnail: Boolean? = false,
     val onAvatarClick: ((AllNotificationResponseData) -> Unit)? = null,
+    val onMediaThumbnailClick: ((AllNotificationResponseData) -> Unit)? = null,
     val disableAutoMarkAsRead: Boolean? = false,
     val hideDelete: Boolean? = false,
     val deleteIcon: @Composable (() -> Unit)? = null,
