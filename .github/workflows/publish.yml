@@ -47,7 +47,7 @@ jobs:
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSPHRASE }}
         # run: echo "publishing to maven central"
         run: |
-         cat <(echo -e "${{ secrets.ORG_GRADLE_PROJECT_signingKey }}") | gpg --batch --import | ./gradlew publishAllPublicationsToSonatypeRepository
+         cat <(echo -e "${{ secrets.ORG_GRADLE_PROJECT_signingKey }}") | gpg --batch --import | ./gradlew publishAllPublicationsToSonatypeRepository --stacktrace
 
     #   # Step to import GPG key and sign the artifacts
     #   - name: Sign artifacts
