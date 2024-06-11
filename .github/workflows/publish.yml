@@ -29,7 +29,8 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-    
+      - name: Inject Maven signing key
+        run: echo $GPG_SIGNING_KEY | | awk 'NR == 1 { print "SIGNING_KEY=" } 1' ORS='\\n' >> gradle.properties
 
       # Step to build the project and publish artifacts to Maven Central
       - name: Build and publish
@@ -48,8 +49,7 @@ jobs:
           ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.GPG_PRIVATE_KEY_ID }}
           ORG_GRADLE_PROJECT_base64EncodedAsciiArmoredSigningKey: ${{ secrets.GPG_BASE64_ENCODED_KEY }}
         # run: echo "publishing to maven central"
-        run: |
-         cat <(echo -e "${{ secrets.ORG_GRADLE_PROJECT_signingKey }}") | gpg --batch --import | ./gradlew publishAllPublicationsToSonatypeRepository --stacktrace
+        run:  ./gradlew publishAllPublicationsToSonatypeRepository --stacktrace
 
     #   # Step to import GPG key and sign the artifacts
     #   - name: Sign artifacts
