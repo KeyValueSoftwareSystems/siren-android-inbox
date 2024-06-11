@@ -45,6 +45,7 @@ jobs:
           POM_DEVELOPER_EMAIL: ${{ secrets.POM_DEVELOPER_EMAIL }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSPHRASE }}
+          ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.GPG_PRIVATE_KEY_ID }}
         # run: echo "publishing to maven central"
         run: |
          cat <(echo -e "${{ secrets.ORG_GRADLE_PROJECT_signingKey }}") | gpg --batch --import | ./gradlew publishAllPublicationsToSonatypeRepository --stacktrace

@@ -99,6 +99,6 @@ afterEvaluate {
 }
 
 signing {
-    useInMemoryPgpKeys("$System.env.ORG_GRADLE_PROJECT_signingKey","$System.env.ORG_GRADLE_PROJECT_signingPassword")
+    useInMemoryPgpKeys("$System.env.ORG_GRADLE_PROJECT_signingKeyId","$System.env.ORG_GRADLE_PROJECT_signingKey","$System.env.ORG_GRADLE_PROJECT_signingPassword")
     sign publishing.publications
 }
