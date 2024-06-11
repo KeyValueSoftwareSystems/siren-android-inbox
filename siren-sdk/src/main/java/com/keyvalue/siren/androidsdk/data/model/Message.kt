@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName
 data class Message(
     @SerializedName("actionUrl")
     val actionUrl: String?,
+    @SerializedName("thumbnailUrl")
+    val thumbnailUrl: String,
     @SerializedName("additionalData")
     val additionalData: String?,
     @SerializedName("avatar")
