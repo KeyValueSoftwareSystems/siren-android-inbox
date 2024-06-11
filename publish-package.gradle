@@ -99,7 +99,7 @@ afterEvaluate {
 }
 
 signing {
-    val signingKey = base64Decode(System.getenv("ORG_GRADLE_PROJECT_base64EncodedAsciiArmoredSigningKey"))
+    val signingKey = base64Decode(System.getenv("ORG_GRADLE_PROJECT_base64EncodedAsciiArmoredSigningKey") as String?)
     useInMemoryPgpKeys(signingKey,"$System.env.ORG_GRADLE_PROJECT_signingPassword")
     sign publishing.publications
 }
