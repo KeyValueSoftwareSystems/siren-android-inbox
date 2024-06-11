@@ -99,6 +99,14 @@ afterEvaluate {
 }
 
 signing {
-    useInMemoryPgpKeys("$System.env.ORG_GRADLE_PROJECT_signingKeyId","$System.env.ORG_GRADLE_PROJECT_signingKey","$System.env.ORG_GRADLE_PROJECT_signingPassword")
+    val signingKey = base64Decode("$System.env.ORG_GRADLE_PROJECT_base64EncodedAsciiArmoredSigningKey" as String?)
+    useInMemoryPgpKeys(signingKey,"$System.env.ORG_GRADLE_PROJECT_signingPassword")
     sign publishing.publications
+}
+
+fun base64Decode(encodedString: String?): String? {
+    return encodedString?.let {
+        val decodedBytes = java.util.Base64.getDecoder().decode(it)
+        String(decodedBytes)
+    }
 }
