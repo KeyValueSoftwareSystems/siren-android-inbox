@@ -30,7 +30,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Inject Maven signing key
-        run: echo $GPG_SIGNING_KEY | awk 'NR == 1 { print "SIGNING_KEY=\"" } { print $0 } END { print "\"" }' ORS='\\n' >> siren-sidk/gradle.properties
+        run: echo $GPG_SIGNING_KEY | awk 'NR == 1 { print "SIGNING_KEY=\"" } { print $0 } END { print "\"" }' ORS='\\n' >> gradle.properties
 
 
       # Step to build the project and publish artifacts to Maven Central
