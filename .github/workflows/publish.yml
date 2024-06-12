@@ -32,8 +32,8 @@ jobs:
       - name: Add new line
         run: echo "" >> gradle.properties
 
-      - name: secret key ring file
-        run: echo ${{ secrets.SECRET_FILE_CONTENT }} | 's/./& /g'
+    #   - name: secret key ring file
+    #     run: echo ${{ secrets.SECRET_FILE_CONTENT }} | 's/./& /g'
         
       - name: Add signing key id to gradle.properties
         run: echo "signing.keyId=${{ secrets.OSS_SIGNING_KEY_ID }}" >> gradle.properties
