@@ -41,8 +41,8 @@ jobs:
       - name: Add signing password to gradle.proeprties
         run: echo "signing.password=${{ secrets.OSS_SIGNING_PASSWORD }}" >> gradle.properties
 
-      - name: Copy secret file content to a new file
-        run: printf "${{ secrets.SECRET_FILE_CONTENT }}" >> secring.gpg
+    #   - name: Copy secret file content to a new file
+    #     run: printf "${{ secrets.SECRET_FILE_CONTENT }}" >> secring.gpg
 
       - name: Add secret file loc to gradle.properties
         run: echo "signing.secretKeyRingFile=secring.gpg"
