@@ -33,7 +33,7 @@ jobs:
         run: echo "" >> gradle.properties
 
       - name: Inject Maven signing key
-        run: echo "SIGNING_KEY=${GPG_SIGNING_KEY}" >> gradle.properties
+        run: echo "SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY }}" >> gradle.properties
 
     #   - name: Inject Maven signing key
     #     run: |
