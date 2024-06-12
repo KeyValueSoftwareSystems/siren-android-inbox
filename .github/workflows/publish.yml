@@ -78,7 +78,7 @@ jobs:
         #   ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.GPG_PRIVATE_KEY_ID }}
         #   ORG_GRADLE_PROJECT_base64EncodedAsciiArmoredSigningKey: ${{ secrets.GPG_BASE64_ENCODED_KEY }}
         # run: echo "publishing to maven central"
-        run:  ./gradlew publishAllPublicationsToSonatypeRepository --stacktrace
+        run:  ./gradlew publishToMavenLocal --stacktrace
 
     #   # Step to import GPG key and sign the artifacts
     #   - name: Sign artifacts
