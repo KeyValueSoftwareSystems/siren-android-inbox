@@ -98,10 +98,10 @@ afterEvaluate {
     }
 }
 
-def signingKey = findProperty('SIGNING_KEY')
-def signingKeyPwd = findProperty('SIGNING_KEY_PWD')
+// def signingKey = findProperty('SIGNING_KEY')
+// def signingKeyPwd = findProperty('SIGNING_KEY_PWD')
 
 signing {
-    useInMemoryPgpKeys(signingKey, signingKeyPwd)
+    // useInMemoryPgpKeys(signingKey, signingKeyPwd)
     sign publishing.publications
 }

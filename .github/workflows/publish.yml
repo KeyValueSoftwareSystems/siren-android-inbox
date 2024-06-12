@@ -60,24 +60,24 @@ jobs:
 
     #   - name: Echo gradle.properties
     #     run: cat gradle.properties
-    #   # Step to build the project and publish artifacts to Maven Central
-    #   - name: Build and publish
-    #     # working-directory: siren-sdk
-    #     env:
-    #       OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-    #       OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-    #       OSS_SIGNING_KEY_ID: ${{ secrets.OSS_SIGNING_KEY_ID }}
-    #       OSS_SIGNING_PASSWORD: ${{ secrets.OSS_SIGNING_PASSWORD }}
-    #       OSS_SIGNING_KEY: ${{ secrets.OSS_SIGNING_KEY }}
-    #       POM_DEVELOPER_ID: ${{ secrets.POM_DEVELOPER_ID }}
-    #       POM_DEVELOPER_NAME: ${{ secrets.POM_DEVELOPER_NAME }}
-    #       POM_DEVELOPER_EMAIL: ${{ secrets.POM_DEVELOPER_EMAIL }}
-    #       ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
-    #       ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSPHRASE }}
-    #       ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.GPG_PRIVATE_KEY_ID }}
-    #       ORG_GRADLE_PROJECT_base64EncodedAsciiArmoredSigningKey: ${{ secrets.GPG_BASE64_ENCODED_KEY }}
-    #     # run: echo "publishing to maven central"
-    #     run:  ./gradlew publishAllPublicationsToSonatypeRepository --stacktrace
+      # Step to build the project and publish artifacts to Maven Central
+      - name: Build and publish
+        # working-directory: siren-sdk
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          OSS_SIGNING_KEY_ID: ${{ secrets.OSS_SIGNING_KEY_ID }}
+          OSS_SIGNING_PASSWORD: ${{ secrets.OSS_SIGNING_PASSWORD }}
+          OSS_SIGNING_KEY: ${{ secrets.OSS_SIGNING_KEY }}
+          POM_DEVELOPER_ID: ${{ secrets.POM_DEVELOPER_ID }}
+          POM_DEVELOPER_NAME: ${{ secrets.POM_DEVELOPER_NAME }}
+          POM_DEVELOPER_EMAIL: ${{ secrets.POM_DEVELOPER_EMAIL }}
+        #   ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
+        #   ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSPHRASE }}
+        #   ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.GPG_PRIVATE_KEY_ID }}
+        #   ORG_GRADLE_PROJECT_base64EncodedAsciiArmoredSigningKey: ${{ secrets.GPG_BASE64_ENCODED_KEY }}
+        # run: echo "publishing to maven central"
+        run:  ./gradlew publishAllPublicationsToSonatypeRepository --stacktrace
 
     #   # Step to import GPG key and sign the artifacts
     #   - name: Sign artifacts
