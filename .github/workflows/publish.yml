@@ -30,7 +30,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Inject Maven signing key
-        run: echo $GPG_SIGNING_KEY | awk 'NR == 1 { print "SIGNING_KEY=\"" } { print $0 } END { print "\"" }' ORS='\\n' >> gradle.properties
+        run: echo "" >> gradle.properties | echo $GPG_SIGNING_KEY | awk 'NR == 1 { print "SIGNING_KEY=\"" } { print $0 } END { print "\"" }' ORS='\\n' >> gradle.properties
 
       - name: Echo gradle.properties
         run: cat gradle.properties
