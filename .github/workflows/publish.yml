@@ -29,8 +29,15 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Add new line
+        run: echo "" >> gradle.properties
+
       - name: Inject Maven signing key
-        run: echo -e "\nSIGNING_KEY=\"$GPG_SIGNING_KEY\"" >> /gradle.properties
+        run: echo "SIGNING_KEY=${GPG_SIGNING_KEY}" >> gradle.properties
+
+    #   - name: Inject Maven signing key
+    #     run: |
+    #     echo "" >> gradle.properties echo $GPG_SIGNING_KEY | awk 'NR == 1 { print "SIGNING_KEY=\"" } { print $0 } END { print "\"" }' ORS='\\n' >> gradle.properties
 
       - name: Echo gradle.properties
         run: cat gradle.properties
