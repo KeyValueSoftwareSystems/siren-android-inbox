@@ -32,6 +32,11 @@ jobs:
       - name: Add new line
         run: echo "" >> gradle.properties
 
+      - name: install secret key
+        run: |
+            cat <(echo -e "${{ secrets.GPG_SIGNING_KEY }}") | gpg --batch --import
+            gpg --list-secret-keys --keyid-format LONG
+            
       - name: Inject Maven signing key
         run: echo "SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY }}" >> gradle.properties
 
