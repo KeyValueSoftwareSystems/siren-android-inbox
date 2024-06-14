@@ -51,7 +51,7 @@ jobs:
         env:
           GPG_SECRET_RING: ${{ secrets.SECRET_FILE_CONTENT }}
         run: |
-          echo "$GPG_SECRET_RING" | base64 --decode >> secring.gpg
+          echo "$GPG_SECRET_RING" >> secring.gpg
 
       - name: Add secret file loc to gradle.properties
         run: echo "signing.secretKeyRingFile=secring.gpg" >> gradle.properties
