@@ -34,6 +34,9 @@ jobs:
       - name: Set up GPG
         uses: olafurpg/setup-gpg@v3
 
+      - name: get gpg version
+        uses: echo `gpg --version`
+
       - name: Import GPG
         uses: crazy-max/ghaction-import-gpg@v6
         with:
