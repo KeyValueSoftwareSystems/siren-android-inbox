@@ -44,7 +44,7 @@ jobs:
           passphrase: ${{ secrets.OSS_SIGNING_PASSWORD }}
 
       - name: List the keys
-        run: gpg --list-keys 
+        run: gpg --list-secret-keys 
 
    
       # Step to grant execute permissions to the Gradle wrapper script
