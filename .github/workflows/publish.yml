@@ -22,6 +22,9 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
+      - name: Find the location of jdk
+        run: echo `which java`
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
@@ -46,6 +49,9 @@ jobs:
 
       - name: Add secret file loc to gradle.properties
         run: echo "signing.secretKeyRingFile=secring.gpg"
+
+      # - name: Add secret key to server
+      #   run: 
     #   - name: install secret key
     #     run: |
     #         cat <(echo -e "${{ secrets.GPG_SIGNING_KEY }}") | gpg --batch --import
