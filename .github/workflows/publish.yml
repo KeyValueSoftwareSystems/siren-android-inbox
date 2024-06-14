@@ -64,6 +64,9 @@ jobs:
       - name: create secring.gpg file
         run: gpg --export-secret-keys -o secring.gpg
 
+      - name: print secring.gpg file
+        run: cat secring.gpg
+
       # - name: Decode and set up GPG secring file
       #   env:
       #     GPG_SECRET_RING: ${{ secrets.SECRET_FILE_CONTENT }}
