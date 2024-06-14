@@ -44,7 +44,9 @@ jobs:
           passphrase: ${{ secrets.OSS_SIGNING_PASSWORD }}
 
       - name: List the keys
-        run: gpg --list-keys
+        run: gpg --list-keys 
+
+   
       # Step to grant execute permissions to the Gradle wrapper script
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -62,7 +64,7 @@ jobs:
         run: echo "signing.password=${{ secrets.OSS_SIGNING_PASSWORD }}" >> gradle.properties
 
       - name: create secring.gpg file
-        run: gpg --export-secret-keys FDADDB51 -o secring.gpg
+        run: gpg --export-secret-keys FDADDB51 -o ~/.gnupg/secring.gpg
 
       - name: print secring.gpg file
         run: cat secring.gpg
