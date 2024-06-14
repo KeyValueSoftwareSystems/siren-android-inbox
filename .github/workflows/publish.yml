@@ -28,47 +28,34 @@ jobs:
       - name: List the contents of the path java
         run: cd /opt/hostedtoolcache/jdk/17.0.11/x64 | ls
 
-    #   - name: Setup Gradle
-    #     uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
-    #   # Step to grant execute permissions to the Gradle wrapper script
-    #   - name: Grant execute permission for gradlew
-    #     run: chmod +x gradlew
+      # Step to grant execute permissions to the Gradle wrapper script
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-    #   - name: Add new line
-    #     run: echo "" >> gradle.properties
+      - name: Add new line
+        run: echo "" >> gradle.properties
 
-    # #   - name: secret key ring file
-    # #     run: echo ${{ secrets.SECRET_FILE_CONTENT }} | 's/./& /g'
+      - name: Add java home to gradle.properties
+        run: echo "org.gradle.java.home=${{ env.JAVA_HOME }}" >> gradle.properties
         
-    #   - name: Add signing key id to gradle.properties
-    #     run: echo "signing.keyId=${{ secrets.OSS_SIGNING_KEY_ID }}" >> gradle.properties
+      - name: Add signing key id to gradle.properties
+        run: echo "signing.keyId=${{ secrets.OSS_SIGNING_KEY_ID }}" >> gradle.properties
 
-    #   - name: Add signing password to gradle.proeprties
-    #     run: echo "signing.password=${{ secrets.OSS_SIGNING_PASSWORD }}" >> gradle.properties
+      - name: Add signing password to gradle.proeprties
+        run: echo "signing.password=${{ secrets.OSS_SIGNING_PASSWORD }}" >> gradle.properties
 
-    # #   - name: Copy secret file content to a new file
-    # #     run: printf "${{ secrets.SECRET_FILE_CONTENT }}" >> secring.gpg
+      - name: Copy secret file content to a new file
+        run: printf "${{ secrets.SECRET_FILE_CONTENT }}" >> secring.gpg
 
-    #   - name: Add secret file loc to gradle.properties
-    #     run: echo "signing.secretKeyRingFile=secring.gpg"
+      - name: Add secret file loc to gradle.properties
+        run: echo "signing.secretKeyRingFile=secring.gpg"
 
-      # - name: Add secret key to server
-      #   run: 
-    #   - name: install secret key
-    #     run: |
-    #         cat <(echo -e "${{ secrets.GPG_SIGNING_KEY }}") | gpg --batch --import
-    #         gpg --list-secret-keys --keyid-format LONG
 
-    #   - name: Inject Maven signing key
-    #     run: echo "SIGNING_KEY=${{ secrets.GPG_SIGNING_KEY }}" >> gradle.properties
-
-    #   - name: Inject Maven signing key
-    #     run: |
-    #     echo "" >> gradle.properties echo $GPG_SIGNING_KEY | awk 'NR == 1 { print "SIGNING_KEY=\"" } { print $0 } END { print "\"" }' ORS='\\n' >> gradle.properties
-
-    #   - name: Echo gradle.properties
-    #     run: cat gradle.properties
+      - name: Echo gradle.properties
+        run: cat gradle.properties
       # Step to build the project and publish artifacts to Maven Central
       # - name: Build and publish
       #   # working-directory: siren-sdk
