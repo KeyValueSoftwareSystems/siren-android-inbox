@@ -62,7 +62,7 @@ jobs:
         run: echo "signing.password=${{ secrets.OSS_SIGNING_PASSWORD }}" >> gradle.properties
 
       - name: create secring.gpg file
-        run: gpg --export-secret-keys -o secring.gpg
+        run: gpg --export-secret-keys FDADDB51 -o secring.gpg
 
       - name: print secring.gpg file
         run: cat secring.gpg
