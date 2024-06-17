@@ -31,20 +31,20 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
-      - name: Set up GPG
-        uses: olafurpg/setup-gpg@v3
+      # - name: Set up GPG
+      #   uses: olafurpg/setup-gpg@v3
 
-      - name: get gpg version
-        run: echo `gpg --version`
+      # - name: get gpg version
+      #   run: echo `gpg --version`
 
-      - name: Import GPG
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.OSS_SIGNING_KEY_ARMOURED_FORMAT }}
-          passphrase: ${{ secrets.OSS_SIGNING_PASSWORD }}
+      # - name: Import GPG
+      #   uses: crazy-max/ghaction-import-gpg@v6
+      #   with:
+      #     gpg_private_key: ${{ secrets.OSS_SIGNING_KEY_ARMOURED_FORMAT }}
+      #     passphrase: ${{ secrets.OSS_SIGNING_PASSWORD }}
 
-      - name: List the keys
-        run: gpg --list-secret-keys 
+      # - name: List the keys
+      #   run: gpg --list-secret-keys 
 
    
       # Step to grant execute permissions to the Gradle wrapper script
@@ -76,7 +76,7 @@ jobs:
       #     echo "$GPG_SECRET_RING" >> secring.gpg
 
       - name: Add secret file loc to gradle.properties
-        run: echo "signing.secretKeyRingFile=secring.gpg" >> gradle.properties
+        run: echo "signing.secretKeyRingFile=/home/runner/work/siren-android-inbox/siren-android-inbox/siren-sdk/secring.gpg" >> gradle.properties
       
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -86,7 +86,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
 
       - name: Download s3 secring file
-        run: aws s3 cp s3://sirn-android-secring/secring.gpg secring.gpg
+        run: aws s3 cp s3://sirn-android-secring/secring.gpg /home/runner/work/siren-android-inbox/siren-android-inbox/siren-sdk/secring.gpg
       
       - name: cat secring.gpg
         run: cat secring.gpg
