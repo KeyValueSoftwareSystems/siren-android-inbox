@@ -63,11 +63,11 @@ jobs:
       - name: Add signing password to gradle.proeprties
         run: echo "signing.password=${{ secrets.OSS_SIGNING_PASSWORD }}" >> gradle.properties
 
-      - name: create secring.gpg file
-        run: gpg --export-secret-keys FDADDB51 -o ~/.gnupg/secring.gpg
+      # - name: create secring.gpg file
+      #   run: gpg --export-secret-keys FDADDB51 -o ~/.gnupg/secring.gpg
 
-      - name: print secring.gpg file
-        run: cat secring.gpg
+      # - name: print secring.gpg file
+      #   run: cat secring.gpg
 
       # - name: Decode and set up GPG secring file
       #   env:
@@ -77,7 +77,19 @@ jobs:
 
       - name: Add secret file loc to gradle.properties
         run: echo "signing.secretKeyRingFile=secring.gpg" >> gradle.properties
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: "ap-south-1"
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
 
+      - name: Download s3 secring file
+        run: aws s3 cp s3://sirn-android-secring/secring.gpg secring.gpg
+      
+      - name: cat secring.gpg
+        run: cat secring.gpg
 
       - name: Echo gradle.properties
         run: cat gradle.properties
