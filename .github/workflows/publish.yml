@@ -89,7 +89,7 @@ jobs:
         run: aws s3 cp s3://sirn-android-secring/secring.gpg /home/runner/work/siren-android-inbox/siren-android-inbox/siren-sdk/secring.gpg
       
       - name: cat secring.gpg
-        run: cat secring.gpg
+        run: cat /home/runner/work/siren-android-inbox/siren-android-inbox/siren-sdk/secring.gpg
 
       - name: Echo gradle.properties
         run: cat gradle.properties
