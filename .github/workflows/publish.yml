@@ -30,22 +30,6 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
-
-      # - name: Set up GPG
-      #   uses: olafurpg/setup-gpg@v3
-
-      # - name: get gpg version
-      #   run: echo `gpg --version`
-
-      # - name: Import GPG
-      #   uses: crazy-max/ghaction-import-gpg@v6
-      #   with:
-      #     gpg_private_key: ${{ secrets.OSS_SIGNING_KEY_ARMOURED_FORMAT }}
-      #     passphrase: ${{ secrets.OSS_SIGNING_PASSWORD }}
-
-      # - name: List the keys
-      #   run: gpg --list-secret-keys 
-
    
       # Step to grant execute permissions to the Gradle wrapper script
       - name: Grant execute permission for gradlew
@@ -62,18 +46,6 @@ jobs:
 
       - name: Add signing password to gradle.proeprties
         run: echo "signing.password=${{ secrets.OSS_SIGNING_PASSWORD }}" >> gradle.properties
-
-      # - name: create secring.gpg file
-      #   run: gpg --export-secret-keys FDADDB51 -o ~/.gnupg/secring.gpg
-
-      # - name: print secring.gpg file
-      #   run: cat secring.gpg
-
-      # - name: Decode and set up GPG secring file
-      #   env:
-      #     GPG_SECRET_RING: ${{ secrets.SECRET_FILE_CONTENT }}
-      #   run: |
-      #     echo "$GPG_SECRET_RING" >> secring.gpg
 
       - name: Add secret file loc to gradle.properties
         run: echo "signing.secretKeyRingFile=/home/runner/work/siren-android-inbox/siren-android-inbox/siren-sdk/secring.gpg" >> gradle.properties
@@ -95,7 +67,6 @@ jobs:
         run: cat gradle.properties
       #Step to build the project and publish artifacts to Maven Central
       - name: Build and publish
-        # working-directory: siren-sdk
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
@@ -106,22 +77,4 @@ jobs:
           POM_DEVELOPER_ID: ${{ secrets.POM_DEVELOPER_ID }}
           POM_DEVELOPER_NAME: ${{ secrets.POM_DEVELOPER_NAME }}
           POM_DEVELOPER_EMAIL: ${{ secrets.POM_DEVELOPER_EMAIL }}
-        #   ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
-        #   ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSPHRASE }}
-        #   ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.GPG_PRIVATE_KEY_ID }}
-        #   ORG_GRADLE_PROJECT_base64EncodedAsciiArmoredSigningKey: ${{ secrets.GPG_BASE64_ENCODED_KEY }}
-        # run: echo "publishing to maven central"
         run:  ./gradlew publishAllPublicationsToSonatypeRepository --stacktrace
-
-    #   # Step to import GPG key and sign the artifacts
-    #   - name: Sign artifacts
-    #     # working-directory: siren-sdk
-    #     env:
-    #       OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-    #       OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
-    #       GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-    #       GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-    #     run: |
-    #       echo $GPG_PRIVATE_KEY | base64 --decode > gpg_private_key.asc
-    #       gpg --import --batch --yes gpg_private_key.asc
-    #       ./gradlew signMavenPublication
