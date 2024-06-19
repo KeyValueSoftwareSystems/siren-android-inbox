@@ -25,8 +25,8 @@ jobs:
       - name: Find the location of jdk
         run: echo "${{ env.JAVA_HOME }}"
 
-      - name: List the contents of the path java
-        run: cd /opt/hostedtoolcache/jdk/17.0.11/x64 | ls
+      # - name: List the contents of the path java
+      #   run: cd /opt/hostedtoolcache/jdk/17.0.11/x64 | ls
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
@@ -53,15 +53,14 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: "ap-south-1"
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE }}
 
       - name: Download s3 secring file
-        run: aws s3 cp s3://sirn-android-secring/secring.gpg /home/runner/work/siren-android-inbox/siren-android-inbox/siren-sdk/secring.gpg
+        run: aws s3 cp s3://${{ secrets.BUCKET }}/secring.gpg /home/runner/work/siren-android-inbox/siren-android-inbox/siren-sdk/secring.gpg
       
-      - name: cat secring.gpg
-        run: cat /home/runner/work/siren-android-inbox/siren-android-inbox/siren-sdk/secring.gpg
+      # - name: cat secring.gpg
+      #   run: cat /home/runner/work/siren-android-inbox/siren-android-inbox/siren-sdk/secring.gpg
 
       - name: Echo gradle.properties
         run: cat gradle.properties
