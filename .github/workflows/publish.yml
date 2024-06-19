@@ -8,6 +8,8 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
 
     steps:
       # Step to check out the repository's code
@@ -51,6 +53,7 @@ jobs:
         run: echo "signing.secretKeyRingFile=/home/runner/work/siren-android-inbox/siren-android-inbox/siren-sdk/secring.gpg" >> gradle.properties
       
       - name: Configure AWS credentials
+        
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ secrets.AWS_REGION }}
