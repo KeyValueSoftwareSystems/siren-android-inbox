@@ -1,6 +1,7 @@
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+
 task androidJavadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
@@ -48,8 +49,8 @@ afterEvaluate {
                 artifactId 'sirenapp-android-inbox'
                 version '1.0.0'
                 pom {
-                    name = artifactId
-                    description = POM_DESCRIPTION
+                    name = "$System.env.ARTIFACT_ID"
+                    description = "$System.env.POM_DESCRIPTION"
                     url = 'https://github.com/KeyValueSoftwareSystems/siren-android-inbox'
                     licenses {
                         license {
@@ -63,9 +64,9 @@ afterEvaluate {
                     }
                     developers {
                         developer {
-                            id = POM_DEVELOPER_ID
-                            name = POM_DEVELOPER_NAME
-                            email = POM_DEVELOPER_EMAIL
+                            id = "$System.env.POM_DEVELOPER_ID"
+                            name = "$System.env.POM_DEVELOPER_NAME"
+                            email = "$System.env.POM_DEVELOPER_EMAIL"
                         }
                     }
                 }
@@ -78,8 +79,8 @@ afterEvaluate {
                 url = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 
                 credentials {
-                    username ossrhUsername
-                    password ossrhPassword
+                    username "$System.env.OSSRH_USERNAME"
+                    password "$System.env.OSSRH_PASSWORD"
                 }
             }
 
@@ -89,13 +90,14 @@ afterEvaluate {
                 url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
 
                 credentials {
-                    username ossrhUsername
-                    password ossrhPassword
+                    username "$System.env.OSSRH_USERNAME"
+                    password "$System.env.OSSRH_PASSWORD"
                 }
             }
         }
     }
 }
+
 
 signing {
     sign publishing.publications

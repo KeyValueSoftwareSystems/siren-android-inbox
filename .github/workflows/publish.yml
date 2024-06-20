@@ -1,0 +1,80 @@
+name: Publish to Maven Central
+
+on:
+   workflow_dispatch:
+#   workflow_dispatch:
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
+    steps:
+      # Step to check out the repository's code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step to set up JDK 17, which is required for Gradle to run
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Find the location of jdk
+        run: echo "${{ env.JAVA_HOME }}"
+
+      # - name: List the contents of the path java
+      #   run: cd /opt/hostedtoolcache/jdk/17.0.11/x64 | ls
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+   
+      # Step to grant execute permissions to the Gradle wrapper script
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Add new line
+        run: echo "" >> gradle.properties
+
+      - name: Add java home to gradle.properties
+        run: echo "org.gradle.java.home=${{ env.JAVA_HOME }}" >> gradle.properties
+        
+      - name: Add signing key id to gradle.properties
+        run: echo "signing.keyId=${{ secrets.OSS_SIGNING_KEY_ID }}" >> gradle.properties
+
+      - name: Add signing password to gradle.proeprties
+        run: echo "signing.password=${{ secrets.OSS_SIGNING_PASSWORD }}" >> gradle.properties
+
+      - name: Add secret file loc to gradle.properties
+        run: echo "signing.secretKeyRingFile=/home/runner/work/siren-android-inbox/siren-android-inbox/siren-sdk/secring.gpg" >> gradle.properties
+      
+      - name: Configure AWS credentials
+        
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+
+      - name: Download s3 secring file
+        run: aws s3 cp s3://${{ secrets.BUCKET }}/secring.gpg /home/runner/work/siren-android-inbox/siren-android-inbox/siren-sdk/secring.gpg
+      
+      # - name: cat secring.gpg
+      #   run: cat /home/runner/work/siren-android-inbox/siren-android-inbox/siren-sdk/secring.gpg
+
+      - name: Echo gradle.properties
+        run: cat gradle.properties
+      #Step to build the project and publish artifacts to Maven Central
+      - name: Build and publish
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          OSS_SIGNING_KEY_ID: ${{ secrets.OSS_SIGNING_KEY_ID }}
+          OSS_SIGNING_PASSWORD: ${{ secrets.OSS_SIGNING_PASSWORD }}
+          OSS_SIGNING_KEY: ${{ secrets.OSS_SIGNING_KEY }}
+          OSS_STAGING_PROFILE_ID: ${{ secrets.OSS_STAGING_PROFILE_ID }}
+          POM_DEVELOPER_ID: ${{ secrets.POM_DEVELOPER_ID }}
+          POM_DEVELOPER_NAME: ${{ secrets.POM_DEVELOPER_NAME }}
+          POM_DEVELOPER_EMAIL: ${{ secrets.POM_DEVELOPER_EMAIL }}
+        run:  ./gradlew publishAllPublicationsToSonatypeRepository --stacktrace
